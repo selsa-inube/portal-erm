@@ -5,7 +5,7 @@ import { Tag } from "@inubekit/tag";
 import { useMediaQueries } from "@inubekit/hooks";
 import { Divider } from "@inubekit/divider";
 
-import { spacing } from "@design/tokens/spacing/spacing";
+import { spacing } from "@design/tokens/spacing";
 import selsaLogo from "@assets/images/logoInube.png";
 import errorImage from "@assets/images/img-team-building-68.png";
 import { errorCodes } from "@config/errorCodes.tsx";

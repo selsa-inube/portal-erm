@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/foundations";
 
-import { spacing } from "@design/tokens/spacing/spacing.ts";
+import { spacing } from "@design/tokens/spacing";
 
 interface StyledCertificationsContainerProps {
   $isMobile: boolean;
