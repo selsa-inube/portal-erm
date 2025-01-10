@@ -7,10 +7,12 @@ import {
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
+import { environment } from "./config/environment";
+
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
-  void logout({ logoutParams: { returnTo: "http://localhost:3000" } });
+  void logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return <h1>You have been logged out.</h1>;
 }
 
