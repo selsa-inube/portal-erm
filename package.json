@@ -4,20 +4,36 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "storybook": "storybook dev -p 6006",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@inubekit/button": "^4.44.3",
+    "@inubekit/divider": "^0.16.2",
+    "@inubekit/hooks": "^1.2.1",
+    "@inubekit/stack": "^3.8.1",
+    "@inubekit/tag": "^3.42.2",
+    "@inubekit/text": "^2.17.0",
+    "@storybook/react": "^8.4.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.3",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.11.1",
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/addon-interactions": "^8.4.7",
+    "@storybook/addon-onboarding": "^8.4.7",
+    "@storybook/blocks": "^8.4.7",
+    "@storybook/react-vite": "^8.4.7",
+    "@storybook/test": "^8.4.7",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.2",
@@ -25,10 +41,12 @@
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
+    "eslint-plugin-storybook": "^0.11.2",
     "globals": "^15.9.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
     "prettier": "3.3.3",
+    "storybook": "^8.4.7",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8",
@@ -38,6 +56,11 @@
     "**/*": [
       "eslint",
       "prettier --write --ignore-unknown"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
     ]
   }
 }
