@@ -9,10 +9,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
 
-import { GlobalStyles } from "./styles/global";
-import { AppProvider } from "./context/AppContext";
+import { GlobalStyles } from "@styles/global";
+import { AppProvider } from "@context/AppContext";
 
-import { environment } from "./config/environment";
+import { environment } from "@config/environment";
 
 function LogOut() {
   localStorage.clear();
