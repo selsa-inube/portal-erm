@@ -46,9 +46,11 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode =
-    params.get("portal") ?? decrypt(localStorage.getItem("portalCode")!);
-
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : localStorage.getItem("portalCode")
+      ? decrypt(localStorage.getItem("portalCode")!)
+      : null;
   if (!portalCode) {
     return <ErrorPage />;
   }

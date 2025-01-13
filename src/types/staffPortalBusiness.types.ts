@@ -7,12 +7,12 @@ interface IOptionsByStaffPortalBusinessManager {
 interface IStaffPortalByBusinessManager {
   abbreviatedName: string;
   businessManagerId: string;
-  businessUnit: string;
   descriptionUse: string;
-  portalCode: string;
+  optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
+  publicCode: string;
   staffPortalCatalogId: string;
   staffPortalId: string;
-  optionsByStaffPortalBusinessManager?: IOptionsByStaffPortalBusinessManager[];
+  url: string;
 }
 
 interface IBusinessManagers {

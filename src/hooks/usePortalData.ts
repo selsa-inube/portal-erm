@@ -30,7 +30,6 @@ export const usePortalData = (codeParame: string) => {
         localStorage.setItem("portalCode", encryptedParamValue);
 
         setPortalData(staffPortalData);
-        console.log("Datos del portal después de setear:", staffPortalData);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
         setHasError(true);

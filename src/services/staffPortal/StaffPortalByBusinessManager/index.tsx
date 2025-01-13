@@ -15,7 +15,7 @@ const staffPortalByBusinessManager = async (
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const queryParams = new URLSearchParams({
-        portalCode: codeParame,
+        publicCode: codeParame,
       });
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);

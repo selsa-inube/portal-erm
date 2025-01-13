@@ -10,18 +10,36 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
       typeof resend.businessManagerId === "string"
         ? resend.businessManagerId
         : "",
-    businessUnit:
-      typeof resend.businessUnit === "string" ? resend.businessUnit : "",
     descriptionUse:
       typeof resend.descriptionUse === "string" ? resend.descriptionUse : "",
-    portalCode: typeof resend.portalCode === "string" ? resend.portalCode : "",
+    publicCode: typeof resend.publicCode === "string" ? resend.publicCode : "",
     staffPortalCatalogId:
       typeof resend.staffPortalCatalogId === "string"
         ? resend.staffPortalCatalogId
         : "",
     staffPortalId:
       typeof resend.staffPortalId === "string" ? resend.staffPortalId : "",
+    url: typeof resend.url === "string" ? resend.url : "",
+    optionsByStaffPortalBusinessManager: Array.isArray(
+      resend.optionsByStaffPortalBusinessManager,
+    )
+      ? resend.optionsByStaffPortalBusinessManager.map((option) => ({
+          optionStaffId:
+            typeof option.optionStaffId === "string"
+              ? option.optionStaffId
+              : "",
+          staffPortalCatalogId:
+            typeof option.staffPortalCatalogId === "string"
+              ? option.staffPortalCatalogId
+              : "",
+          staffPortalId:
+            typeof option.staffPortalId === "string"
+              ? option.staffPortalId
+              : "",
+        }))
+      : [],
   };
+
   return buildResend;
 };
 
