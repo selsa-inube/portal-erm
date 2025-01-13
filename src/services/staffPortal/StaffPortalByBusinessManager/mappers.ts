@@ -1,48 +1,37 @@
-import { IEmployeePortalByBusinessManager } from "@src/types/staffPortalBusiness.types";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 
-const mapEmployeePortalByBusinessManagerApiToEntity = (
+const mapStaffPortalByBusinessManagerApiToEntity = (
   resend: Record<string, string | number | object>,
-): IEmployeePortalByBusinessManager => {
-  const buildResend: IEmployeePortalByBusinessManager = {
+): IStaffPortalByBusinessManager => {
+  const buildResend: IStaffPortalByBusinessManager = {
     abbreviatedName:
-      typeof resend.abbreviatedName === "object"
-        ? JSON.stringify(resend.abbreviatedName)
-        : String(resend.abbreviatedName),
+      typeof resend.abbreviatedName === "string" ? resend.abbreviatedName : "",
     businessManagerId:
-      typeof resend.businessManagerId === "object"
-        ? JSON.stringify(resend.businessManagerId)
-        : String(resend.businessManagerId),
+      typeof resend.businessManagerId === "string"
+        ? resend.businessManagerId
+        : "",
+    businessUnit:
+      typeof resend.businessUnit === "string" ? resend.businessUnit : "",
     descriptionUse:
-      typeof resend.descriptionUse === "object"
-        ? JSON.stringify(resend.descriptionUse)
-        : String(resend.descriptionUse),
-    publicCode:
-      typeof resend.publicCode === "object"
-        ? JSON.stringify(resend.publicCode)
-        : String(resend.publicCode),
-    employeePortalCatalogId:
-      typeof resend.staffPortalCatalogId === "object"
-        ? JSON.stringify(resend.staffPortalCatalogId)
-        : String(resend.staffPortalCatalogId),
-    employeePortalId:
-      typeof resend.staffPortalId === "object"
-        ? JSON.stringify(resend.staffPortalId)
-        : String(resend.staffPortalId),
-    url:
-      typeof resend.url === "object"
-        ? JSON.stringify(resend.url)
-        : String(resend.url),
+      typeof resend.descriptionUse === "string" ? resend.descriptionUse : "",
+    portalCode: typeof resend.portalCode === "string" ? resend.portalCode : "",
+    staffPortalCatalogId:
+      typeof resend.staffPortalCatalogId === "string"
+        ? resend.staffPortalCatalogId
+        : "",
+    staffPortalId:
+      typeof resend.staffPortalId === "string" ? resend.staffPortalId : "",
   };
   return buildResend;
 };
 
-const mapEmployeePortalByBusinessManagerApiToEntities = (
+const mapStaffPortalByBusinessManagerApiToEntities = (
   resend: Record<string, string | number | object>[],
-): IEmployeePortalByBusinessManager[] => {
-  return resend.map(mapEmployeePortalByBusinessManagerApiToEntity);
+): IStaffPortalByBusinessManager[] => {
+  return resend.map(mapStaffPortalByBusinessManagerApiToEntity);
 };
 
 export {
-  mapEmployeePortalByBusinessManagerApiToEntities,
-  mapEmployeePortalByBusinessManagerApiToEntity,
+  mapStaffPortalByBusinessManagerApiToEntities,
+  mapStaffPortalByBusinessManagerApiToEntity,
 };

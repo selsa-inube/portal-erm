@@ -1,18 +1,18 @@
-interface IoptionsByStaffPortalBusinessManager {
-  optionEmployeeId: string;
-  employeePortalCatalogId: string;
-  employeePortalId: string;
+interface IOptionsByStaffPortalBusinessManager {
+  optionStaffId: string;
+  staffPortalCatalogId: string;
+  staffPortalId: string;
 }
 
-interface IEmployeePortalByBusinessManager {
+interface IStaffPortalByBusinessManager {
   abbreviatedName: string;
   businessManagerId: string;
+  businessUnit: string;
   descriptionUse: string;
-  publicCode: string;
-  employeePortalCatalogId: string;
-  employeePortalId: string;
-  url: string;
-  optionsByStaffPortalBusinessManager?: IoptionsByStaffPortalBusinessManager[];
+  portalCode: string;
+  staffPortalCatalogId: string;
+  staffPortalId: string;
+  optionsByStaffPortalBusinessManager?: IOptionsByStaffPortalBusinessManager[];
 }
 
 interface IBusinessManagers {
@@ -26,7 +26,7 @@ interface IBusinessManagers {
   customerId: string;
 }
 
-interface IBusinessUnitsPortalEmployee {
+interface IBusinessUnitsPortalStaff {
   publicCode: string;
   languageId: string;
   abbreviatedName: string;
@@ -36,7 +36,7 @@ interface IBusinessUnitsPortalEmployee {
 }
 
 export type {
-  IEmployeePortalByBusinessManager,
+  IStaffPortalByBusinessManager,
   IBusinessManagers,
-  IBusinessUnitsPortalEmployee,
+  IBusinessUnitsPortalStaff,
 };

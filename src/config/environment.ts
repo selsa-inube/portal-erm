@@ -15,7 +15,7 @@ interface Environment {
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
 }
 
-const enviroment: Environment = {
+const environment: Environment = {
   CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID as string,
   CLIENT_SECRET: import.meta.env.VITE_AUTH0_CLIENT_SECRET as string,
   AUTH0_DOMAIN: import.meta.env.VITE_AUTH0_DOMAIN as string,
@@ -25,7 +25,7 @@ const enviroment: Environment = {
 };
 
 export {
-  enviroment,
+  environment,
   maxRetriesServices,
   fetchTimeoutServices,
   secretKeyPortalId,

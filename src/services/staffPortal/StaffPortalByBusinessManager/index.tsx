@@ -1,14 +1,14 @@
 import {
-  enviroment,
+  environment,
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { IEmployeePortalByBusinessManager } from "@src/types/staffPortalBusiness.types";
-import { mapEmployeePortalByBusinessManagerApiToEntities } from "./mappers";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
-const employeePortalByBusinessManager = async (
+const staffPortalByBusinessManager = async (
   codeParame: string,
-): Promise<IEmployeePortalByBusinessManager> => {
+): Promise<IStaffPortalByBusinessManager> => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -30,14 +30,14 @@ const employeePortalByBusinessManager = async (
       };
 
       const res = await fetch(
-        `${enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/employee-portals-by-business-managers?${queryParams.toString()}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-manager?${queryParams.toString()}`,
         options,
       );
 
       clearTimeout(timeoutId);
 
       if (res.status === 204) {
-        return {} as IEmployeePortalByBusinessManager;
+        return {} as IStaffPortalByBusinessManager;
       }
 
       const data = await res.json();
@@ -51,7 +51,7 @@ const employeePortalByBusinessManager = async (
       }
 
       const normalizedEmployeePortal = Array.isArray(data)
-        ? mapEmployeePortalByBusinessManagerApiToEntities(data)
+        ? mapStaffPortalByBusinessManagerApiToEntities(data)
         : [];
 
       return normalizedEmployeePortal[0];
@@ -65,7 +65,7 @@ const employeePortalByBusinessManager = async (
     }
   }
 
-  return {} as IEmployeePortalByBusinessManager;
+  return {} as IStaffPortalByBusinessManager;
 };
 
-export { employeePortalByBusinessManager };
+export { staffPortalByBusinessManager };

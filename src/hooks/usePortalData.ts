@@ -1,28 +1,38 @@
 import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
-import { employeePortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
+import { staffPortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 
 export const usePortalData = (codeParame: string) => {
-  const [portalData, setPortalData] = useState({});
+  const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
+    {} as IStaffPortalByBusinessManager,
+  );
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const fetchPortalData = async () => {
       try {
-        const employeePortalData =
-          await employeePortalByBusinessManager(codeParame);
-        if (
-          !employeePortalData ||
-          Object.keys(employeePortalData).length === 0
-        ) {
+        if (!codeParame) {
+          console.error("El parámetro 'codeParame' es inválido:", codeParame);
           setHasError(true);
           return;
         }
+
+        const staffPortalData = await staffPortalByBusinessManager(codeParame);
+
+        if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
+          setHasError(true);
+          console.log("No se recibieron datos válidos o el objeto está vacío.");
+          return;
+        }
+
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
-        setPortalData(employeePortalData);
+
+        setPortalData(staffPortalData);
+        console.log("Datos del portal después de setear:", staffPortalData);
       } catch (error) {
-        console.error(error);
+        console.error("Error al obtener los datos:", error);
         setHasError(true);
       }
     };
