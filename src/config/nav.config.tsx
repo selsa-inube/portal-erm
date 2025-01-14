@@ -86,7 +86,7 @@ const actions = [
     label: "Cerrar sesión",
     icon: <MdLogout />,
     action: () => {
-      console.log("logout");
+      window.location.href = "/logout";
     },
   },
 ];
