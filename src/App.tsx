@@ -7,7 +7,12 @@ import {
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { environment } from "./config/environment";
+import { AppPage } from "@components/layout/AppPage";
+
+import { GlobalStyles } from "@styles/global";
+import { AppProvider } from "@context/AppContext";
+
+import { environment } from "@config/environment";
 
 function LogOut() {
   localStorage.clear();
@@ -19,7 +24,7 @@ function LogOut() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<h1>Hello World</h1>} />
+      <Route path="/*" element={<AppPage />}></Route>
       <Route path="/logout" element={<LogOut />} />
     </>,
   ),
@@ -42,7 +47,12 @@ function App() {
     return null;
   }
 
-  return <RouterProvider router={router} />;
+  return (
+    <AppProvider>
+      <GlobalStyles />
+      <RouterProvider router={router} />
+    </AppProvider>
+  );
 }
 
 export { App };
