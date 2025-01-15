@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider, useAppContext } from "@context/AppContext";
+import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 
@@ -16,7 +16,6 @@ import { usePortalData } from "@hooks/usePortalData";
 import { useFlag } from "@inubekit/flag";
 
 import { GlobalStyles } from "./styles/global";
-import { decrypt } from "./utils/encrypt";
 
 function LogOut() {
   localStorage.clear();
@@ -25,43 +24,32 @@ function LogOut() {
   return null;
 }
 
-function FirstPage() {
-  const { user } = useAppContext();
-  const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
-    <AppPage />
-  ) : (
-    <AppPage />
-  );
-}
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />} />
+      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
 
-function App() {
+function getPortalCode(): string | null {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : localStorage.getItem("portalCode")
-      ? decrypt(localStorage.getItem("portalCode")!)
-      : null;
+  return params.get("portal");
+}
+
+function App() {
+  const portalCode = getPortalCode();
 
   if (!portalCode) {
-    return <ErrorPage />;
+    return <ErrorPage heading="Se debe ingresar un código de portal" />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError } = usePortalData(portalCode ?? "");
+  const { hasError } = usePortalData(portalCode);
   const { addFlag } = useFlag();
 
   useEffect(() => {
