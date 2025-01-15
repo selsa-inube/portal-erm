@@ -13,6 +13,7 @@ import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 
 import { usePortalData } from "@hooks/usePortalData";
+import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
 
 import { GlobalStyles } from "./styles/global";
 import { decrypt } from "./utils/encrypt";
@@ -23,6 +24,7 @@ function LogOut() {
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return null;
 }
+
 function FirstPage() {
   const { user } = useAppContext();
   const portalCode = localStorage.getItem("portalCode");
@@ -51,14 +53,22 @@ function App() {
     : localStorage.getItem("portalCode")
       ? decrypt(localStorage.getItem("portalCode")!)
       : null;
+
   if (!portalCode) {
     return <ErrorPage />;
   }
 
   const [isReady, setIsReady] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-
+  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { hasError } = usePortalData(portalCode ?? "");
+
+  const userAccountId = user?.userAccountId;
+
+  const {
+    userAccount,
+    error: userAccountError,
+    loading: userAccountLoading,
+  } = useStaffUserAccount(userAccountId ?? "");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
@@ -68,16 +78,21 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
-  if (!isReady) {
+  if (!isReady || userAccountLoading) {
     return null;
   }
 
-  if (hasError) {
+  if (
+    hasError ||
+    userAccountError ||
+    !userAccount ||
+    Object.keys(userAccount).length === 0
+  ) {
     return <ErrorPage />;
   }
 
   return (
-    <AppProvider>
+    <AppProvider staffUserAccount={userAccount}>
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>

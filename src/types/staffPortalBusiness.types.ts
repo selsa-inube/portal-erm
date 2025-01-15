@@ -35,8 +35,19 @@ interface IBusinessUnitsPortalStaff {
   urlLogo: string;
 }
 
+interface IStaffUserAccount {
+  accountName: string;
+  biologicalSex: string;
+  birthDay: string;
+  principalEmail: string;
+  principalPhone: string;
+  userAccount: string;
+  userAccountId: string;
+}
+
 export type {
   IStaffPortalByBusinessManager,
   IBusinessManagers,
   IBusinessUnitsPortalStaff,
+  IStaffUserAccount,
 };

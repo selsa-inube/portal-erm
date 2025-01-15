@@ -1,3 +1,5 @@
+import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
+
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -46,4 +48,6 @@ export interface IAppContextType {
   setProvisionedPortal: React.Dispatch<
     React.SetStateAction<IProvisionedPortal | null>
   >;
+  staffUser: IStaffUserAccount | null;
+  setstaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount | null>>;
 }
