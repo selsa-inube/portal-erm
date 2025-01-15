@@ -13,6 +13,7 @@ import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 
 import { usePortalData } from "@hooks/usePortalData";
+import { useFlag } from "@inubekit/flag";
 
 import { GlobalStyles } from "./styles/global";
 import { decrypt } from "./utils/encrypt";
@@ -23,6 +24,7 @@ function LogOut() {
   logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
   return null;
 }
+
 function FirstPage() {
   const { user } = useAppContext();
   const portalCode = localStorage.getItem("portalCode");
@@ -37,7 +39,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />}></Route>
+      <Route path="/*" element={<AppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -51,14 +53,16 @@ function App() {
     : localStorage.getItem("portalCode")
       ? decrypt(localStorage.getItem("portalCode")!)
       : null;
+
   if (!portalCode) {
     return <ErrorPage />;
   }
 
   const [isReady, setIsReady] = useState(false);
+  const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-
   const { hasError } = usePortalData(portalCode ?? "");
+  const { addFlag } = useFlag();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
@@ -67,6 +71,18 @@ function App() {
       setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
+
+  useEffect(() => {
+    if (hasError && !flagShown) {
+      addFlag({
+        title: "Error",
+        description: "Error en la consulta del código del portal",
+        appearance: "dark",
+        duration: 10000,
+      });
+      setFlagShown(true);
+    }
+  }, [hasError, flagShown, addFlag]);
 
   if (!isReady) {
     return null;
