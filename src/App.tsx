@@ -27,19 +27,21 @@ function LogOut() {
 
 function FirstPage() {
   const { user } = useAppContext();
+  const { isAuthenticated } = useAuth0();
   const portalCode = localStorage.getItem("portalCode");
-  return (portalCode && portalCode.length === 0) || !user ? (
-    <AppPage />
-  ) : (
-    <AppPage />
-  );
+
+  if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
+    return <ErrorPage />;
+  }
+
+  return <AppPage />;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />}></Route>
+      <Route path="/*" element={<AppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -48,6 +50,7 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
+
   const portalCode = params.get("portal")
     ? params.get("portal")
     : localStorage.getItem("portalCode")
@@ -55,40 +58,51 @@ function App() {
       : null;
 
   if (!portalCode) {
+    console.error("Error: No se encontró un portalCode válido.");
     return <ErrorPage />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
-  const { hasError } = usePortalData(portalCode ?? "");
 
-  const userAccountId = user?.userAccountId;
+  const { hasError } = usePortalData(portalCode ?? "");
 
   const {
     userAccount,
     error: userAccountError,
     loading: userAccountLoading,
-  } = useStaffUserAccount(userAccountId ?? "");
+  } = useStaffUserAccount(user?.userAccountId ?? "");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
+      console.log("Redirigiendo a login...");
       loginWithRedirect();
-    } else {
-      setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
-  if (!isReady || userAccountLoading) {
-    return null;
+  useEffect(() => {
+    console.log("Auth0 State:", { isAuthenticated, isLoading, user });
+    if (isAuthenticated && user) {
+      setIsReady(true);
+    }
+  }, [isAuthenticated, user]);
+
+  if (isLoading || !isReady || userAccountLoading) {
+    return <div>Loading...</div>;
   }
 
-  if (
-    hasError ||
-    userAccountError ||
-    !userAccount ||
-    Object.keys(userAccount).length === 0
-  ) {
+  if (hasError || userAccountError) {
+    console.error("Error al cargar los datos:", {
+      hasError,
+      userAccountError,
+      userAccount,
+    });
     return <ErrorPage />;
+  }
+
+  if (!userAccount || Object.keys(userAccount).length === 0) {
+    console.error("No se pudo cargar la cuenta de usuario correctamente.");
+    return <div>Error: No se pudo cargar la cuenta de usuario.</div>;
   }
 
   return (

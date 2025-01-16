@@ -17,8 +17,15 @@ export const useStaffUserAccount = ({
 
   useEffect(() => {
     const fetchUserAccount = async () => {
+      if (!userAccountId) {
+        setError("El ID de cuenta de usuario es necesario");
+        setUserAccount(null);
+        return;
+      }
+
       setLoading(true);
       setError(null);
+
       try {
         const data = await staffUserAccountById(userAccountId);
         setUserAccount(data);
@@ -30,9 +37,7 @@ export const useStaffUserAccount = ({
       }
     };
 
-    if (userAccountId) {
-      fetchUserAccount();
-    }
+    fetchUserAccount();
   }, [userAccountId]);
 
   return { userAccount, loading, error };
