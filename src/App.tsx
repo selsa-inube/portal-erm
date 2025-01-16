@@ -36,14 +36,19 @@ const router = createBrowserRouter(
 function getPortalCode(): string | null {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  return params.get("portal");
+  const portalCode = params.get("portal");
+
+  if (portalCode) {
+    localStorage.setItem("portalCode", portalCode);
+  }
+  return portalCode ?? localStorage.getItem("portalCode");
 }
 
 function App() {
   const portalCode = getPortalCode();
 
   if (!portalCode) {
-    return <ErrorPage heading="Se debe ingresar un código de portal" />;
+    return <ErrorPage errorCode={1000} />;
   }
 
   const [isReady, setIsReady] = useState(false);
@@ -72,8 +77,8 @@ function App() {
     }
   }, [hasError, flagShown, addFlag]);
 
-  if (!isReady) {
-    return null;
+  if (isLoading || !isReady) {
+    return <div>Cargando...</div>;
   }
 
   if (hasError) {
