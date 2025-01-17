@@ -6,14 +6,15 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { useFlag } from "@inubekit/flag";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-
+import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
-import { useFlag } from "@inubekit/flag";
 
 import { GlobalStyles } from "./styles/global";
 
@@ -33,19 +34,16 @@ const router = createBrowserRouter(
   ),
 );
 
-function getPortalCode(): string | null {
+function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalCode = params.get("portal");
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode")!);
 
-  if (portalCode) {
-    localStorage.setItem("portalCode", portalCode);
+  if (!params.has("portal")) {
+    return <ErrorPage errorCode={1001} />;
   }
-  return portalCode ?? localStorage.getItem("portalCode");
-}
-
-function App() {
-  const portalCode = getPortalCode();
 
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
@@ -60,7 +58,7 @@ function App() {
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
       loginWithRedirect();
-    } else {
+    } else if (!isLoading && (isAuthenticated || hasError)) {
       setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
@@ -82,7 +80,7 @@ function App() {
   }
 
   if (hasError) {
-    return <ErrorPage />;
+    return <ErrorPage errorCode={500} />;
   }
 
   return (
