@@ -22,7 +22,7 @@ const AppProvider: React.FC<{
     id: string;
     company: string;
     urlImgPerfil: string;
-    userAccountId?: string;
+    userAccountId: string;
   } | null>(
     auth0User
       ? {
@@ -30,7 +30,7 @@ const AppProvider: React.FC<{
           id: auth0User.nickname ?? "",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
-          userAccountId: "",
+          userAccountId: staffUserAccount.userAccountId,
         }
       : null,
   );

@@ -7,7 +7,6 @@ import {
 import { useEffect, useState } from "react";
 
 import { useFlag } from "@inubekit/flag";
-
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -31,11 +30,37 @@ function FirstPage() {
   const { isAuthenticated } = useAuth0();
   const portalCode = localStorage.getItem("portalCode");
 
+  const {
+    userAccount,
+    error: userAccountError,
+    loading: userAccountLoading,
+  } = useStaffUserAccount({ userAccountId: user?.userAccountId ?? "" });
+
   if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
     return <ErrorPage />;
   }
 
-  return <AppPage />;
+  if (userAccountLoading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (
+    userAccountError ||
+    !userAccount ||
+    Object.keys(userAccount).length === 0
+  ) {
+    console.error("Error al cargar los datos del usuario o cuenta:", {
+      userAccountError,
+      userAccount,
+    });
+    return <ErrorPage errorCode={500} />;
+  }
+
+  return (
+    <AppProvider staffUserAccount={userAccount}>
+      <AppPage />
+    </AppProvider>
+  );
 }
 
 const router = createBrowserRouter(
@@ -68,13 +93,6 @@ function App() {
   const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
   const { hasError } = usePortalData(portalCode);
-
-  const {
-    userAccount,
-    error: userAccountError,
-    loading: userAccountLoading,
-  } = useStaffUserAccount(user?.userAccountId ?? "");
-
   const { addFlag } = useFlag();
 
   useEffect(() => {
@@ -102,29 +120,20 @@ function App() {
     }
   }, [hasError, flagShown, addFlag]);
 
-  if (isLoading || !isReady || userAccountLoading) {
+  if (isLoading || !isReady) {
     return <div>Cargando...</div>;
   }
 
-  if (hasError || userAccountError) {
-    console.error("Error al cargar los datos del portal o de usuario:", {
-      hasError,
-      userAccountError,
-      userAccount,
-    });
+  if (hasError) {
+    console.error("Error al cargar los datos del portal:", hasError);
     return <ErrorPage errorCode={500} />;
   }
 
-  if (!userAccount || Object.keys(userAccount).length === 0) {
-    console.error("No se pudo cargar la cuenta de usuario correctamente.");
-    return <div>Error: No se pudo cargar la cuenta de usuario.</div>;
-  }
-
   return (
-    <AppProvider staffUserAccount={userAccount}>
+    <>
       <GlobalStyles />
       <RouterProvider router={router} />
-    </AppProvider>
+    </>
   );
 }
 
