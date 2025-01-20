@@ -10,7 +10,7 @@ import { useFlag } from "@inubekit/flag";
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider } from "@context/AppContext";
+import { AppProvider, useAppContext } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
@@ -26,10 +26,23 @@ function LogOut() {
   return null;
 }
 
+function FirstPage() {
+  const { user } = useAppContext();
+  const { isAuthenticated } = useAuth0();
+  const portalCode = localStorage.getItem("portalCode");
+
+  if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
+    return <ErrorPage />;
+  }
+
+  return <AppPage />;
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<AppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -65,12 +78,17 @@ function App() {
   const { addFlag } = useFlag();
 
   useEffect(() => {
+    console.log("Usuario autenticado:", user);
     if (!isLoading && !isAuthenticated && !hasError) {
       loginWithRedirect();
     } else if (!isLoading && (isAuthenticated || hasError)) {
-      setIsReady(true);
+      if (!user?.userAccountId) {
+        setIsReady(false);
+      } else {
+        setIsReady(true);
+      }
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
+  }, [isLoading, isAuthenticated, loginWithRedirect, hasError, user]);
 
   useEffect(() => {
     if (hasError && !flagShown) {
