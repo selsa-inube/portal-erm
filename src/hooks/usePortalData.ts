@@ -8,6 +8,7 @@ export const usePortalData = (codeParame: string) => {
     {} as IStaffPortalByBusinessManager,
   );
   const [hasError, setHasError] = useState(false);
+  const [errorType, setErrorType] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPortalData = async () => {
@@ -15,6 +16,7 @@ export const usePortalData = (codeParame: string) => {
         if (!codeParame) {
           console.error("El parámetro 'codeParame' es inválido:", codeParame);
           setHasError(true);
+          setErrorType("invalid_param");
           return;
         }
 
@@ -22,6 +24,7 @@ export const usePortalData = (codeParame: string) => {
 
         if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
           setHasError(true);
+          setErrorType("no_data");
           console.log("No se recibieron datos válidos o el objeto está vacío.");
           return;
         }
@@ -33,11 +36,12 @@ export const usePortalData = (codeParame: string) => {
       } catch (error) {
         console.error("Error al obtener los datos:", error);
         setHasError(true);
+        setErrorType("api_error");
       }
     };
 
     void fetchPortalData();
   }, [codeParame]);
 
-  return { portalData, hasError };
+  return { portalData, hasError, errorType };
 };

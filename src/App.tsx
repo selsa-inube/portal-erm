@@ -52,7 +52,7 @@ function App() {
   const [isReady, setIsReady] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError } = usePortalData(portalCode);
+  const { hasError, errorType } = usePortalData(portalCode);
   const { addFlag } = useFlag();
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function App() {
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
   useEffect(() => {
-    if (hasError && !flagShown) {
+    if (hasError && errorType === "api_error" && !flagShown) {
       addFlag({
         title: "Error",
         description: "Error en la consulta del código del portal",
@@ -73,7 +73,7 @@ function App() {
       });
       setFlagShown(true);
     }
-  }, [hasError, flagShown, addFlag]);
+  }, [hasError, flagShown, addFlag, errorType]);
 
   if (isLoading || !isReady) {
     return <div>Cargando...</div>;
@@ -90,5 +90,4 @@ function App() {
     </AppProvider>
   );
 }
-
 export default App;
