@@ -6,17 +6,18 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { useFlag } from "@inubekit/flag";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider, useAppContext } from "@context/AppContext";
+import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-
+import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
 
 import { GlobalStyles } from "./styles/global";
-import { decrypt } from "./utils/encrypt";
 
 function LogOut() {
   localStorage.clear();
@@ -25,23 +26,10 @@ function LogOut() {
   return null;
 }
 
-function FirstPage() {
-  const { user } = useAppContext();
-  const { isAuthenticated } = useAuth0();
-  const portalCode = localStorage.getItem("portalCode");
-
-  if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
-    return <ErrorPage />;
-  }
-
-  return <AppPage />;
-}
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />} />
+      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -53,19 +41,20 @@ function App() {
 
   const portalCode = params.get("portal")
     ? params.get("portal")
-    : localStorage.getItem("portalCode")
-      ? decrypt(localStorage.getItem("portalCode")!)
-      : null;
+    : decrypt(localStorage.getItem("portalCode")!);
+
+  if (!params.has("portal")) {
+    return <ErrorPage errorCode={1001} />;
+  }
 
   if (!portalCode) {
-    console.error("Error: No se encontró un portalCode válido.");
-    return <ErrorPage />;
+    return <ErrorPage errorCode={1000} />;
   }
 
   const [isReady, setIsReady] = useState(false);
+  const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
-
-  const { hasError } = usePortalData(portalCode ?? "");
+  const { hasError } = usePortalData(portalCode);
 
   const {
     userAccount,
@@ -73,31 +62,39 @@ function App() {
     loading: userAccountLoading,
   } = useStaffUserAccount(user?.userAccountId ?? "");
 
+  const { addFlag } = useFlag();
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
-      console.log("Redirigiendo a login...");
       loginWithRedirect();
+    } else if (!isLoading && (isAuthenticated || hasError)) {
+      setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
   useEffect(() => {
-    console.log("Auth0 State:", { isAuthenticated, isLoading, user });
-    if (isAuthenticated && user) {
-      setIsReady(true);
+    if (hasError && !flagShown) {
+      addFlag({
+        title: "Error",
+        description: "Error en la consulta del código del portal",
+        appearance: "dark",
+        duration: 10000,
+      });
+      setFlagShown(true);
     }
-  }, [isAuthenticated, user]);
+  }, [hasError, flagShown, addFlag]);
 
   if (isLoading || !isReady || userAccountLoading) {
-    return <div>Loading...</div>;
+    return <div>Cargando...</div>;
   }
 
   if (hasError || userAccountError) {
-    console.error("Error al cargar los datos:", {
+    console.error("Error al cargar los datos del portal o de usuario:", {
       hasError,
       userAccountError,
       userAccount,
     });
-    return <ErrorPage />;
+    return <ErrorPage errorCode={500} />;
   }
 
   if (!userAccount || Object.keys(userAccount).length === 0) {
