@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
@@ -13,7 +12,6 @@ import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
-
 import { GlobalStyles } from "./styles/global";
 
 function LogOut() {
@@ -49,7 +47,7 @@ function App() {
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError, isFetching } = usePortalData(portalCode);
+  const { portalData, hasError, isFetching } = usePortalData(portalCode ?? "");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
@@ -68,7 +66,7 @@ function App() {
   }
 
   return (
-    <AppProvider>
+    <AppProvider dataPortal={portalData}>
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>

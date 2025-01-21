@@ -1,3 +1,4 @@
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -42,8 +43,8 @@ export interface IAppContextType {
   setLogoUrl: React.Dispatch<React.SetStateAction<string>>;
   handleClientChange: (client: IClient) => void;
   businessUnitSigla?: string;
-  provisionedPortal: IProvisionedPortal | null;
+  provisionedPortal: IStaffPortalByBusinessManager;
   setProvisionedPortal: React.Dispatch<
-    React.SetStateAction<IProvisionedPortal | null>
+    React.SetStateAction<IStaffPortalByBusinessManager>
   >;
 }

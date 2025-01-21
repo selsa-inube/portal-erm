@@ -11,15 +11,15 @@ export const usePortalData = (codeParame: string) => {
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
-  const [flagShown, setFlagShown] = useState(() => {
-    // Revisa en localStorage si el flag ya fue mostrado
-    return localStorage.getItem("flagShown") === "true";
-  });
+  const [flagShown, setFlagShown] = useState(false);
   const { addFlag } = useFlag();
 
   useEffect(() => {
     const fetchPortalData = async () => {
       setIsFetching(true);
+      setHasError(false);
+      setFlagShown(false);
+
       try {
         if (!codeParame) {
           console.error("El parámetro 'codeParame' es inválido:", codeParame);
@@ -54,15 +54,16 @@ export const usePortalData = (codeParame: string) => {
   }, [codeParame]);
 
   useEffect(() => {
-    if (hasError && errorType === "api_error" && !flagShown) {
+    // Solo mostrar el flag si el errorType es 'api_error'
+    if (hasError && !flagShown && errorType === "api_error") {
       addFlag({
         title: "Error",
-        description: "Error en la consulta del código del portal",
+        description: "Error en la consulta del código del portal.",
         appearance: "dark",
         duration: 10000,
       });
-      setFlagShown(true);
-      localStorage.setItem("flagShown", "true");
+
+      setFlagShown(true); // Evita que el flag se muestre múltiples veces
     }
   }, [hasError, errorType, flagShown, addFlag]);
 
