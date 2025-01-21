@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
 import { staffPortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { useFlag } from "@inubekit/flag";
 
 export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
@@ -10,6 +11,11 @@ export const usePortalData = (codeParame: string) => {
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
+  const [flagShown, setFlagShown] = useState(() => {
+    // Revisa en localStorage si el flag ya fue mostrado
+    return localStorage.getItem("flagShown") === "true";
+  });
+  const { addFlag } = useFlag();
 
   useEffect(() => {
     const fetchPortalData = async () => {
@@ -46,6 +52,19 @@ export const usePortalData = (codeParame: string) => {
 
     void fetchPortalData();
   }, [codeParame]);
+
+  useEffect(() => {
+    if (hasError && errorType === "api_error" && !flagShown) {
+      addFlag({
+        title: "Error",
+        description: "Error en la consulta del código del portal",
+        appearance: "dark",
+        duration: 10000,
+      });
+      setFlagShown(true);
+      localStorage.setItem("flagShown", "true");
+    }
+  }, [hasError, errorType, flagShown, addFlag]);
 
   return { portalData, hasError, errorType, isFetching };
 };

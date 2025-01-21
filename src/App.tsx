@@ -6,8 +6,6 @@ import {
 } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { useFlag } from "@inubekit/flag";
-
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
@@ -50,10 +48,8 @@ function App() {
   }
 
   const [isReady, setIsReady] = useState(false);
-  const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError, errorType, isFetching } = usePortalData(portalCode);
-  const { addFlag } = useFlag();
+  const { hasError, isFetching } = usePortalData(portalCode);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated && !hasError) {
@@ -62,18 +58,6 @@ function App() {
       setIsReady(true);
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
-
-  useEffect(() => {
-    if (hasError && errorType === "api_error" && !flagShown) {
-      addFlag({
-        title: "Error",
-        description: "Error en la consulta del código del portal",
-        appearance: "dark",
-        duration: 10000,
-      });
-      setFlagShown(true);
-    }
-  }, [hasError, flagShown, addFlag, errorType]);
 
   if (isLoading || isFetching || !isReady) {
     return <div>Cargando...</div>;
