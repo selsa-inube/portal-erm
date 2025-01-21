@@ -52,7 +52,7 @@ function App() {
   const [isReady, setIsReady] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError, errorType } = usePortalData(portalCode);
+  const { hasError, errorType, isFetching } = usePortalData(portalCode);
   const { addFlag } = useFlag();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function App() {
     }
   }, [hasError, flagShown, addFlag, errorType]);
 
-  if (isLoading || !isReady) {
+  if (isLoading || isFetching || !isReady) {
     return <div>Cargando...</div>;
   }
 
@@ -90,4 +90,5 @@ function App() {
     </AppProvider>
   );
 }
+
 export default App;

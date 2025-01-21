@@ -9,9 +9,11 @@ export const usePortalData = (codeParame: string) => {
   );
   const [hasError, setHasError] = useState(false);
   const [errorType, setErrorType] = useState<string | null>(null);
+  const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
     const fetchPortalData = async () => {
+      setIsFetching(true);
       try {
         if (!codeParame) {
           console.error("El parámetro 'codeParame' es inválido:", codeParame);
@@ -37,11 +39,13 @@ export const usePortalData = (codeParame: string) => {
         console.error("Error al obtener los datos:", error);
         setHasError(true);
         setErrorType("api_error");
+      } finally {
+        setIsFetching(false);
       }
     };
 
     void fetchPortalData();
   }, [codeParame]);
 
-  return { portalData, hasError, errorType };
+  return { portalData, hasError, errorType, isFetching };
 };
