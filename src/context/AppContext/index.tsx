@@ -14,8 +14,7 @@ const AppContext = createContext<IAppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<{
   children: ReactNode;
-  staffUserAccount: IStaffUserAccount;
-}> = ({ children, staffUserAccount }) => {
+}> = ({ children }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -27,10 +26,10 @@ const AppProvider: React.FC<{
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: auth0User.nickname ?? "",
+          id: "account1",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
-          userAccountId: staffUserAccount.userAccountId,
+          userAccountId: auth0User.userAccountId,
         }
       : null,
   );
@@ -47,9 +46,7 @@ const AppProvider: React.FC<{
   const [provisionedPortal, setProvisionedPortal] =
     useState<IProvisionedPortal | null>(null);
 
-  const [staffUser, setstaffUser] = useState<IStaffUserAccount | null>(
-    staffUserAccount,
-  );
+  const [staffUser, setstaffUser] = useState<IStaffUserAccount | null>(null);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));

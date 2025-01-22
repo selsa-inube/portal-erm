@@ -26,7 +26,7 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user } = useAppContext();
+  const { user, setstaffUser } = useAppContext();
   const { isAuthenticated } = useAuth0();
   const portalCode = localStorage.getItem("portalCode");
 
@@ -34,14 +34,20 @@ function FirstPage() {
     userAccount,
     error: userAccountError,
     loading: userAccountLoading,
-  } = useStaffUserAccount({ userAccountId: user?.userAccountId ?? "" });
+  } = useStaffUserAccount({ userAccountId: user?.id ?? "" });
+
+  useEffect(() => {
+    if (userAccount && Object.keys(userAccount).length > 0) {
+      setstaffUser(userAccount);
+    }
+  }, [userAccount]);
 
   if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
     return <ErrorPage />;
   }
 
   if (userAccountLoading) {
-    return <div>Cargando...</div>;
+    return <div>Cargando!!...</div>;
   }
 
   if (
@@ -49,18 +55,10 @@ function FirstPage() {
     !userAccount ||
     Object.keys(userAccount).length === 0
   ) {
-    console.error("Error al cargar los datos del usuario o cuenta:", {
-      userAccountError,
-      userAccount,
-    });
-    return <ErrorPage errorCode={500} />;
+    return <ErrorPage errorCode={1004} />;
   }
 
-  return (
-    <AppProvider staffUserAccount={userAccount}>
-      <AppPage />
-    </AppProvider>
-  );
+  return <AppPage />;
 }
 
 const router = createBrowserRouter(
@@ -81,32 +79,23 @@ function App() {
     ? params.get("portal")
     : decrypt(localStorage.getItem("portalCode")!);
 
-  if (!params.has("portal")) {
-    return <ErrorPage errorCode={1001} />;
-  }
-
   if (!portalCode) {
     return <ErrorPage errorCode={1000} />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
-  const { loginWithRedirect, isAuthenticated, isLoading, user } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   const { hasError } = usePortalData(portalCode);
   const { addFlag } = useFlag();
 
   useEffect(() => {
-    console.log("Usuario autenticado:", user);
     if (!isLoading && !isAuthenticated && !hasError) {
       loginWithRedirect();
-    } else if (!isLoading && (isAuthenticated || hasError)) {
-      if (!user?.userAccountId) {
-        setIsReady(false);
-      } else {
-        setIsReady(true);
-      }
+    } else {
+      setIsReady(true);
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, hasError, user]);
+  }, [isLoading, isAuthenticated, loginWithRedirect]);
 
   useEffect(() => {
     if (hasError && !flagShown) {
@@ -119,7 +108,6 @@ function App() {
       setFlagShown(true);
     }
   }, [hasError, flagShown, addFlag]);
-
   if (isLoading || !isReady) {
     return <div>Cargando...</div>;
   }
@@ -130,10 +118,10 @@ function App() {
   }
 
   return (
-    <>
+    <AppProvider>
       <GlobalStyles />
       <RouterProvider router={router} />
-    </>
+    </AppProvider>
   );
 }
 
