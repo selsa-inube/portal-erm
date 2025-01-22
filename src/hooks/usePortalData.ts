@@ -54,7 +54,6 @@ export const usePortalData = (codeParame: string) => {
   }, [codeParame]);
 
   useEffect(() => {
-    // Solo mostrar el flag si el errorType es 'api_error'
     if (hasError && !flagShown && errorType === "api_error") {
       addFlag({
         title: "Error",
@@ -63,7 +62,7 @@ export const usePortalData = (codeParame: string) => {
         duration: 10000,
       });
 
-      setFlagShown(true); // Evita que el flag se muestre múltiples veces
+      setFlagShown(true);
     }
   }, [hasError, errorType, flagShown, addFlag]);
 
