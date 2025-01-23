@@ -8,7 +8,7 @@ export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
     {} as IStaffPortalByBusinessManager,
   );
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(true);
   const [errorType, setErrorType] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState(true);
   const [flagShown, setFlagShown] = useState(false);
@@ -17,7 +17,7 @@ export const usePortalData = (codeParame: string) => {
   useEffect(() => {
     const fetchPortalData = async () => {
       setIsFetching(true);
-      setHasError(false);
+      // setHasError(false);
       setFlagShown(false);
 
       try {
@@ -39,7 +39,7 @@ export const usePortalData = (codeParame: string) => {
 
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
-
+        setHasError(false);
         setPortalData(staffPortalData);
       } catch (error) {
         console.error("Error al obtener los datos:", error);
