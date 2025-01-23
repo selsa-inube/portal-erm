@@ -4,10 +4,12 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 
 interface UseStaffUserAccountProps {
   userAccountId: string;
+  onUserAccountLoaded?: (userAccount: IStaffUserAccount) => void;
 }
 
 export const useStaffUserAccount = ({
   userAccountId,
+  onUserAccountLoaded,
 }: UseStaffUserAccountProps) => {
   const [userAccount, setUserAccount] = useState<IStaffUserAccount | null>(
     null,
@@ -29,6 +31,9 @@ export const useStaffUserAccount = ({
       try {
         const data = await staffUserAccountById(userAccountId);
         setUserAccount(data);
+        if (onUserAccountLoaded) {
+          onUserAccountLoaded(data); // Ejecuta el callback si existe
+        }
       } catch (err) {
         console.error(err);
         setError("Hubo un error al obtener los datos del usuario");
@@ -38,7 +43,7 @@ export const useStaffUserAccount = ({
     };
 
     fetchUserAccount();
-  }, [userAccountId]);
+  }, [userAccountId, onUserAccountLoaded]);
 
   return { userAccount, loading, error };
 };

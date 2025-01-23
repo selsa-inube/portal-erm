@@ -28,7 +28,6 @@ const staffUserAccountById = async (
 
       const res = await fetch(
         `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staff-user-accounts-iportal-staff/${userAccountId}`,
-        // `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staff-user-accounts-iportal-staff/account1`,
         options,
       );
 

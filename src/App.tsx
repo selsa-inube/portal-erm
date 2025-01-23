@@ -34,13 +34,10 @@ function FirstPage() {
     userAccount,
     error: userAccountError,
     loading: userAccountLoading,
-  } = useStaffUserAccount({ userAccountId: user?.id ?? "" });
-
-  useEffect(() => {
-    if (userAccount && Object.keys(userAccount).length > 0) {
-      setstaffUser(userAccount);
-    }
-  }, [userAccount]);
+  } = useStaffUserAccount({
+    userAccountId: user?.id ?? "",
+    onUserAccountLoaded: setstaffUser,
+  });
 
   if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
     return <ErrorPage />;
