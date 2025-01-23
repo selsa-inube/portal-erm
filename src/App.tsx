@@ -7,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider, useAppContext } from "@context/AppContext";
+import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
@@ -21,21 +21,10 @@ function LogOut() {
   return null;
 }
 
-function FirstPage() {
-  const { user, provisionedPortal } = useAppContext();
-
-  return (provisionedPortal?.publicCode &&
-    provisionedPortal.publicCode.length === 0) ||
-    !user ? null : (
-    <AppPage />
-  );
-}
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />} />
+      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
