@@ -38,7 +38,7 @@ function App() {
     ? params.get("portal")
     : decrypt(localStorage.getItem("portalCode")!);
 
-  if (!params.has("portal") || !portalCode) {
+  if (!params.has("portal") || portalCode === "") {
     return <ErrorPage errorCode={1001} />;
   }
 
@@ -60,6 +60,10 @@ function App() {
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
+  if (isLoading || isFetching) {
+    return <div>Cargando...</div>;
+  }
+
   if (hasError) {
     if (errorType === "api_error") {
       return <ErrorPage errorCode={500} />;
@@ -67,8 +71,8 @@ function App() {
     return <ErrorPage errorCode={1001} />;
   }
 
-  if (isLoading || isFetching || !isReady) {
-    return <div>Cargando...</div>;
+  if (!isReady) {
+    return null;
   }
 
   return (
