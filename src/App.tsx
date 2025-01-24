@@ -4,55 +4,79 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import { AppPage } from "@components/layout/AppPage";
-
-import { GlobalStyles } from "@styles/global";
 import { AppProvider } from "@context/AppContext";
-
 import { environment } from "@config/environment";
+import { ErrorPage } from "@components/layout/ErrorPage";
+import { decrypt } from "@utils/encrypt";
+import { usePortalData } from "@hooks/usePortalData";
+import { GlobalStyles } from "./styles/global";
 
 function LogOut() {
   localStorage.clear();
   const { logout } = useAuth0();
-  void logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
-  return <h1>You have been logged out.</h1>;
+  logout({ logoutParams: { returnTo: environment.REDIRECT_URI } });
+  return null;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<AppPage />}></Route>
-      <Route path="/logout" element={<LogOut />} />
+      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
+      <Route path="logout" element={<LogOut />} />
     </>,
   ),
 );
 
 function App() {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const url = new URL(window.location.href);
+  const params = new URLSearchParams(url.search);
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      void loginWithRedirect();
-    }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode")!);
 
-  if (isLoading) {
-    return <h1>Loading...</h1>;
+  if (!portalCode || portalCode.trim() === "") {
+    return <ErrorPage errorCode={1001} />;
   }
 
-  if (!isAuthenticated) {
-    return null;
+  const [isReady, setIsReady] = useState(false);
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { portalData, hasError, errorType, isFetching } = usePortalData(
+    portalCode ?? "",
+  );
+
+  useEffect(() => {
+    if (!isLoading) {
+      if (hasError) {
+        setIsReady(false);
+      } else if (!isAuthenticated) {
+        loginWithRedirect();
+      } else {
+        setIsReady(true);
+      }
+    }
+  }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
+
+  if (hasError) {
+    if (errorType === "api_error") {
+      return <ErrorPage errorCode={500} />;
+    }
+    return <ErrorPage errorCode={1001} />;
+  }
+
+  if (isLoading || isFetching || !isReady) {
+    return <div>Cargando...</div>;
   }
 
   return (
-    <AppProvider>
+    <AppProvider dataPortal={portalData}>
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>
   );
 }
 
-export { App };
+export default App;
