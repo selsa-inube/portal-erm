@@ -37,20 +37,18 @@ function App() {
     ? params.get("portal")
     : decrypt(localStorage.getItem("portalCode")!);
 
-  if (!params.has("portal")) {
+  if (!params.has("portal") || !portalCode) {
     return <ErrorPage errorCode={1001} />;
-  }
-
-  if (!portalCode) {
-    return <ErrorPage errorCode={1000} />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { portalData, hasError, isFetching } = usePortalData(portalCode ?? "");
+  const { portalData, hasError, errorType, isFetching } = usePortalData(
+    portalCode ?? "",
+  );
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasError) {
+    if (!isLoading && !isAuthenticated) {
       loginWithRedirect();
     } else if (!isLoading && (isAuthenticated || hasError)) {
       setIsReady(true);
@@ -62,7 +60,11 @@ function App() {
   }
 
   if (hasError) {
-    return <ErrorPage errorCode={500} />;
+    if (errorType === "api_error") {
+      return <ErrorPage errorCode={500} />;
+    }
+
+    return <ErrorPage errorCode={1001} />;
   }
 
   return (
