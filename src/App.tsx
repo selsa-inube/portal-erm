@@ -33,11 +33,12 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
+
   const portalCode = params.get("portal")
     ? params.get("portal")
     : decrypt(localStorage.getItem("portalCode")!);
 
-  if (!params.has("portal") || !portalCode) {
+  if (!portalCode || portalCode.trim() === "") {
     return <ErrorPage errorCode={1001} />;
   }
 
@@ -48,23 +49,26 @@ function App() {
   );
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      loginWithRedirect();
-    } else if (!isLoading && (isAuthenticated || hasError)) {
-      setIsReady(true);
+    if (!isLoading) {
+      if (hasError) {
+        setIsReady(false);
+      } else if (!isAuthenticated) {
+        loginWithRedirect();
+      } else {
+        setIsReady(true);
+      }
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
-
-  if (isLoading || isFetching || !isReady) {
-    return <div>Cargando...</div>;
-  }
 
   if (hasError) {
     if (errorType === "api_error") {
       return <ErrorPage errorCode={500} />;
     }
-
     return <ErrorPage errorCode={1001} />;
+  }
+
+  if (isLoading || isFetching || !isReady) {
+    return <div>Cargando...</div>;
   }
 
   return (
