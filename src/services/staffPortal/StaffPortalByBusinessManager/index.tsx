@@ -30,7 +30,7 @@ const staffPortalByBusinessManager = async (
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-managerasdas?${queryParams.toString()}`,
+        `${environment.IVITE_ISAAS_QUERY_PROCESS_SERVICE}/staff-portals-by-business-manager?${queryParams.toString()}`,
         options,
       );
 
