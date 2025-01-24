@@ -38,7 +38,7 @@ function App() {
     ? params.get("portal")
     : decrypt(localStorage.getItem("portalCode")!);
 
-  if (!portalCode || portalCode.trim() === "") {
+  if (!params.has("portal") || !portalCode) {
     return <ErrorPage errorCode={1001} />;
   }
 
