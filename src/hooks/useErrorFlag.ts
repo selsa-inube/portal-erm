@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useFlag } from "@inubekit/flag";
 
-export const useErrorFlag = (hasError: boolean, errorType: string | null) => {
-  const [flagShown, setFlagShown] = useState(false);
+export const useErrorFlag = (flagShown: boolean) => {
   const { addFlag } = useFlag();
-
   useEffect(() => {
-    if (hasError && !flagShown && errorType === "api_error") {
+    if (flagShown) {
       addFlag({
         title: "Error",
-        description: "Error en la consulta del código del portal.",
-        appearance: "dark",
+        description: "Error en la consulta de los datos.",
+        appearance: "danger",
         duration: 10000,
       });
-
-      setFlagShown(true);
     }
-  }, [hasError, errorType, flagShown, addFlag]);
-
-  return flagShown;
+  }, [flagShown]);
 };

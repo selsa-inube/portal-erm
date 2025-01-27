@@ -4,13 +4,13 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { decrypt, encrypt } from "@utils/encrypt";
+import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { GlobalStyles } from "./styles/global";
 
@@ -34,32 +34,20 @@ function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
 
-  let portalCode = "";
-  if (params.has("portal")) {
-    portalCode = params.get("portal")!;
-    localStorage.setItem("portalCode", encrypt(portalCode));
-  } else if (localStorage.getItem("portalCode")) {
-    portalCode = decrypt(localStorage.getItem("portalCode")!);
-  }
+  const portalCode = params.get("portal")
+    ? params.get("portal")
+    : decrypt(localStorage.getItem("portalCode")!);
 
   if (!portalCode) {
     return <ErrorPage errorCode={1001} />;
   }
 
-  const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { portalData, hasError, errorType, isFetching } =
-    usePortalData(portalCode);
+  const { portalData, hasError, isFetching } = usePortalData(portalCode);
 
   useEffect(() => {
-    if (!isLoading) {
-      if (hasError) {
-        setIsReady(false);
-      } else if (!isAuthenticated) {
-        loginWithRedirect();
-      } else {
-        setIsReady(true);
-      }
+    if (!isLoading && !isAuthenticated && !hasError && !isFetching) {
+      loginWithRedirect();
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
@@ -68,13 +56,10 @@ function App() {
   }
 
   if (hasError) {
-    if (errorType === "api_error") {
-      return <ErrorPage errorCode={500} />;
-    }
-    return <ErrorPage errorCode={1001} />;
+    return <ErrorPage errorCode={hasError} />;
   }
 
-  if (!isReady || !isAuthenticated) {
+  if (!isAuthenticated) {
     return null;
   }
 

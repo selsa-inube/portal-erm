@@ -2,41 +2,32 @@ import { useState, useEffect } from "react";
 import { encrypt } from "@utils/encrypt";
 import { staffPortalByBusinessManager } from "@services/staffPortal/StaffPortalByBusinessManager";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
-
 import { useErrorFlag } from "./useErrorFlag";
 
 export const usePortalData = (codeParame: string) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
     {} as IStaffPortalByBusinessManager,
   );
-  const [hasError, setHasError] = useState(true);
-  const [errorType, setErrorType] = useState<string | null>(null);
+  const [hasError, setHasError] = useState<number | null>(1001);
   const [isFetching, setIsFetching] = useState(true);
+  const [flagShown, setFlagShown] = useState(false);
 
-  const flagShown = useErrorFlag(hasError, errorType);
+  useErrorFlag(flagShown);
 
   useEffect(() => {
     const fetchPortalData = async () => {
       setIsFetching(true);
-
       try {
         const staffPortalData = await staffPortalByBusinessManager(codeParame);
-
-        if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
-          setHasError(true);
-          setErrorType("no_data");
-          console.log("No se recibieron datos válidos o el objeto está vacío.");
+        if (!staffPortalData || Object.keys(staffPortalData).length === 0)
           return;
-        }
-
         const encryptedParamValue = encrypt(codeParame);
         localStorage.setItem("portalCode", encryptedParamValue);
-        setHasError(false);
+        setHasError(null);
         setPortalData(staffPortalData);
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-        setHasError(true);
-        setErrorType("api_error");
+      } catch {
+        setHasError(500);
+        setFlagShown(true);
       } finally {
         setIsFetching(false);
       }
@@ -45,5 +36,5 @@ export const usePortalData = (codeParame: string) => {
     void fetchPortalData();
   }, [codeParame]);
 
-  return { portalData, hasError, errorType, isFetching, flagShown };
+  return { portalData, hasError, isFetching };
 };
