@@ -4,9 +4,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { useFlag } from "@inubekit/flag";
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
 import { AppProvider, useAppContext } from "@context/AppContext";
@@ -26,20 +25,18 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, setstaffUser } = useAppContext();
+  const { user } = useAppContext();
   const { isAuthenticated } = useAuth0();
-  const portalCode = localStorage.getItem("portalCode");
 
   const {
     userAccount,
-    error: userAccountError,
+    hasError: userAccountError,
     loading: userAccountLoading,
   } = useStaffUserAccount({
     userAccountId: user?.id ?? "",
-    onUserAccountLoaded: setstaffUser,
   });
 
-  if (!isAuthenticated || !portalCode || portalCode.length === 0 || !user) {
+  if (!isAuthenticated) {
     return <ErrorPage />;
   }
 
@@ -47,11 +44,7 @@ function FirstPage() {
     return <div>Cargando!!...</div>;
   }
 
-  if (
-    userAccountError ||
-    !userAccount ||
-    Object.keys(userAccount).length === 0
-  ) {
+  if (userAccountError || !userAccount) {
     return <ErrorPage errorCode={1004} />;
   }
 
@@ -77,45 +70,32 @@ function App() {
     : decrypt(localStorage.getItem("portalCode")!);
 
   if (!portalCode) {
-    return <ErrorPage errorCode={1000} />;
+    return <ErrorPage errorCode={1001} />;
   }
 
-  const [isReady, setIsReady] = useState(false);
-  const [flagShown, setFlagShown] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { hasError } = usePortalData(portalCode);
-  const { addFlag } = useFlag();
+  const { portalData, hasError, isFetching } = usePortalData(portalCode);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasError) {
+    if (!isLoading && !isAuthenticated && !hasError && !isFetching) {
       loginWithRedirect();
-    } else {
-      setIsReady(true);
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect]);
+  }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
 
-  useEffect(() => {
-    if (hasError && !flagShown) {
-      addFlag({
-        title: "Error",
-        description: "Error en la consulta del código del portal",
-        appearance: "dark",
-        duration: 10000,
-      });
-      setFlagShown(true);
-    }
-  }, [hasError, flagShown, addFlag]);
-  if (isLoading || !isReady) {
+  if (isLoading || isFetching) {
     return <div>Cargando...</div>;
   }
 
   if (hasError) {
-    console.error("Error al cargar los datos del portal:", hasError);
-    return <ErrorPage errorCode={500} />;
+    return <ErrorPage errorCode={hasError} />;
+  }
+
+  if (!isAuthenticated) {
+    return null;
   }
 
   return (
-    <AppProvider>
+    <AppProvider dataPortal={portalData}>
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>

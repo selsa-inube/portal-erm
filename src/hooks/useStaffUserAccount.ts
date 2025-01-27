@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { staffUserAccountById } from "@services/StaffUser/StaffUserAccountIportalStaff";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
+import { useErrorFlag } from "./useErrorFlag";
 
 interface UseStaffUserAccountProps {
   userAccountId: string;
@@ -14,29 +15,32 @@ export const useStaffUserAccount = ({
   const [userAccount, setUserAccount] = useState<IStaffUserAccount | null>(
     null,
   );
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [hasError, setHasError] = useState<number | null>(1001);
+  const [flagShown, setFlagShown] = useState(false);
+
+  useErrorFlag(flagShown);
 
   useEffect(() => {
     const fetchUserAccount = async () => {
       if (!userAccountId) {
-        setError("El ID de cuenta de usuario es necesario");
+        setHasError(null);
         setUserAccount(null);
         return;
       }
 
       setLoading(true);
-      setError(null);
+      setHasError(null);
 
       try {
         const data = await staffUserAccountById(userAccountId);
         setUserAccount(data);
         if (onUserAccountLoaded) {
-          onUserAccountLoaded(data); // Ejecuta el callback si existe
+          onUserAccountLoaded(data);
         }
-      } catch (err) {
-        console.error(err);
-        setError("Hubo un error al obtener los datos del usuario");
+      } catch {
+        setHasError(500);
+        setFlagShown(true);
       } finally {
         setLoading(false);
       }
@@ -45,5 +49,5 @@ export const useStaffUserAccount = ({
     fetchUserAccount();
   }, [userAccountId, onUserAccountLoaded]);
 
-  return { userAccount, loading, error };
+  return { userAccount, loading, hasError };
 };

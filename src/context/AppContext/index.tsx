@@ -7,14 +7,16 @@ import React, {
 } from "react";
 import selsaLogo from "@assets/images/selsa.png";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IAppContextType, IPreferences, IProvisionedPortal } from "./types";
+import { IAppContextType, IPreferences } from "./types";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<{
   children: ReactNode;
-}> = ({ children }) => {
+  dataPortal: IStaffPortalByBusinessManager;
+}> = ({ children, dataPortal }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -43,10 +45,10 @@ const AppProvider: React.FC<{
     showPinnedOnly: false,
   });
 
-  const [provisionedPortal, setProvisionedPortal] =
-    useState<IProvisionedPortal | null>(null);
-
   const [staffUser, setstaffUser] = useState<IStaffUserAccount | null>(null);
+
+  const [provisionedPortal, setProvisionedPortal] =
+    useState<IStaffPortalByBusinessManager>(dataPortal);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
