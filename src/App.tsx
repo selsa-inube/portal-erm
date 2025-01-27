@@ -5,13 +5,16 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { useEffect } from "react";
+
 import { useAuth0 } from "@auth0/auth0-react";
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider } from "@context/AppContext";
+import { AppProvider, useAppContext } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
+import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
+
 import { GlobalStyles } from "./styles/global";
 
 function LogOut() {
@@ -21,10 +24,38 @@ function LogOut() {
   return null;
 }
 
+function FirstPage() {
+  const { user } = useAppContext();
+  const { isAuthenticated } = useAuth0();
+
+  const {
+    userAccount,
+    hasError: userAccountError,
+    loading: userAccountLoading,
+  } = useStaffUserAccount({
+    userAccountId: user?.id ?? "",
+  });
+
+  if (!isAuthenticated) {
+    return <ErrorPage />;
+  }
+
+  if (userAccountLoading) {
+    return <div>Cargando!!...</div>;
+  }
+
+  if (userAccountError || !userAccount) {
+    return <ErrorPage errorCode={1004} />;
+  }
+
+  return <AppPage />;
+}
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<AppPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/*" element={<AppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),

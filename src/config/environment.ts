@@ -13,6 +13,7 @@ interface Environment {
   AUTH0_DOMAIN: string;
   REDIRECT_URI: string;
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
+  IVITE_ISTAFF_QUERY_PROCESS_SERVICE: string;
 }
 
 const environment: Environment = {
@@ -22,6 +23,8 @@ const environment: Environment = {
   REDIRECT_URI: IS_PRODUCTION ? AUTH_REDIRECT_URI : window.location.origin,
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IVITE_ISAAS_QUERY_PROCESS_SERVICE as string,
+  IVITE_ISTAFF_QUERY_PROCESS_SERVICE: import.meta.env
+    .VITE_IVITE_ISATFF_QUERY_PROCESS_SERVICE as string,
 };
 
 export {

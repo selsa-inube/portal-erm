@@ -1,7 +1,27 @@
+import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
+
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
+}
+
+export interface IClient {
+  id: string;
+  name: string;
+  sigla: string;
+  logo: string;
+}
+
+export interface IProvisionedPortal {
+  status: string;
+  lastUpdated: string;
+  resources: {
+    id: string;
+    name: string;
+    type: string;
+    url: string;
+  }[];
 }
 
 export interface IClient {
@@ -28,6 +48,7 @@ export interface IAppContextType {
     id: string;
     company: string;
     urlImgPerfil: string;
+    userAccountId: string;
   } | null;
   setUser: React.Dispatch<
     React.SetStateAction<{
@@ -35,6 +56,7 @@ export interface IAppContextType {
       id: string;
       company: string;
       urlImgPerfil: string;
+      userAccountId: string;
     } | null>
   >;
   preferences: IPreferences;
@@ -47,4 +69,6 @@ export interface IAppContextType {
   setProvisionedPortal: React.Dispatch<
     React.SetStateAction<IStaffPortalByBusinessManager>
   >;
+  staffUser: IStaffUserAccount | null;
+  setstaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount | null>>;
 }
