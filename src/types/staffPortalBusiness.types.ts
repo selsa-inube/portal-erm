@@ -15,39 +15,4 @@ interface IStaffPortalByBusinessManager {
   url: string;
 }
 
-interface IBusinessManagers {
-  id: string;
-  publicCode: string;
-  language: string;
-  abbreviatedName: string;
-  description: string;
-  urlBrand: string;
-  urlLogo: string;
-  customerId: string;
-}
-
-interface IBusinessUnitsPortalStaff {
-  publicCode: string;
-  languageId: string;
-  abbreviatedName: string;
-  descriptionUse: string;
-  firstMonthOfFiscalYear: string;
-  urlLogo: string;
-}
-
-interface IStaffUserAccount {
-  accountName: string;
-  biologicalSex: string;
-  birthDay: string;
-  principalEmail: string;
-  principalPhone: string;
-  userAccount: string;
-  userAccountId: string;
-}
-
-export type {
-  IStaffPortalByBusinessManager,
-  IBusinessManagers,
-  IBusinessUnitsPortalStaff,
-  IStaffUserAccount,
-};
+export type { IStaffPortalByBusinessManager };

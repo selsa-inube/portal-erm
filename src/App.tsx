@@ -10,7 +10,7 @@ import { AppPage } from "@components/layout/AppPage";
 import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { decrypt } from "@utils/encrypt";
+import { decrypt, encrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { GlobalStyles } from "./styles/global";
 
@@ -34,19 +34,22 @@ function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
 
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : decrypt(localStorage.getItem("portalCode")!);
+  let portalCode = "";
+  if (params.has("portal")) {
+    portalCode = params.get("portal")!;
+    localStorage.setItem("portalCode", encrypt(portalCode));
+  } else if (localStorage.getItem("portalCode")) {
+    portalCode = decrypt(localStorage.getItem("portalCode")!);
+  }
 
-  if (!params.has("portal") || portalCode === "") {
+  if (!portalCode) {
     return <ErrorPage errorCode={1001} />;
   }
 
   const [isReady, setIsReady] = useState(false);
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { portalData, hasError, errorType, isFetching } = usePortalData(
-    portalCode ?? "",
-  );
+  const { portalData, hasError, errorType, isFetching } =
+    usePortalData(portalCode);
 
   useEffect(() => {
     if (!isLoading) {
@@ -71,7 +74,7 @@ function App() {
     return <ErrorPage errorCode={1001} />;
   }
 
-  if (!isReady) {
+  if (!isReady || !isAuthenticated) {
     return null;
   }
 

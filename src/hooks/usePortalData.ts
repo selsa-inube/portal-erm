@@ -20,13 +20,6 @@ export const usePortalData = (codeParame: string) => {
       setIsFetching(true);
 
       try {
-        if (!codeParame) {
-          console.error("El parámetro 'codeParame' es inválido:", codeParame);
-          setHasError(true);
-          setErrorType("invalid_param");
-          return;
-        }
-
         const staffPortalData = await staffPortalByBusinessManager(codeParame);
 
         if (!staffPortalData || Object.keys(staffPortalData).length === 0) {
