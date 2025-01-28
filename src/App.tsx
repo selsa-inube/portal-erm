@@ -6,13 +6,16 @@ import {
 } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
+
+import { useBusinessManagers } from "./hooks/useBusinessManagers";
 import { GlobalStyles } from "./styles/global";
+import { AppProvider } from "./context/AppContext";
 
 function LogOut() {
   localStorage.clear();
@@ -43,20 +46,32 @@ function App() {
   }
 
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
-  const { portalData, hasError, isFetching } = usePortalData(portalCode);
+  const {
+    portalData,
+    hasError: hasPortalError,
+    isFetching,
+  } = usePortalData(portalCode);
+
+  const {
+    businessManagersData,
+    hasError: hasManagersError,
+    codeError: businessManagersCode,
+  } = useBusinessManagers(portalData);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasError && !isFetching) {
+    if (!isLoading && !isAuthenticated && !hasPortalError && !isFetching) {
       loginWithRedirect();
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, hasError]);
+  }, [isLoading, isAuthenticated, loginWithRedirect, hasPortalError]);
 
   if (isLoading || isFetching) {
     return <div>Cargando...</div>;
   }
 
-  if (hasError) {
-    return <ErrorPage errorCode={hasError} />;
+  if (hasPortalError || hasManagersError) {
+    return (
+      <ErrorPage errorCode={businessManagersCode ?? hasPortalError ?? 1001} />
+    );
   }
 
   if (!isAuthenticated) {
@@ -64,7 +79,10 @@ function App() {
   }
 
   return (
-    <AppProvider dataPortal={portalData}>
+    <AppProvider
+      dataPortal={portalData}
+      businessManagersData={businessManagersData}
+    >
       <GlobalStyles />
       <RouterProvider router={router} />
     </AppProvider>
