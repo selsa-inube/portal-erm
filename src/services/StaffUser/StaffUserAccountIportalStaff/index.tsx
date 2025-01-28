@@ -21,13 +21,13 @@ const staffUserAccountById = async (
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          "X-Action": "SearchByIdStaffUserAccountIportalStaff",
+          "X-Action": "SearchByIdStaffUserAccount",
         },
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staff-user-accounts-iportal-staff/${userAccountId}`,
+        `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staff-user-accounts/${userAccountId}`,
         options,
       );
 
