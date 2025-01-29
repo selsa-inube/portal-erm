@@ -1,8 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Grid } from "@inubekit/grid";
-import { Header } from "@inubekit/header";
-import { Nav } from "@inubekit/nav";
-import { useMediaQuery } from "@inubekit/hooks";
+import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
@@ -31,10 +28,14 @@ function AppPage() {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={nav}
+          navigation={{
+            items: nav,
+          }}
           logoURL={renderLogo(logoUrl)}
-          userName="Usuario"
-          userMenu={userMenu}
+          user={{
+            username: "Nombre de usuario",
+          }}
+          menu={userMenu}
         />
         <StyledContainer>
           <Grid
