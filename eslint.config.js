@@ -46,6 +46,5 @@ export default tseslint.config({
       "warn",
       { allowConstantExport: true },
     ],
-    "@typescript-eslint/no-redundant-type-constituents": "off",
   },
 });
