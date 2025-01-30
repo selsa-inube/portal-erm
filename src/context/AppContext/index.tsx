@@ -45,7 +45,9 @@ const AppProvider: React.FC<{
     showPinnedOnly: false,
   });
 
-  const [staffUser, setstaffUser] = useState<IStaffUserAccount | null>(null);
+  const [staffUser, setstaffUser] = useState<IStaffUserAccount>(
+    {} as IStaffUserAccount,
+  );
 
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
