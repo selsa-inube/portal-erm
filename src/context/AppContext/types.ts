@@ -3,6 +3,17 @@ import {
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
 
+interface BusinessManager {
+  id: string;
+  publicCode: string;
+  language: string;
+  abbreviatedName: string;
+  description: string;
+  urlBrand: string;
+  urlLogo: string;
+  customerId: string;
+}
+
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -23,15 +34,7 @@ export interface IAppContextType {
     urlImgPerfil: string;
     userAccountId: string;
   } | null;
-  setUser: React.Dispatch<
-    React.SetStateAction<{
-      username: string;
-      id: string;
-      company: string;
-      urlImgPerfil: string;
-      userAccountId: string;
-    } | null>
-  >;
+  setUser: React.Dispatch<React.SetStateAction<IAppContextType["user"]>>;
   preferences: IPreferences;
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;
   logoUrl: string;
@@ -44,4 +47,6 @@ export interface IAppContextType {
   >;
   staffUser: IStaffUserAccount;
   setstaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount>>;
+  businessManagers: BusinessManager | null;
+  setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
 }

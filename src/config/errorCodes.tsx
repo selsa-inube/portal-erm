@@ -86,6 +86,26 @@ const errorCodes: Record<number, ErrorDetail> = {
     whatWentWrong: ["No se encontraron opciones para el empleado."],
     howToFix: ["Confirma que estés usando la url adecuada."],
   },
+  1006: {
+    whatWentWrong: [
+      "No se encontraron datos para el gestor de negocios.",
+      "El ID proporcionado no devolvió información válida.",
+    ],
+    howToFix: [
+      "Verifica que el ID del gestor de negocios sea correcto.",
+      "Asegúrate de que los datos necesarios estén configurados en el sistema.",
+    ],
+  },
+  1007: {
+    whatWentWrong: [
+      "Hubo un problema al intentar obtener los datos del gestor de negocios.",
+      "La solicitud falló debido a un error de red o del servidor.",
+    ],
+    howToFix: [
+      "Intenta nuevamente más tarde.",
+      "Si el problema persiste, contacta al equipo de soporte técnico.",
+    ],
+  },
 };
 
 export { errorCodes };

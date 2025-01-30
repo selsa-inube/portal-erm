@@ -5,18 +5,30 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import selsaLogo from "@assets/images/selsa.png";
 import { useAuth0 } from "@auth0/auth0-react";
-import { IAppContextType, IPreferences } from "./types";
+
+import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
+import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
+
+import { IAppContextType, IPreferences } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
+const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
+};
+
 const AppProvider: React.FC<{
   children: ReactNode;
+  businessManagersData: IBusinessManager;
   dataPortal: IStaffPortalByBusinessManager;
-}> = ({ children, dataPortal }) => {
+}> = ({ children, dataPortal, businessManagersData }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -52,6 +64,9 @@ const AppProvider: React.FC<{
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
 
+  const [businessManagers, setBusinessManagers] =
+    useState<IBusinessManager>(businessManagersData);
+
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
   };
@@ -79,6 +94,8 @@ const AppProvider: React.FC<{
         setProvisionedPortal,
         staffUser,
         setstaffUser,
+        businessManagers,
+        setBusinessManagers,
       }}
     >
       {children}
@@ -86,12 +103,5 @@ const AppProvider: React.FC<{
   );
 };
 
-const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
-
-export { AppProvider, useAppContext };
+export { AppProvider };
+export { useAppContext };
