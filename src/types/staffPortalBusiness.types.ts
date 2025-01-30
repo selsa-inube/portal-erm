@@ -38,7 +38,7 @@ interface IBusinessUnitsPortalStaff {
 interface IStaffUserAccount {
   accountName: string;
   biologicalSex: string;
-  birthDay: string;
+  birthDay: Date;
   principalEmail: string;
   principalPhone: string;
   userAccount: string;

@@ -7,7 +7,10 @@ const mapStaffUserAccountApiToEntity = (
     accountName: typeof data.accountName === "string" ? data.accountName : "",
     biologicalSex:
       typeof data.biologicalSex === "string" ? data.biologicalSex : "",
-    birthDay: typeof data.birthDay === "string" ? data.birthDay : "",
+    birthDay:
+      typeof data.birthDay === "string" && !isNaN(Date.parse(data.birthDay))
+        ? new Date(data.birthDay)
+        : new Date(),
     principalEmail:
       typeof data.principalEmail === "string" ? data.principalEmail : "",
     principalPhone:
