@@ -32,7 +32,6 @@ export interface IAppContextType {
     id: string;
     company: string;
     urlImgPerfil: string;
-    userAccountId: string;
   } | null;
   setUser: React.Dispatch<React.SetStateAction<IAppContextType["user"]>>;
   preferences: IPreferences;

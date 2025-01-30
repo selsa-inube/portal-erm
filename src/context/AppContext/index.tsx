@@ -35,7 +35,6 @@ const AppProvider: React.FC<{
     id: string;
     company: string;
     urlImgPerfil: string;
-    userAccountId: string;
   } | null>(
     auth0User
       ? {
@@ -43,7 +42,6 @@ const AppProvider: React.FC<{
           id: "account1",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
-          userAccountId: auth0User.userAccountId,
         }
       : null,
   );
