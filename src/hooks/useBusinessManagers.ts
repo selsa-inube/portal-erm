@@ -15,7 +15,7 @@ export const useBusinessManagers = (
     useState<IBusinessManager>({} as IBusinessManager);
   const [hasError, setHasError] = useState(false);
   const [codeError, setCodeError] = useState<number | undefined>(undefined);
-  const [isFetching, setIsFetching] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const [flagShown, setFlagShown] = useState(false);
 
   useErrorFlag(flagShown);

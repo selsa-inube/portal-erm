@@ -56,15 +56,22 @@ function App() {
     businessManagersData,
     hasError: hasManagersError,
     codeError: businessManagersCode,
+    isFetching: isFetchingManagers,
   } = useBusinessManagers(portalData);
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated && !hasPortalError && !isFetching) {
+    if (
+      !isLoading &&
+      !isAuthenticated &&
+      !hasPortalError &&
+      !isFetching &&
+      !isFetchingManagers
+    ) {
       loginWithRedirect();
     }
   }, [isLoading, isAuthenticated, loginWithRedirect, hasPortalError]);
 
-  if (isLoading || isFetching) {
+  if (isLoading || isFetching || isFetchingManagers) {
     return <div>Cargando...</div>;
   }
 
