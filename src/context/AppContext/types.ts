@@ -1,4 +1,16 @@
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+
+interface BusinessManager {
+  id: string;
+  publicCode: string;
+  language: string;
+  abbreviatedName: string;
+  description: string;
+  urlBrand: string;
+  urlLogo: string;
+  customerId: string;
+}
+
 export interface IPreferences {
   boardOrientation: "vertical" | "horizontal";
   showPinnedOnly: boolean;
@@ -29,14 +41,7 @@ export interface IAppContextType {
     company: string;
     urlImgPerfil: string;
   } | null;
-  setUser: React.Dispatch<
-    React.SetStateAction<{
-      username: string;
-      id: string;
-      company: string;
-      urlImgPerfil: string;
-    } | null>
-  >;
+  setUser: React.Dispatch<React.SetStateAction<IAppContextType["user"]>>;
   preferences: IPreferences;
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;
   logoUrl: string;
@@ -47,4 +52,6 @@ export interface IAppContextType {
   setProvisionedPortal: React.Dispatch<
     React.SetStateAction<IStaffPortalByBusinessManager>
   >;
+  businessManagers: BusinessManager | null;
+  setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
 }

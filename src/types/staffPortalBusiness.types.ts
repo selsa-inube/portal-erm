@@ -1,18 +1,16 @@
+import { IEmployeePortalByBusinessManager } from "./employeePortalBusiness.types";
+
 interface IOptionsByStaffPortalBusinessManager {
   optionStaffId: string;
   staffPortalCatalogId: string;
   staffPortalId: string;
 }
 
-interface IStaffPortalByBusinessManager {
-  abbreviatedName: string;
-  businessManagerId: string;
-  descriptionUse: string;
-  optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
+interface IStaffPortalByBusinessManager
+  extends IEmployeePortalByBusinessManager {
   publicCode: string;
-  staffPortalCatalogId: string;
-  staffPortalId: string;
   url: string;
+  optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
 }
 
 export type { IStaffPortalByBusinessManager };
