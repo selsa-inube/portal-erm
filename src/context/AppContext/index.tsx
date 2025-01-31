@@ -14,7 +14,7 @@ const AppContext = createContext<IAppContextType | undefined>(undefined);
 
 const AppProvider: React.FC<{
   children: ReactNode;
-  dataPortal?: IStaffPortalByBusinessManager;
+  dataPortal: IStaffPortalByBusinessManager;
 }> = ({ children, dataPortal }) => {
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
