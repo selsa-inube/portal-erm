@@ -27,7 +27,7 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user } = useAppContext();
+  const { user, setStaffUser } = useAppContext();
   const { isAuthenticated } = useAuth0();
 
   const {
@@ -37,6 +37,12 @@ function FirstPage() {
   } = useStaffUserAccount({
     userAccountId: user?.id ?? "",
   });
+
+  useEffect(() => {
+    if (userAccount) {
+      setStaffUser(userAccount);
+    }
+  }, [userAccount, setStaffUser]);
 
   if (!isAuthenticated) {
     return <ErrorPage />;
@@ -52,7 +58,6 @@ function FirstPage() {
 
   return <AppPage />;
 }
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>

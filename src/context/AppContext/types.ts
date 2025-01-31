@@ -45,7 +45,7 @@ export interface IAppContextType {
     React.SetStateAction<IStaffPortalByBusinessManager>
   >;
   staffUser: IStaffUserAccount;
-  setstaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount>>;
+  setStaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount>>;
   businessManagers: BusinessManager | null;
   setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
 }

@@ -55,7 +55,7 @@ const AppProvider: React.FC<{
     showPinnedOnly: false,
   });
 
-  const [staffUser, setstaffUser] = useState<IStaffUserAccount>(
+  const [staffUser, setStaffUser] = useState<IStaffUserAccount>(
     {} as IStaffUserAccount,
   );
 
@@ -91,7 +91,7 @@ const AppProvider: React.FC<{
         provisionedPortal,
         setProvisionedPortal,
         staffUser,
-        setstaffUser,
+        setStaffUser,
         businessManagers,
         setBusinessManagers,
       }}
