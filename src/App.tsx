@@ -39,10 +39,10 @@ function FirstPage() {
   });
 
   useEffect(() => {
-    if (userAccount) {
+    if (userAccount && !userAccountLoading && !userAccountError) {
       setStaffUser(userAccount);
     }
-  }, [userAccount, setStaffUser]);
+  }, [userAccount, userAccountLoading, userAccountError, setStaffUser]);
 
   if (!isAuthenticated) {
     return <ErrorPage />;
@@ -58,6 +58,7 @@ function FirstPage() {
 
   return <AppPage />;
 }
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
