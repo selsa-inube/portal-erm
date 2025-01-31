@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useFlag } from "@inubekit/flag";
+import { useFlag } from "@inubekit/inubekit";
 
 export const useErrorFlag = (flagShown: boolean) => {
   const { addFlag } = useFlag();
