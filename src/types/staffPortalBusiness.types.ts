@@ -13,4 +13,14 @@ interface IStaffPortalByBusinessManager
   optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
 }
 
-export type { IStaffPortalByBusinessManager };
+interface IStaffUserAccount {
+  accountName: string;
+  biologicalSex: string;
+  birthDay: Date;
+  principalEmail: string;
+  principalPhone: string;
+  userAccount: string;
+  userAccountId: string;
+}
+
+export type { IStaffPortalByBusinessManager, IStaffUserAccount };

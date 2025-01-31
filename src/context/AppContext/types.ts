@@ -1,4 +1,7 @@
-import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import {
+  IStaffPortalByBusinessManager,
+  IStaffUserAccount,
+} from "@ptypes/staffPortalBusiness.types";
 
 interface BusinessManager {
   id: string;
@@ -23,17 +26,6 @@ export interface IClient {
   logo: string;
 }
 
-export interface IProvisionedPortal {
-  status: string;
-  lastUpdated: string;
-  resources: {
-    id: string;
-    name: string;
-    type: string;
-    url: string;
-  }[];
-}
-
 export interface IAppContextType {
   user: {
     username: string;
@@ -52,6 +44,8 @@ export interface IAppContextType {
   setProvisionedPortal: React.Dispatch<
     React.SetStateAction<IStaffPortalByBusinessManager>
   >;
+  staffUser: IStaffUserAccount;
+  setStaffUser: React.Dispatch<React.SetStateAction<IStaffUserAccount>>;
   businessManagers: BusinessManager | null;
   setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
 }

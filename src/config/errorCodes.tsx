@@ -79,7 +79,7 @@ const errorCodes: Record<number, ErrorDetail> = {
     howToFix: ["Confirma que estés usando la url adecuada."],
   },
   1004: {
-    whatWentWrong: ["El usuario con que accedio no es un empleado."],
+    whatWentWrong: ["El usuario con que accedio no es un funcionario."],
     howToFix: ["Confirma que estés usando la url adecuada."],
   },
   1005: {

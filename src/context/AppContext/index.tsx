@@ -9,6 +9,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
+import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
 
 import { IAppContextType, IPreferences } from "./types";
@@ -38,7 +39,7 @@ const AppProvider: React.FC<{
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: auth0User.nickname ?? "",
+          id: "account1",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
         }
@@ -53,6 +54,10 @@ const AppProvider: React.FC<{
       "vertical",
     showPinnedOnly: false,
   });
+
+  const [staffUser, setStaffUser] = useState<IStaffUserAccount>(
+    {} as IStaffUserAccount,
+  );
 
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
@@ -85,6 +90,8 @@ const AppProvider: React.FC<{
         },
         provisionedPortal,
         setProvisionedPortal,
+        staffUser,
+        setStaffUser,
         businessManagers,
         setBusinessManagers,
       }}
