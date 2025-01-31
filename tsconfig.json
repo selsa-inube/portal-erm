@@ -39,6 +39,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", ".storybook/**/*", "vite.config.ts", "*.ts", "*.tsx"],
+  "include": ["src", "*.ts", "*.tsx"],
+  "exclude": [".storybook", "vite.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
