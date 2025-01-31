@@ -43,9 +43,7 @@ const AppProvider: React.FC<{
   });
 
   const [provisionedPortal, setProvisionedPortal] =
-    useState<IStaffPortalByBusinessManager>(
-      dataPortal ?? ({} as IStaffPortalByBusinessManager),
-    );
+    useState<IStaffPortalByBusinessManager>(dataPortal);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
