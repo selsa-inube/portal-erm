@@ -1,34 +1,26 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IBusinessUnit } from "@src/types/employeePortalBusiness.types";
 
 import { IAppContextType, IPreferences } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
-const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error("useAppContext must be used within an AppProvider");
-  }
-  return context;
-};
-
-const AppProvider: React.FC<{
+interface AppProviderProps {
   children: ReactNode;
   businessManagersData: IBusinessManager;
   dataPortal: IStaffPortalByBusinessManager;
-}> = ({ children, dataPortal, businessManagersData }) => {
+  businessUnitsData: IBusinessUnit[];
+}
+
+function AppProvider(props: AppProviderProps) {
+  const { children, dataPortal, businessManagersData, businessUnitsData } =
+    props;
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -58,12 +50,12 @@ const AppProvider: React.FC<{
   const [staffUser, setStaffUser] = useState<IStaffUserAccount>(
     {} as IStaffUserAccount,
   );
-
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
-
   const [businessManagers, setBusinessManagers] =
     useState<IBusinessManager>(businessManagersData);
+  const [businessUnits, setBusinessUnits] =
+    useState<IBusinessUnit[]>(businessUnitsData);
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
@@ -94,12 +86,13 @@ const AppProvider: React.FC<{
         setStaffUser,
         businessManagers,
         setBusinessManagers,
+        setBusinessUnits,
+        businessUnits,
       }}
     >
       {children}
     </AppContext.Provider>
   );
-};
+}
 
-export { AppProvider };
-export { useAppContext };
+export { AppProvider, AppContext };

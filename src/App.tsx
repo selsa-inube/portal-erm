@@ -1,23 +1,27 @@
+import { useEffect } from "react";
 import {
   Route,
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  useNavigate,
 } from "react-router-dom";
-import { useEffect } from "react";
-
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { AppPage } from "@components/layout/AppPage";
-import { AppProvider, useAppContext } from "@context/AppContext";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
+import { useBusinessManagers } from "@hooks/useBusinessManagers";
 
-import { useBusinessManagers } from "./hooks/useBusinessManagers";
+import { LoginRoutes } from "./routes/login";
+import { Login } from "./pages/login";
 import { GlobalStyles } from "./styles/global";
+import { BusinessUnitsLoader } from "./BusinessUnitsLoader";
+import { useAppContext } from "./context/AppContext/useAppContext";
+import { AppProvider } from "./context/AppContext";
 
 function LogOut() {
   localStorage.clear();
@@ -29,6 +33,7 @@ function LogOut() {
 function FirstPage() {
   const { user, setStaffUser } = useAppContext();
   const { isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
 
   const {
     userAccount,
@@ -41,8 +46,15 @@ function FirstPage() {
   useEffect(() => {
     if (userAccount && !userAccountLoading && !userAccountError) {
       setStaffUser(userAccount);
+      navigate("/app", { replace: true });
     }
-  }, [userAccount, userAccountLoading, userAccountError, setStaffUser]);
+  }, [
+    userAccount,
+    userAccountLoading,
+    userAccountError,
+    setStaffUser,
+    navigate,
+  ]);
 
   if (!isAuthenticated) {
     return <ErrorPage />;
@@ -56,14 +68,15 @@ function FirstPage() {
     return <ErrorPage errorCode={1004} />;
   }
 
-  return <AppPage />;
+  return <Login />;
 }
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />} />
+      <Route path="login/*" element={<LoginRoutes />} />
+      <Route path="/app/*" element={<AppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
@@ -72,10 +85,10 @@ const router = createBrowserRouter(
 function App() {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-
-  const portalCode = params.get("portal")
-    ? params.get("portal")
-    : decrypt(localStorage.getItem("portalCode")!);
+  const portalParam = params.get("portal");
+  const storedPortal = localStorage.getItem("portalCode");
+  const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
+  const portalCode = portalParam ?? decryptedPortal;
 
   if (!portalCode) {
     return <ErrorPage errorCode={1001} />;
@@ -105,16 +118,21 @@ function App() {
     ) {
       loginWithRedirect();
     }
-  }, [isLoading, isAuthenticated, loginWithRedirect, hasPortalError]);
+  }, [
+    isLoading,
+    isAuthenticated,
+    loginWithRedirect,
+    hasPortalError,
+    isFetching,
+    isFetchingManagers,
+  ]);
 
   if (isLoading || isFetching || isFetchingManagers) {
     return <div>Cargando...</div>;
   }
 
   if (hasPortalError || hasManagersError) {
-    return (
-      <ErrorPage errorCode={businessManagersCode ?? hasPortalError ?? 1001} />
-    );
+    return <ErrorPage errorCode={businessManagersCode ?? 1001} />;
   }
 
   if (!isAuthenticated) {
@@ -125,8 +143,10 @@ function App() {
     <AppProvider
       dataPortal={portalData}
       businessManagersData={businessManagersData}
+      businessUnitsData={[]}
     >
       <GlobalStyles />
+      <BusinessUnitsLoader portalCode={portalCode} />
       <RouterProvider router={router} />
     </AppProvider>
   );
