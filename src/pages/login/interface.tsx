@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useMediaQueries, Grid, Stack, Text } from "@inubekit/inubekit";
 
 import selsaLogo from "@assets/images/logoInube.png";
+import { spacing } from "@src/design/tokens/spacing";
 
 import {
   StyledWelcomeContainer,
@@ -24,9 +25,9 @@ function LoginUI() {
           justifyContent="center"
           alignItems="center"
           height="100%"
-          gap={screenMobile ? "16px" : "32px"}
+          gap={screenMobile ? spacing.s200 : spacing.s400}
         >
-          <Stack direction="column" alignItems="center" gap="15px">
+          <Stack direction="column" alignItems="center" gap={spacing.s200}>
             <Stack direction="column" alignItems="center">
               <Text type="headline" size="small" weight="bold">
                 ¡Bienvenido!
@@ -48,7 +49,7 @@ function LoginUI() {
           alignItems="center"
           justifyContent="center"
           height={screenMobile ? "90vh" : "-webkit-fill-available"}
-          padding="50px 16px"
+          padding={`${spacing.s600} ${spacing.s200}`}
         >
           <Outlet />
         </Stack>

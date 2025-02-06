@@ -1,8 +1,10 @@
 import { Stack, Text, Spinner } from "@inubekit/inubekit";
 
+import { spacing } from "@src/design/tokens/spacing";
+
 function CheckingCredentialsUI() {
   return (
-    <Stack gap="16px" direction="column">
+    <Stack gap={spacing.s200} direction="column">
       <Stack direction="column">
         <Text type="title" textAlign="center">
           Validando credenciales

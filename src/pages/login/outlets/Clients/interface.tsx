@@ -4,6 +4,7 @@ import { Button, Textfield, Stack, Text } from "@inubekit/inubekit";
 
 import { RadioClient } from "@components/cards/RadioClient";
 import { IClient } from "@context/AppContext/types";
+import { spacing } from "@src/design/tokens/spacing";
 
 import { IClientState } from "./types";
 import {
@@ -48,7 +49,7 @@ function ClientsUI(props: ClientsUIProps) {
 
   return (
     <StyledClients>
-      <Stack direction="column" alignItems="center" gap="20px">
+      <Stack direction="column" alignItems="center" gap={spacing.s250}>
         <Text type="title" as="h2" textAlign="center">
           {textsConfig.clientsTitle}
         </Text>
@@ -72,7 +73,7 @@ function ClientsUI(props: ClientsUIProps) {
           )}
           {filteredClients.length === 0 && <NoResultsMessage search={search} />}
           <StyledClientsList $scroll={clients.length > 5}>
-            <Stack direction="column" alignItems="center" gap="8px">
+            <Stack direction="column" alignItems="center" gap={spacing.s100}>
               {filteredClients.map((client) => (
                 <StyledClientsItem key={client.id}>
                   <RadioClient

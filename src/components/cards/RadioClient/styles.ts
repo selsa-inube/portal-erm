@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@src/design/tokens/spacing";
+
 const StyledRadioClient = styled.label`
   & div {
     box-sizing: border-box;
@@ -12,7 +14,7 @@ const StyledRadioClient = styled.label`
     box-shadow: 0px 1px 2px 0px
       ${({ theme }) =>
         theme?.palette?.neutralAlpha?.N40A || inube.palette.neutralAlpha.N40A};
-    border-radius: 8px;
+    border-radius: ${spacing.s100};
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
     border: 1px solid
       ${({ theme }) =>

@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { spacing } from "@src/design/tokens/spacing";
+
 interface StyledClientsListProps {
   $scroll?: boolean;
 }
@@ -16,7 +18,7 @@ const StyledClients = styled.div`
   }
 
   & button {
-    margin-top: 24px;
+    margin-top: ${spacing.s300};
   }
 `;
 
@@ -34,7 +36,7 @@ const StyledClientsList = styled.div<StyledClientsListProps>`
 `;
 
 const StyledNoResults = styled.div`
-  margin: 16px 0px;
+  margin: ${spacing.s200} ${spacing.s0};
 `;
 
 const StyledClientsItem = styled.li`
