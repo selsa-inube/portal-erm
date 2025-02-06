@@ -1,6 +1,12 @@
 import React from "react";
 import { MdSearch } from "react-icons/md";
-import { Button, Textfield, Stack, Text } from "@inubekit/inubekit";
+import {
+  Button,
+  Textfield,
+  Stack,
+  Text,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { RadioClient } from "@components/cards/RadioClient";
 import { IClient } from "@context/AppContext/types";
@@ -46,6 +52,7 @@ function ClientsUI(props: ClientsUIProps) {
   } = props;
 
   const filteredClients = filterClients(clients, search) || clients;
+  const isMobile = useMediaQuery("(max-width: 461px)");
 
   return (
     <StyledClients>
@@ -93,6 +100,7 @@ function ClientsUI(props: ClientsUIProps) {
               type="button"
               disabled={client.value}
               onClick={handleSubmit}
+              fullwidth={isMobile}
             >
               {textsConfig.continueButton}
             </Button>
