@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@src/context/AppContext/useAppContext";
 import {
   StyledAppPage,
   StyledContainer,
