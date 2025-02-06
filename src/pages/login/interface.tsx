@@ -3,7 +3,11 @@ import { useMediaQueries, Grid, Stack, Text } from "@inubekit/inubekit";
 
 import selsaLogo from "@assets/images/logoInube.png";
 
-import { StyledWelcomeContainer, StyledOutletContainer } from "./styles";
+import {
+  StyledWelcomeContainer,
+  StyledOutletContainer,
+  StyledLogo,
+} from "./styles";
 
 function LoginUI() {
   const { "(max-width: 768px)": screenMobile }: Record<string, boolean> =
@@ -31,13 +35,10 @@ function LoginUI() {
                 Portal-ERM
               </Text>
             </Stack>
-            <img
+            <StyledLogo
               src={selsaLogo}
+              screenMobile={screenMobile}
               alt="Logo Inube"
-              style={{
-                width: screenMobile ? "90px" : "124px",
-                marginTop: "16px",
-              }}
             />
           </Stack>
         </Stack>
