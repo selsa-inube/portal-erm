@@ -35,11 +35,11 @@ const nav: INav = {
           icon: <MdOutlinePersonOff />,
           path: "/absences",
         },
-        certificates: {
-          id: "certificates",
-          label: "Certificados",
+        certifications: {
+          id: "certifications",
+          label: "Certificaciones",
           icon: <MdAttachFile />,
-          path: "/certificates",
+          path: "/certifications",
         },
         contracts: {
           id: "contracts",
