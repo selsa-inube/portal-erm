@@ -1,5 +1,5 @@
 export interface ICertificationsTable {
-  description: CertificationsTableField<string>;
+  requestNumber: CertificationsTableField<string>;
   date: CertificationsTableField<string>;
   status: CertificationsTableField<string>;
   details: CertificationsTableDetails;

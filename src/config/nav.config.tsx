@@ -1,7 +1,7 @@
 import {
   MdLogout,
   MdOutlinePersonOff,
-  MdAttachFile,
+  MdOutlineFilePresent,
   MdBeachAccess,
   MdOutlinePersonalInjury,
   MdOutlineHistoryEdu,
@@ -38,7 +38,7 @@ const nav: INav = {
         certifications: {
           id: "certifications",
           label: "Certificaciones",
-          icon: <MdAttachFile />,
+          icon: <MdOutlineFilePresent />,
           path: "/certifications",
         },
         contracts: {

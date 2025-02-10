@@ -6,7 +6,6 @@ import { HumanResourceRequest } from "@ptypes/certifications.types";
 export const formatHumanResourceData = (requests: HumanResourceRequest[]) =>
   requests.map((request) => ({
     requestNumber: { value: request.human_resource_request_number },
-    description: { value: request.human_resource_request_description },
     type: { value: request.human_resource_request_type },
     date: { value: formatDate(request.human_resource_request_date) },
     status: { value: request.human_resource_request_status },
