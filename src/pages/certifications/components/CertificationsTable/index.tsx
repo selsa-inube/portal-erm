@@ -127,6 +127,7 @@ function CertificationsTable({
       value?: string | number | JSX.Element;
       type?: string;
       onClick?: () => void;
+      user_has_privileges?: boolean;
     },
   ) => {
     if (loading) {
@@ -138,14 +139,21 @@ function CertificationsTable({
       cellData.type === "icon" &&
       (headerKey === "details" || headerKey === "delete")
     ) {
+      const hasPrivileges = cellData.user_has_privileges ?? false;
+      const isDeleteAction = headerKey === "delete";
+
       const appearanceValue: "dark" | "danger" | "gray" =
-        headerKey === "details" ? "dark" : "danger";
+        isDeleteAction && !hasPrivileges
+          ? "gray"
+          : isDeleteAction
+            ? "danger"
+            : "dark";
 
       const iconProps = {
         appearance: appearanceValue,
         size: "16px",
-        onClick: () => cellData,
-        cursorHover: true,
+        onClick: hasPrivileges ? cellData.onClick : undefined,
+        cursorHover: hasPrivileges,
       };
 
       return (

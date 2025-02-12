@@ -34,4 +34,3 @@ export const headers: {
 ];
 
 export const pageLength = 5;
-export const caption = "Tabla de Ejemplo";

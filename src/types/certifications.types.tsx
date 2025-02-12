@@ -9,6 +9,7 @@ export interface HumanResourceRequest {
   employee_id: string;
   user_code_in_charge: string;
   user_name_in_charge: string;
+  user_has_privileges: boolean;
 }
 
 export interface HumanResourceRequestTraceability {
@@ -18,6 +19,7 @@ export interface HumanResourceRequestTraceability {
   user_who_executed_action: string;
   execution_date: string;
   description: string;
+  user_has_privileges: boolean;
 }
 
 export interface TaskManagingHumanResourceRequest {
@@ -26,6 +28,7 @@ export interface TaskManagingHumanResourceRequest {
   task_code: string;
   task_name: string;
   task_status: string;
+  user_has_privileges: boolean;
 }
 
 export interface HumanResourceData {
