@@ -15,6 +15,7 @@ import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
+import { HolidaysRoutes } from "./routes/holidays";
 
 import { useBusinessManagers } from "./hooks/useBusinessManagers";
 import { GlobalStyles } from "./styles/global";
@@ -63,7 +64,9 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
-      <Route path="/*" element={<AppPage />} />
+      <Route path="/*" element={<AppPage />}>
+        <Route path="holidays/*" element={<HolidaysRoutes />} />
+      </Route>
       <Route path="logout" element={<LogOut />} />
     </>,
   ),

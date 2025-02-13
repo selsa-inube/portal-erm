@@ -10,7 +10,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
-import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 
 import { IAppContextType, IPreferences } from "./types";
 
