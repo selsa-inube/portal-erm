@@ -4,6 +4,7 @@ import { getHolidaysRequestInProcess } from "@services/holidays/getHolidaysReque
 import { useAppContext } from "@context/AppContext";
 import { getDateString } from "@utils/date";
 import { parseFormattedDate } from "@utils/date";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { holidaysNavConfig } from "./config/nav.config";
 import { HolidaysOptionsUI } from "./interface";
@@ -13,13 +14,17 @@ import { formatHolidaysData } from "./config/table.config";
 function HolidaysOptions() {
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [flagShown, setFlagShown] = useState(false);
   const { user } = useAppContext();
+
+  useErrorFlag(flagShown, "Error en la consulta las solicitudes en tramite");
 
   useEffect(() => {
     const fetchHolidays = async () => {
       setIsLoading(true);
       try {
         if (!user?.id) return;
+
         const holidays = await getHolidaysRequestInProcess(user.id);
         const formattedData = formatHolidaysData(holidays || []);
 
@@ -30,9 +35,11 @@ function HolidaysOptions() {
           const dateB = parseFormattedDate(dateBString);
           return dateA.getTime() - dateB.getTime();
         });
+
         setTableData(sortedData);
       } catch (error) {
         console.error("Error al obtener las vacaciones:", error);
+        setFlagShown(true);
       } finally {
         setIsLoading(false);
       }
