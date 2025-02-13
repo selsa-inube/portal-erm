@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import {
   IBusinessManager,
   IEmployeePortalByBusinessManager,
-} from "@src/types/employeePortalBusiness.types";
+} from "@ptypes/employeePortalBusiness.types";
 import { getBusinessManagerById } from "@services/businessManagers/getBusinessManagerById";
 
 import { useErrorFlag } from "./useErrorFlag";
