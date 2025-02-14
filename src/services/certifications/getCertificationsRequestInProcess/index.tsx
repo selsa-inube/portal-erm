@@ -15,7 +15,7 @@ const getHumanResourceRequests = async () => {
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
       const res = await fetch(
-        `${environment.HUMAN_RESOURCE_REQUEST_SERVICE}/certification`,
+        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/certification`,
         {
           method: "GET",
           headers: {

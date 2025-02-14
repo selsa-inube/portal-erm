@@ -22,6 +22,5 @@ export const formatHumanResourceData = (requests: HumanResourceRequest[]) =>
       type: "icon" as const,
       onClick: () =>
         console.log(`Eliminar solicitud ${request.human_resource_request_id}`),
-      user_has_privileges: request.user_has_privileges,
     },
   }));

@@ -23,7 +23,6 @@ const mapHumanResourceRequestApiToEntity = (
   employee_id: String(item.employee_id ?? ""),
   user_code_in_charge: String(item.user_code_in_charge ?? ""),
   user_name_in_charge: String(item.user_name_in_charge ?? ""),
-  user_has_privileges: item.user_has_privileges ?? false,
 });
 
 const mapHumanResourceRequestTraceabilityApiToEntity = (
@@ -35,7 +34,6 @@ const mapHumanResourceRequestTraceabilityApiToEntity = (
   user_who_executed_action: String(item.user_who_executed_action ?? ""),
   execution_date: String(item.execution_date ?? ""),
   description: String(item.description ?? ""),
-  user_has_privileges: item.user_has_privileges ?? false,
 });
 
 const mapTaskManagingHumanResourceRequestApiToEntity = (
@@ -46,7 +44,6 @@ const mapTaskManagingHumanResourceRequestApiToEntity = (
   task_code: String(item.task_code ?? ""),
   task_name: String(item.task_name ?? ""),
   task_status: String(item.task_status ?? ""),
-  user_has_privileges: item.user_has_privileges ?? false,
 });
 
 export {
