@@ -2,6 +2,7 @@ import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   Text,
   Icon,
+  IIcon,
   SkeletonLine,
   useMediaQueries,
   Col,
@@ -24,11 +25,13 @@ import { Detail } from "./Detail";
 interface CertificationsTableProps {
   data: ICertificationsTable[];
   loading?: boolean;
+  disableDeleteAction?: boolean;
 }
 
 function CertificationsTable({
   data,
   loading = false,
+  disableDeleteAction = false,
 }: CertificationsTableProps) {
   const {
     totalRecords,
@@ -127,7 +130,7 @@ function CertificationsTable({
       value?: string | number | JSX.Element;
       type?: string;
       onClick?: () => void;
-      user_has_privileges?: boolean;
+      hasDeletePrivilege?: boolean;
     },
   ) => {
     if (loading) {
@@ -139,35 +142,32 @@ function CertificationsTable({
       cellData.type === "icon" &&
       (headerKey === "details" || headerKey === "delete")
     ) {
-      const hasPrivileges = cellData.user_has_privileges ?? false;
-      const isDeleteAction = headerKey === "delete";
+      if (headerKey === "details") {
+        const iconProps: IIcon = {
+          appearance: "dark",
+          size: "16px",
+          cursorHover: true,
+          icon: <MdOutlineVisibility />,
+        };
 
-      const appearanceValue: "dark" | "danger" | "gray" =
-        isDeleteAction && !hasPrivileges
-          ? "gray"
-          : isDeleteAction
-            ? "danger"
-            : "dark";
+        return <Icon {...iconProps} />;
+      }
 
-      const iconProps = {
-        appearance: appearanceValue,
-        size: "16px",
-        onClick: hasPrivileges ? cellData.onClick : undefined,
-        cursorHover: hasPrivileges,
-      };
-
-      return (
-        <Icon
-          icon={
-            headerKey === "details" ? (
-              <MdOutlineVisibility />
-            ) : (
-              <MdDeleteOutline />
-            )
-          }
-          {...iconProps}
-        />
-      );
+      if (headerKey === "delete") {
+        const hasPrivilege = !disableDeleteAction;
+        const iconProps: IIcon = {
+          appearance: hasPrivilege ? "danger" : "gray",
+          size: "16px",
+          onClick: hasPrivilege
+            ? () => {
+                /* no-op */
+              }
+            : undefined,
+          cursorHover: hasPrivilege,
+          icon: <MdDeleteOutline />,
+        };
+        return <Icon {...iconProps} />;
+      }
     }
     return cellData?.value;
   };

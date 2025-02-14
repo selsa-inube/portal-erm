@@ -7,10 +7,12 @@ interface DetailProps {
   onClickDetails?: () => void;
   onClickEdit?: () => void;
   onClickEliminate?: () => void;
+  disableDeleteAction?: boolean;
 }
 
 export function Detail(props: DetailProps) {
-  const { onClickDetails, onClickEdit, onClickEliminate } = props;
+  const { onClickDetails, onClickEdit, onClickEliminate, disableDeleteAction } =
+    props;
   const [ModalOpen, setModalOpen] = useState(false);
   return (
     <Stack justifyContent="center">
@@ -29,6 +31,7 @@ export function Detail(props: DetailProps) {
           onClickDetails={onClickDetails}
           onClickEdit={onClickEdit}
           onClickEliminate={onClickEliminate}
+          disableDeleteAction={disableDeleteAction}
         />
       )}
     </Stack>

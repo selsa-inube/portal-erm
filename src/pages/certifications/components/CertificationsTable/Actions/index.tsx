@@ -9,12 +9,33 @@ interface ActionModalProps {
   onClickDetails?: () => void;
   onClickEdit?: () => void;
   onClickEliminate?: () => void;
+  disableDeleteAction?: boolean;
 }
 
 export function ActionModal(props: ActionModalProps) {
-  const { onClose, onClickDetails, onClickEdit } = props;
+  const {
+    onClose,
+    onClickDetails,
+    onClickEdit,
+    onClickEliminate,
+    disableDeleteAction,
+  } = props;
 
   const actionsLi = Actions(onClickDetails, onClickEdit);
+
+  const deleteActionIndex = actionsLi.findIndex(
+    (item) => item.label === "Eliminar",
+  );
+  if (deleteActionIndex !== -1) {
+    if (disableDeleteAction) {
+      actionsLi[deleteActionIndex].onClick = undefined;
+      actionsLi[deleteActionIndex].appearance = "gray";
+    } else if (onClickEliminate) {
+      actionsLi[deleteActionIndex].onClick = onClickEliminate;
+      actionsLi[deleteActionIndex].appearance = "danger";
+    }
+  }
+
   return (
     <StyledContainer>
       <StyledActions>
