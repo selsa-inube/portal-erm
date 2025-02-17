@@ -4,7 +4,7 @@ export interface HumanResourceRequest {
   human_resource_request_description: string;
   human_resource_request_date: string;
   human_resource_request_status: string;
-  human_resource_request_data: Record<string, unknown>;
+  human_resource_request_data: string;
   human_resource_request_type: string;
   employee_id: string;
   user_code_in_charge: string;
@@ -30,6 +30,6 @@ export interface TaskManagingHumanResourceRequest {
 
 export interface HumanResourceData {
   human_resource_request: HumanResourceRequest;
-  human_resource_request_traceability: HumanResourceRequestTraceability;
-  tasks_to_manage_the_human_resources_request: TaskManagingHumanResourceRequest;
+  human_resource_request_traceability: HumanResourceRequestTraceability[];
+  tasks_to_manage_the_human_resources_request: TaskManagingHumanResourceRequest[];
 }
