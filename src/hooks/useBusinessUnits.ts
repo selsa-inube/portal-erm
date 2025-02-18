@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import { IBusinessUnit } from "@src/types/employeePortalBusiness.types";
-import { getBusinessUnitsForOfficer } from "@src/services/businessUnits/getBusinessUnits";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
 
 import { useErrorFlag } from "./useErrorFlag";
 
@@ -35,11 +35,6 @@ export const useBusinessUnits = (
     }
 
     const fetchBusinessUnits = async () => {
-      console.log(
-        "Ejecutando fetch de businessUnits con:",
-        userAccount,
-        portalPublicCode,
-      );
       setIsFetching(true);
 
       try {

@@ -10,7 +10,7 @@ import {
 
 import { RadioClient } from "@components/cards/RadioClient";
 import { IClient } from "@context/AppContext/types";
-import { spacing } from "@src/design/tokens/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import { IClientState } from "./types";
 import {

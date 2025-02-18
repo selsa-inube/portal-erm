@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useMediaQueries, Grid, Stack, Text } from "@inubekit/inubekit";
 
 import selsaLogo from "@assets/images/logoInube.png";
-import { spacing } from "@src/design/tokens/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledWelcomeContainer,

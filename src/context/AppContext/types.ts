@@ -1,9 +1,10 @@
 import React from "react";
+
 import {
   IStaffPortalByBusinessManager,
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
-import { IBusinessUnit } from "@src/types/employeePortalBusiness.types";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
 interface BusinessManager {
   id: string;

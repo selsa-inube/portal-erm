@@ -1,7 +1,7 @@
 import cooservunal from "@assets/mocks_images/cooservunal.png";
 import corbanca from "@assets/mocks_images/corbanca.png";
 import fondecom from "@assets/mocks_images/fondecom.png";
-import { IClient } from "@src/context/AppContext/types";
+import { IClient } from "@context/AppContext/types";
 
 const clientsDataMock: IClient[] = [
   {

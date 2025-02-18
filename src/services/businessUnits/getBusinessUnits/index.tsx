@@ -3,7 +3,7 @@ import {
   fetchTimeoutServices,
   maxRetriesServices,
 } from "@config/environment";
-import { IBusinessUnit } from "@src/types/employeePortalBusiness.types";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
 import { mapBusinessUnitsApiToEntity } from "./mappers";
 

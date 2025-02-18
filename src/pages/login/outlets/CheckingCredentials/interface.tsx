@@ -1,6 +1,6 @@
 import { Stack, Text, Spinner } from "@inubekit/inubekit";
 
-import { spacing } from "@src/design/tokens/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 function CheckingCredentialsUI() {
   return (

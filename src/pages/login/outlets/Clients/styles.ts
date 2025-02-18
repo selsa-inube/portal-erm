@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { spacing } from "@src/design/tokens/spacing";
+import { spacing } from "@design/tokens/spacing";
 
 interface StyledClientsListProps {
   $scroll?: boolean;

@@ -1,4 +1,4 @@
-import { clientsDataMock } from "@src/mocks/login/clients.mock";
+import { clientsDataMock } from "@mocks/login/clients.mock";
 
 import { RadioClient, RadioClientProps } from "./index";
 

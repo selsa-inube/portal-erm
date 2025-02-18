@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "@src/context/AppContext/useAppContext";
-import { ClientsUI } from "./interface";
+
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { IClient } from "@context/AppContext/types";
+
+import { ClientsUI } from "./interface";
 
 interface IClientLocal {
   ref: HTMLInputElement | null;

@@ -4,8 +4,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
-import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
-import { IBusinessUnit } from "@src/types/employeePortalBusiness.types";
+import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
 import { IAppContextType, IPreferences } from "./types";
 
@@ -47,9 +47,27 @@ function AppProvider(props: AppProviderProps) {
     showPinnedOnly: false,
   });
 
-  const [staffUser, setStaffUser] = useState<IStaffUserAccount>(
-    {} as IStaffUserAccount,
-  );
+  const [staffUser, setStaffUser] = useState<IStaffUserAccount>(() => {
+    const storedStaffUser = localStorage.getItem("staffUser");
+    if (storedStaffUser) {
+      try {
+        return JSON.parse(storedStaffUser);
+      } catch (error) {
+        console.error("Error al parsear staffUser desde localStorage", error);
+      }
+    }
+
+    return {} as IStaffUserAccount;
+  });
+
+  useEffect(() => {
+    if (staffUser && Object.keys(staffUser).length > 0) {
+      localStorage.setItem("staffUser", JSON.stringify(staffUser));
+    } else {
+      localStorage.removeItem("staffUser");
+    }
+  }, [staffUser]);
+
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
   const [businessManagers, setBusinessManagers] =

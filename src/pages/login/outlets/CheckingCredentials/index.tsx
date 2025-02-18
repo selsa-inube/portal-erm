@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect } from "react";
 
-import { useAppContext } from "@src/context/AppContext/useAppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
+
 import { CheckingCredentialsUI } from "./interface";
 
 function CheckingCredentials() {
