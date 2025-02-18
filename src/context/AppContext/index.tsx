@@ -7,7 +7,7 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
-import { IAppContextType, IPreferences } from "./types";
+import { IAppContextType, IPreferences, IClient } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
 
@@ -56,7 +56,6 @@ function AppProvider(props: AppProviderProps) {
         console.error("Error al parsear staffUser desde localStorage", error);
       }
     }
-
     return {} as IStaffUserAccount;
   });
 
@@ -74,6 +73,33 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessManager>(businessManagersData);
   const [businessUnits, setBusinessUnits] =
     useState<IBusinessUnit[]>(businessUnitsData);
+
+  const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
+    const storedClient = localStorage.getItem("selectedClient");
+    if (storedClient) {
+      try {
+        return JSON.parse(storedClient);
+      } catch (error) {
+        console.error(
+          "Error al parsear selectedClient desde localStorage",
+          error,
+        );
+      }
+    }
+    return null;
+  });
+
+  useEffect(() => {
+    if (selectedClient) {
+      localStorage.setItem("selectedClient", JSON.stringify(selectedClient));
+    } else {
+      localStorage.removeItem("selectedClient");
+    }
+  }, [selectedClient]);
+
+  const handleClientChange = (client: IClient) => {
+    setSelectedClient(client);
+  };
 
   const updatePreferences = (newPreferences: Partial<IPreferences>) => {
     setPreferences((prev) => ({ ...prev, ...newPreferences }));
@@ -95,17 +121,17 @@ function AppProvider(props: AppProviderProps) {
         updatePreferences,
         logoUrl,
         setLogoUrl,
-        handleClientChange: () => {
-          console.log("handleClientChange");
-        },
+        handleClientChange,
         provisionedPortal,
         setProvisionedPortal,
         staffUser,
         setStaffUser,
         businessManagers,
         setBusinessManagers,
-        setBusinessUnits,
         businessUnits,
+        setBusinessUnits,
+        selectedClient,
+        setSelectedClient,
       }}
     >
       {children}

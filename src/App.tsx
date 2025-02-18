@@ -31,7 +31,7 @@ function LogOut() {
 }
 
 function FirstPage() {
-  const { user, setStaffUser, staffUser } = useAppContext();
+  const { user, setStaffUser } = useAppContext();
   const { isAuthenticated } = useAuth0();
   const navigate = useNavigate();
 
@@ -42,12 +42,6 @@ function FirstPage() {
   } = useStaffUserAccount({
     userAccountId: user?.id ?? "",
   });
-
-  useEffect(() => {
-    if (staffUser && Object.keys(staffUser).length > 0) {
-      navigate("/app", { replace: true });
-    }
-  }, [staffUser, navigate]);
 
   useEffect(() => {
     if (userAccount && !userAccountLoading && !userAccountError) {

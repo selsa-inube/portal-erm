@@ -38,7 +38,7 @@ function LoginUI() {
             </Stack>
             <StyledLogo
               src={selsaLogo}
-              screenMobile={screenMobile}
+              $screenMobile={screenMobile}
               alt="Logo Inube"
             />
           </Stack>

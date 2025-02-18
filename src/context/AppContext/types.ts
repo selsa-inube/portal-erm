@@ -53,4 +53,6 @@ export interface IAppContextType {
   setBusinessManagers: React.Dispatch<React.SetStateAction<BusinessManager>>;
   businessUnits: IBusinessUnit[];
   setBusinessUnits: React.Dispatch<React.SetStateAction<IBusinessUnit[]>>;
+  selectedClient: IClient | null;
+  setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
 }

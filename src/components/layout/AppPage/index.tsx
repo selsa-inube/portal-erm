@@ -21,7 +21,7 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage() {
-  const { logoUrl } = useAppContext();
+  const { logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   return (
@@ -29,12 +29,13 @@ function AppPage() {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={{
-            items: nav,
-          }}
+          navigation={{ items: nav }}
           logoURL={renderLogo(logoUrl)}
           user={{
             username: "Nombre de usuario",
+            client: selectedClient
+              ? selectedClient.name
+              : "Sin unidad seleccionada",
           }}
           menu={userMenu}
         />

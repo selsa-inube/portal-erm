@@ -4,7 +4,7 @@ import { inube } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
 interface IStyledLogo {
-  screenMobile: boolean;
+  $screenMobile: boolean;
   theme?: typeof inube;
 }
 
@@ -19,7 +19,7 @@ const StyledOutletContainer = styled(StyledWelcomeContainer)`
 `;
 
 const StyledLogo = styled.img<IStyledLogo>`
-  width: ${({ screenMobile }) => (screenMobile ? "90px" : "124px")};
+  width: ${({ $screenMobile }) => ($screenMobile ? "90px" : "124px")};
   margin-top: ${spacing.s200};
 `;
 
