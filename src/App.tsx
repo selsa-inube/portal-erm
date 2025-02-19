@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { AppPage } from "@components/layout/AppPage";
 import { environment } from "@config/environment";
 import { ErrorPage } from "@components/layout/ErrorPage";
 import { decrypt } from "@utils/encrypt";
@@ -22,6 +21,7 @@ import { GlobalStyles } from "./styles/global";
 import { BusinessUnitsLoader } from "./BusinessUnitsLoader";
 import { useAppContext } from "./context/AppContext/useAppContext";
 import { AppProvider } from "./context/AppContext";
+import { ProtectedAppPage } from "./ProtectedAppPage";
 
 function LogOut() {
   localStorage.clear();
@@ -76,7 +76,7 @@ const router = createBrowserRouter(
     <>
       <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="login/*" element={<LoginRoutes />} />
-      <Route path="/app/*" element={<AppPage />} />
+      <Route path="/app/*" element={<ProtectedAppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),

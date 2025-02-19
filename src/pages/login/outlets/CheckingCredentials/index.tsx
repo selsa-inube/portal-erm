@@ -6,7 +6,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { CheckingCredentialsUI } from "./interface";
 
 function CheckingCredentials() {
-  const { user, businessUnits } = useAppContext();
+  const { user, businessUnits, businessUnitsIsFetching } = useAppContext();
   const navigate = useNavigate();
 
   const checkCredentials = useCallback(() => {
@@ -26,12 +26,17 @@ function CheckingCredentials() {
     } catch {
       navigate("/login/error/not-available");
     }
-  }, [user, navigate, businessUnits]);
+  }, [user, businessUnits, navigate]);
 
   useEffect(() => {
-    const timer = setTimeout(checkCredentials, 2000);
-    return () => clearTimeout(timer);
-  }, [checkCredentials]);
+    if (!businessUnitsIsFetching) {
+      const timer = setTimeout(() => {
+        checkCredentials();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [businessUnitsIsFetching, checkCredentials]);
 
   return <CheckingCredentialsUI />;
 }

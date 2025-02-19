@@ -74,6 +74,9 @@ function AppProvider(props: AppProviderProps) {
   const [businessUnits, setBusinessUnits] =
     useState<IBusinessUnit[]>(businessUnitsData);
 
+  const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
+    useState<boolean>(false);
+
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
     if (storedClient) {
@@ -130,6 +133,8 @@ function AppProvider(props: AppProviderProps) {
         setBusinessManagers,
         businessUnits,
         setBusinessUnits,
+        businessUnitsIsFetching,
+        setBusinessUnitsIsFetching,
         selectedClient,
         setSelectedClient,
       }}

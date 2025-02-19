@@ -57,7 +57,6 @@ export const useBusinessUnits = (
         console.error("Error al obtener las unidades de negocio:", error);
         if (isMounted) {
           setHasError(true);
-
           setCodeError(ERROR_CODE_FETCH_FAILED);
           setBusinessUnitsData([]);
         }
@@ -76,10 +75,12 @@ export const useBusinessUnits = (
   }, [userAccount, portalPublicCode]);
 
   useEffect(() => {
-    if (!isFetching && hasError) {
+    if (!isFetching && hasError && codeError !== ERROR_CODE_EMPTY_DATA) {
       setFlagShown(true);
+    } else {
+      setFlagShown(false);
     }
-  }, [isFetching, hasError]);
+  }, [isFetching, hasError, codeError]);
 
   return { businessUnitsData, hasError, codeError, isFetching };
 };

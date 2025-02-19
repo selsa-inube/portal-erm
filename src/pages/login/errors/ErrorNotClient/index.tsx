@@ -5,8 +5,9 @@ function ErrorNotClient() {
   return (
     <ErrorPage
       image={clientNotFound}
-      imageAlt="Cliente no encontrado"
-      heading="No hay resultados..."
+      imageAlt="No se han encontrado unidades de negocio"
+      heading="No se han encontrado unidades de negocio"
+      errorCode={1003}
     />
   );
 }

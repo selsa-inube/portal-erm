@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-import { useAppContext } from "./context/AppContext/useAppContext";
 import { useBusinessUnits } from "@hooks/useBusinessUnits";
+
+import { useAppContext } from "./context/AppContext/useAppContext";
 
 interface BusinessUnitsLoaderProps {
   portalCode: string;
@@ -9,7 +10,8 @@ interface BusinessUnitsLoaderProps {
 
 export function BusinessUnitsLoader(props: BusinessUnitsLoaderProps) {
   const { portalCode } = props;
-  const { staffUser, setBusinessUnits } = useAppContext();
+  const { staffUser, setBusinessUnits, setBusinessUnitsIsFetching } =
+    useAppContext();
   const userAccount = staffUser?.userAccount || "";
   const { businessUnitsData, hasError, isFetching } = useBusinessUnits(
     userAccount,
@@ -17,10 +19,18 @@ export function BusinessUnitsLoader(props: BusinessUnitsLoaderProps) {
   );
 
   useEffect(() => {
+    setBusinessUnitsIsFetching(isFetching);
+
     if (!isFetching && !hasError && businessUnitsData.length > 0) {
       setBusinessUnits(businessUnitsData);
     }
-  }, [isFetching, hasError, businessUnitsData, setBusinessUnits]);
+  }, [
+    isFetching,
+    hasError,
+    businessUnitsData,
+    setBusinessUnits,
+    setBusinessUnitsIsFetching,
+  ]);
 
   return null;
 }
