@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { getBusinessUnitsForOfficer } from "@services/businessUnits/getBusinessUnits";
 
@@ -75,8 +74,12 @@ export const useBusinessUnits = (
   }, [userAccount, portalPublicCode]);
 
   useEffect(() => {
-    if (!isFetching && hasError && codeError !== ERROR_CODE_EMPTY_DATA) {
-      setFlagShown(true);
+    if (!isFetching && hasError) {
+      if (codeError === ERROR_CODE_EMPTY_DATA) {
+        window.location.href = "/logout";
+      } else {
+        setFlagShown(true);
+      }
     } else {
       setFlagShown(false);
     }
