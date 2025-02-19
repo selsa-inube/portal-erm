@@ -195,7 +195,22 @@ function CertificationsTable({
           </Tr>
         </Thead>
         <Tbody>
-          {data.length === 0 ? (
+          {loading ? (
+            [...Array(3)].map((_, index) => (
+              <Tr key={index} border="bottom">
+                {visibleHeaders.map((_, cellIndex) => (
+                  <Td
+                    key={cellIndex}
+                    align="center"
+                    type="custom"
+                    appearance={index % 2 === 1 ? "dark" : "light"}
+                  >
+                    <SkeletonLine width="100%" animated={true} />
+                  </Td>
+                ))}
+              </Tr>
+            ))
+          ) : data.length === 0 ? (
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} align="center" type="custom">
                 <Text size="medium">No tiene solicitudes en trámite.</Text>
@@ -216,6 +231,7 @@ function CertificationsTable({
             ))
           )}
         </Tbody>
+
         {data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">
