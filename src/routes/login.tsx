@@ -17,10 +17,10 @@ function LoginRoutes() {
     <Routes>
       <Route path="/" element={<Login />}>
         <Route
-          path="/:user_id/checking-credentials"
+          path=":user_id/checking-credentials"
           element={<CheckingCredentials />}
         />
-        <Route path="/:user_id/clients" element={<Clients />} />
+        <Route path=":user_id/clients" element={<Clients />} />
         <Route path="loading-app" element={<LoadingApp />} />
       </Route>
       <Route path="error/not-available" element={<ErrorNotAvailable />} />

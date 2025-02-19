@@ -12,9 +12,7 @@ function Login() {
 
   useEffect(() => {
     if (
-      (location.pathname === "/login" ||
-        location.pathname === "/login/" ||
-        location.pathname === "/") &&
+      (location.pathname === "/login" || location.pathname === "/login/") &&
       user
     ) {
       navigate(`/login/${user.id}/checking-credentials/`);

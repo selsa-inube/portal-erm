@@ -46,7 +46,7 @@ function FirstPage() {
   useEffect(() => {
     if (userAccount && !userAccountLoading && !userAccountError) {
       setStaffUser(userAccount);
-      navigate("/app", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [
     userAccount,
@@ -74,9 +74,9 @@ function FirstPage() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/*" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route path="/" element={<FirstPage />} errorElement={<ErrorPage />} />
       <Route path="login/*" element={<LoginRoutes />} />
-      <Route path="/app/*" element={<ProtectedAppPage />} />
+      <Route path="/*" element={<ProtectedAppPage />} />
       <Route path="logout" element={<LogOut />} />
     </>,
   ),
