@@ -36,11 +36,11 @@ const story = {
 const Default = (args: RadioClientProps) => <RadioClient {...args} />;
 
 Default.args = {
-  id: clientsDataMock[2].id,
+  id: clientsDataMock[2].businessUnitPublicCode,
   name: "client",
-  value: clientsDataMock[2].name,
-  label: clientsDataMock[2].name,
-  logo: clientsDataMock[2].logo,
+  value: clientsDataMock[2].abbreviatedName,
+  label: clientsDataMock[2].descriptionUse,
+  logo: clientsDataMock[2].urlLogo,
 };
 
 export default story;

@@ -24,7 +24,7 @@ function ClientsUI(props: ClientsUIProps) {
 
   return (
     <StyledClients>
-      <Stack direction="column" alignItems="center" gap={spacing.s250}>
+      <Stack direction="column" alignItems="center" gap={spacing.s200}>
         <Text type="title" as="h2" textAlign="center">
           {textsConfig.clientsTitle}
         </Text>
@@ -35,7 +35,11 @@ function ClientsUI(props: ClientsUIProps) {
       <form>
         <Stack direction="column">
           <StyledClientsList $scroll={clients.length > 5}>
-            <Stack direction="column" alignItems="center" gap={spacing.s100}>
+            <Stack
+              direction="column"
+              alignItems="center"
+              gap={isMobile ? spacing.s150 : spacing.s200}
+            >
               {clients.map((clientItem) => (
                 <StyledClientsItem key={clientItem.id}>
                   <RadioClient

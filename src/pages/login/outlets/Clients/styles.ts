@@ -10,16 +10,14 @@ interface StyledClientsListProps {
 const StyledClients = styled.div`
   & form {
     & > div {
-      margin: 48px auto 0px;
+      gap: ${spacing.s500};
+      margin: 40px auto 0px;
       width: 500px;
       @media screen and (max-width: 532px) {
         width: auto;
+        margin: 30px 0px;
       }
     }
-  }
-
-  & button {
-    margin-top: ${spacing.s300};
   }
 `;
 
@@ -28,7 +26,6 @@ const StyledClientsList = styled.div<StyledClientsListProps>`
     list-style: none;
     min-height: 300px;
     max-height: 430px;
-    padding-right: 8px;
     width: inherit;
     overflow-y: ${({ $scroll }) => ($scroll ? "scroll" : "visible")};
     @media screen and (max-height: 1000px) {

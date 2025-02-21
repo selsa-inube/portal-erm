@@ -2,7 +2,7 @@ import { Stack, Text, Spinner } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-function CheckingCredentialsUI() {
+function SelectBusinessUnitUI() {
   return (
     <Stack gap={spacing.s200} direction="column">
       <Stack direction="column">
@@ -20,4 +20,4 @@ function CheckingCredentialsUI() {
   );
 }
 
-export { CheckingCredentialsUI };
+export { SelectBusinessUnitUI };

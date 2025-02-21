@@ -6,12 +6,9 @@ import { spacing } from "@design/tokens/spacing";
 const StyledRadioClient = styled.label`
   & div {
     box-sizing: border-box;
-    min-height: 72px;
+    min-height: 58px;
     max-height: 72px;
     box-shadow: 0px 1px 3px 1px
-      ${({ theme }) =>
-        theme?.palette?.neutralAlpha?.N40A || inube.palette.neutralAlpha.N40A};
-    box-shadow: 0px 1px 2px 0px
       ${({ theme }) =>
         theme?.palette?.neutralAlpha?.N40A || inube.palette.neutralAlpha.N40A};
     border-radius: ${spacing.s100};
@@ -24,8 +21,9 @@ const StyledRadioClient = styled.label`
 `;
 
 const StyledRadio = styled.input`
-  width: 50px;
+  width: 12px;
   height: 16px;
+  margin: 0px;
 
   &:checked ~ img {
     filter: grayscale(0%);

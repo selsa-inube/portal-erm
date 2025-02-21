@@ -3,4 +3,9 @@ interface IClientState {
   value: boolean;
 }
 
-export type { IClientState };
+interface IClientLocal {
+  ref: HTMLInputElement | null;
+  value: boolean;
+}
+
+export type { IClientState, IClientLocal };

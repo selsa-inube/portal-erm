@@ -3,9 +3,9 @@ import { useCallback, useEffect } from "react";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
 
-import { CheckingCredentialsUI } from "./interface";
+import { SelectBusinessUnitUI } from "./interface";
 
-function CheckingCredentials() {
+function SelectBusinessUnit() {
   const { user, businessUnits, businessUnitsIsFetching } = useAppContext();
   const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ function CheckingCredentials() {
     }
   }, [businessUnitsIsFetching, checkCredentials]);
 
-  return <CheckingCredentialsUI />;
+  return <SelectBusinessUnitUI />;
 }
 
-export { CheckingCredentials };
+export { SelectBusinessUnit };

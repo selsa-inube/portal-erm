@@ -1,32 +1,39 @@
-import cooservunal from "@assets/mocks_images/cooservunal.png";
-import corbanca from "@assets/mocks_images/corbanca.png";
-import fondecom from "@assets/mocks_images/fondecom.png";
-import { IClient } from "@context/AppContext/types";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
-const clientsDataMock: IClient[] = [
+const clientsDataMock: IBusinessUnit[] = [
   {
-    id: "151615",
-    name: "Presente Fondo de Empleados Grupo Éxito",
-    sigla: "Presente",
-    logo: "https://res.cloudinary.com/wfercanas/image/upload/w_500/v1671482962/linpar/presente_trxel5",
+    businessUnitPublicCode: "151615",
+    descriptionUse: "Presente Fondo de Empleados Grupo Éxito",
+    abbreviatedName: "Presente",
+    firstMonthOfFiscalYear: "Enero",
+    languageId: "es",
+    urlLogo:
+      "https://res.cloudinary.com/wfercanas/image/upload/w_500/v1671482962/linpar/presente_trxel5",
   },
   {
-    id: "518481",
-    name: "Cooservunal Fuerza cooperativa y social",
-    sigla: "Cooservunal",
-    logo: cooservunal,
+    businessUnitPublicCode: "518481",
+    descriptionUse: "Cooservunal Fuerza cooperativa y social",
+    abbreviatedName: "Cooservunal",
+    firstMonthOfFiscalYear: "Enero",
+    languageId: "es",
+    urlLogo: "https://i.ibb.co/5hxDf6SN/cooservunal.png",
   },
   {
-    id: "848123",
-    name: "Corbanca Corporación fondo de empleados bancarios y del sector financiero",
-    sigla: "Corbanca",
-    logo: corbanca,
+    businessUnitPublicCode: "848123",
+    descriptionUse:
+      "Corbanca Corporación fondo de empleados bancarios y del sector financiero",
+    abbreviatedName: "Corbanca",
+    firstMonthOfFiscalYear: "Enero",
+    languageId: "es",
+    urlLogo: "https://i.ibb.co/DgKsRskG/corbanca.png",
   },
   {
-    id: "454813",
-    name: "Fondecom Unidos para soluciones de fondo",
-    sigla: "Fondecom",
-    logo: fondecom,
+    businessUnitPublicCode: "454813",
+    descriptionUse: "Fondecom Unidos para soluciones de fondo",
+    abbreviatedName: "Fondecom",
+    firstMonthOfFiscalYear: "Enero",
+    languageId: "es",
+    urlLogo: "https://i.ibb.co/cSHv4tXg/fondecom.png",
   },
 ];
 
