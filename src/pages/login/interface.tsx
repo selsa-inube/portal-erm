@@ -50,9 +50,9 @@ function LoginUI() {
       </StyledWelcomeContainer>
       <StyledOutletContainer>
         <Stack
-          alignItems="center"
+          alignItems={screenMobile ? "flex-start" : "center"}
           justifyContent="center"
-          height={screenMobile ? "90vh" : "-webkit-fill-available"}
+          height="-webkit-fill-available"
           padding={`${spacing.s400} ${spacing.s300} ${spacing.s0}`}
         >
           <Outlet />

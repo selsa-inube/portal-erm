@@ -4,6 +4,7 @@ import { spacing } from "@design/tokens/spacing";
 import { inube } from "@inubekit/inubekit";
 
 interface StyledClientsListProps {
+  $isMobile: boolean;
   $scroll?: boolean;
 }
 
@@ -25,7 +26,8 @@ const StyledClientsList = styled.div<StyledClientsListProps>`
   & > div {
     list-style: none;
     min-height: 300px;
-    max-height: 430px;
+    max-height: ${({ $isMobile }) => ($isMobile ? "none" : "430px")};
+    padding: ${spacing.s100};
     width: inherit;
     overflow-y: ${({ $scroll }) => ($scroll ? "scroll" : "visible")};
     @media screen and (max-height: 1000px) {

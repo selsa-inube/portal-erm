@@ -34,7 +34,10 @@ function ClientsUI(props: ClientsUIProps) {
       </Stack>
       <form>
         <Stack direction="column">
-          <StyledClientsList $scroll={clients.length > 5}>
+          <StyledClientsList
+            $scroll={clients.length > 5 && !isMobile}
+            $isMobile={isMobile}
+          >
             <Stack
               direction="column"
               alignItems="center"
