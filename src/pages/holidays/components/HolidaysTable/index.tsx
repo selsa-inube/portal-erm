@@ -200,7 +200,17 @@ function HolidaysTable({
           </Tr>
         </Thead>
         <Tbody>
-          {data.length === 0 ? (
+          {loading ? (
+            Array.from({ length: 3 }).map((_, idx) => (
+              <Tr key={idx} border="bottom">
+                {visibleHeaders.map((_, index) => (
+                  <Td key={index} colSpan={1} align="center" type="custom">
+                    <SkeletonLine width="100%" animated />
+                  </Td>
+                ))}
+              </Tr>
+            ))
+          ) : data.length === 0 ? (
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} align="center" type="custom">
                 <Text size="medium">No tiene solicitudes en trámite.</Text>
