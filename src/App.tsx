@@ -74,7 +74,11 @@ function FirstPage() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<FirstPage />} errorElement={<ErrorPage />} />
+      <Route
+        path="/login"
+        element={<FirstPage />}
+        errorElement={<ErrorPage />}
+      />
       <Route path="login/*" element={<LoginRoutes />} />
       <Route path="/*" element={<ProtectedAppPage />} />
       <Route path="logout" element={<LogOut />} />

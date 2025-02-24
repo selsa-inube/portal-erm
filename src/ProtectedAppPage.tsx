@@ -11,7 +11,7 @@ function ProtectedAppPage() {
 
   useEffect(() => {
     if (!selectedClient) {
-      navigate("/login/error/not-available", { replace: true });
+      navigate("/login", { replace: true });
     }
   }, [selectedClient, navigate]);
 
