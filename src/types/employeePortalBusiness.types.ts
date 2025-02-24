@@ -1,3 +1,12 @@
+interface IBusinessUnit {
+  abbreviatedName: string;
+  businessUnitPublicCode: string;
+  descriptionUse: string;
+  firstMonthOfFiscalYear: string;
+  languageId: string;
+  urlLogo: string;
+}
+
 interface IOptionsByEmployeePortalBusinessManager {
   optionEmployeeId: string;
   employeePortalCatalogId: string;
@@ -30,4 +39,5 @@ export type {
   IBusinessManager,
   IEmployeePortalByBusinessManager,
   IOptionsByEmployeePortalBusinessManager,
+  IBusinessUnit,
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { getHolidaysRequestInProcess } from "@services/holidays/getHolidaysRequestInProcess";
-import { useAppContext } from "@context/AppContext";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { getDateString } from "@utils/date";
 import { parseFormattedDate } from "@utils/date";
 import { useErrorFlag } from "@hooks/useErrorFlag";

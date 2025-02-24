@@ -6,7 +6,9 @@ export const mockDataPortal: IStaffPortalByBusinessManager = {
   descriptionUse: "Test description",
   optionsByStaffPortalBusinessManager: [],
   publicCode: "ABC123",
-  staffPortalCatalogId: "SPC123",
-  staffPortalId: "SP123",
   url: "https://example.com",
+  businessUnit: "Test Business Unit",
+  portalCode: "TestPortalCode",
+  employeePortalCatalogId: "EPC123",
+  employeePortalId: "EP123",
 };
