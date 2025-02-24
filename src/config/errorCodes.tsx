@@ -73,10 +73,11 @@ const errorCodes: Record<number, ErrorDetail> = {
     howToFix: ["Confirma que estés usando la url adecuada."],
   },
   1003: {
-    whatWentWrong: [
-      "No hay una unidad de negocio relacionada con el codigo del portal.",
+    whatWentWrong: ["No hay unidades de negocio relacionadas con el personal."],
+    howToFix: [
+      "Verifica que el código del portal sea el correcto.",
+      "Si el problema persiste, contacta al soporte técnico.",
     ],
-    howToFix: ["Confirma que estés usando la url adecuada."],
   },
   1004: {
     whatWentWrong: ["El usuario con que accedio no es un funcionario."],
