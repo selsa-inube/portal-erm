@@ -4,7 +4,7 @@ import {
   maxRetriesServices,
 } from "@config/environment";
 
-import { IBusinessManager } from "@src/types/employeePortalBusiness.types";
+import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
