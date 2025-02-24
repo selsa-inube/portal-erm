@@ -14,6 +14,8 @@ interface Environment {
   REDIRECT_URI: string;
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: string;
+  IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
+  BUSINESS_UNIT?: string;
 }
 
 const environment: Environment = {
@@ -25,6 +27,8 @@ const environment: Environment = {
     .VITE_IVITE_ISAAS_QUERY_PROCESS_SERVICE as string,
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_IVITE_ISATFF_QUERY_PROCESS_SERVICE as string,
+  IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: import.meta.env
+    .VITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE as string,
 };
 
 export {
