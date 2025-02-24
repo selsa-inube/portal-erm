@@ -5,7 +5,7 @@ import {
 } from "@config/environment";
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
 
-const getHumanResourceRequests = async () => {
+const getHumanResourceRequests = async (typeRequest: string) => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -15,7 +15,7 @@ const getHumanResourceRequests = async () => {
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
       const res = await fetch(
-        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/certification`,
+        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/certification?humanResourceRequestType=${typeRequest}&sort=desc.humanResourceRequestDate`,
         {
           method: "GET",
           headers: {
@@ -36,15 +36,7 @@ const getHumanResourceRequests = async () => {
       const data = await res.json();
 
       return Array.isArray(data)
-        ? data
-            .map((item) =>
-              mapHumanResourceRequestApiToEntity(item.human_resource_request),
-            )
-            .sort(
-              (a, b) =>
-                new Date(a.human_resource_request_date).getTime() -
-                new Date(b.human_resource_request_date).getTime(),
-            )
+        ? data.map((item) => mapHumanResourceRequestApiToEntity(item))
         : [];
     } catch (error) {
       if (attempt === maxRetries) {
