@@ -15,6 +15,7 @@ interface Environment {
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: string;
   IVITE_ISTAFF_QUERY_PROCESS_SERVICE: string;
   IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE: string;
+  BUSINESS_UNIT?: string;
 }
 
 const environment: Environment = {

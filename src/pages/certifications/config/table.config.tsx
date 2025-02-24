@@ -1,26 +1,26 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
-import { HumanResourceRequest } from "@ptypes/certifications.types";
+import { HumanResourceRequest } from "@src/types/humanResourcesRequest.types";
 
 export const formatHumanResourceData = (requests: HumanResourceRequest[]) =>
   requests.map((request) => ({
-    requestNumber: { value: request.human_resource_request_number },
-    type: { value: request.human_resource_request_type },
-    date: { value: formatDate(request.human_resource_request_date) },
-    status: { value: request.human_resource_request_status },
+    requestNumber: { value: request.humanResourceRequestNumber },
+    type: { value: request.humanResourceRequestType },
+    date: { value: formatDate(request.humanResourceRequestDate) },
+    status: { value: request.humanResourceRequestStatus },
     details: {
       value: <MdOutlineVisibility />,
       type: "icon" as const,
       onClick: () =>
         console.log(
-          `Ver detalles de la solicitud ${request.human_resource_request_id}`,
+          `Ver detalles de la solicitud ${request.humanResourceRequestId}`,
         ),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon" as const,
       onClick: () =>
-        console.log(`Eliminar solicitud ${request.human_resource_request_id}`),
+        console.log(`Eliminar solicitud ${request.humanResourceRequestId}`),
     },
   }));

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { getHumanResourceRequests } from "@services/certifications/getCertificationsRequestInProcess";
+import { getHumanResourceRequests } from "@src/services/humanResourcesRequest/getCertificationsRequestInProcess";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { certificationsNavConfig } from "./config/nav.config";
@@ -21,7 +21,7 @@ function HumanResourceOptions() {
       setHasError(false);
 
       try {
-        const requests = await getHumanResourceRequests();
+        const requests = await getHumanResourceRequests("");
         const formattedData = formatHumanResourceData(requests || []);
         setTableData(formattedData);
       } catch (error) {
