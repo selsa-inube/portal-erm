@@ -5,7 +5,10 @@ import {
 } from "@config/environment";
 import { mapHumanResourceRequestApiToEntity } from "./mappers";
 
-const getHumanResourceRequests = async (typeRequest: string) => {
+const getHumanResourceRequests = async (
+  typeRequest: string,
+  employeeId: string,
+) => {
   const maxRetries = maxRetriesServices;
   const fetchTimeout = fetchTimeoutServices;
 
@@ -13,9 +16,13 @@ const getHumanResourceRequests = async (typeRequest: string) => {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
-
+      const queryParameters = new URLSearchParams({
+        employeeId,
+        humanResourceRequestType: typeRequest,
+        sort: "desc.humanResourceRequestDate",
+      });
       const res = await fetch(
-        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/human-resources-requests?humanResourceRequestType=${typeRequest}&sort=desc.humanResourceRequestDate`,
+        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/human-resources-requests?${queryParameters}`,
         {
           method: "GET",
           headers: {
