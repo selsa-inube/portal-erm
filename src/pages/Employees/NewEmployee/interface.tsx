@@ -3,6 +3,7 @@ import {
   IAssistedStep,
   Stack,
   useMediaQuery,
+  Text,
 } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
@@ -35,6 +36,9 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
           : `${spacing.s400} ${spacing.s800}`
       }
     >
+      <Text type="title" as="h1" size={isTablet ? "medium" : "large"}>
+        Vinculación de un empleado nuevo
+      </Text>
       <Assisted
         step={steps[currentStep - 1]}
         totalSteps={steps.length}
