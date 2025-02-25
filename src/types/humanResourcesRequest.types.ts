@@ -13,7 +13,7 @@ export interface TaskToManageHumanResourceRequest {
   taskCode: string;
   taskManagingId: string;
   taskName: string;
-  taskStatus: string;
+  taskStatus: ETaskStatus;
 }
 
 export interface HumanResourceRequest {
@@ -23,12 +23,39 @@ export interface HumanResourceRequest {
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;
   humanResourceRequestNumber: string;
-  humanResourceRequestStatus: string;
+  humanResourceRequestStatus: EStatus;
   humanResourceRequestTraceabilities: HumanResourceRequestTraceability[];
-  humanResourceRequestType: string;
+  humanResourceRequestType: EType;
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;
+}
+
+export enum EStatus {
+  in_progress = "En progreso",
+  finished = "Terminada",
+  closed = "Cerrada",
+  rejected = "Rechazada",
+  cancele = "Cancelada",
+}
+
+export enum EType {
+  onboarding = "Vinculación",
+  vacations = "Vacaciones",
+  certification = "Certificación",
+  disability = "Incapacidad",
+  leave = "Permiso",
+  unpaid_Leave = "Licencia no remunerada",
+  leaving_the_Job = "Retiro",
+  salary_increase = "Ascenso salarial",
+  position_transfer = "Traslado de cargo",
+  Absence = "Ausencia",
+  pqr = "PQR",
+}
+
+export enum ETaskStatus {
+  Assigned = "Asignada",
+  Executed = "Ejecutada",
 }
 
 export type HumanResourceRequests = HumanResourceRequest[];

@@ -1,35 +1,11 @@
 import {
+  EStatus,
+  ETaskStatus,
+  EType,
   HumanResourceRequest,
   HumanResourceRequestTraceability,
   TaskToManageHumanResourceRequest,
 } from "@src/types/humanResourcesRequest.types";
-
-const statusMapping: Record<string, string> = {
-  in_progress: "En progreso",
-  finished: "Terminada",
-  closed: "Cerrada",
-  rejected: "Rechazada",
-  canceled: "Cancelada",
-};
-
-const typeMapping: Record<string, string> = {
-  onboarding: "Vinculación",
-  vacations: "Vacaciones",
-  certification: "Certificación",
-  disability: "Incapacidad",
-  leave: "Permiso",
-  unpaid_Leave: "Licencia no remunerada",
-  leaving_the_Job: "Retiro",
-  salary_increase: "Ascenso salarial",
-  position_transfer: "Traslado de cargo",
-  Absence: "Ausencia",
-  pqr: "PQR",
-};
-
-const taskStatusMapping: Record<string, string> = {
-  Assigned: "Asignada",
-  Executed: "Ejecutada",
-};
 
 const mapHumanResourceRequestApiToEntity = (
   item: Partial<HumanResourceRequest>,
@@ -40,23 +16,9 @@ const mapHumanResourceRequestApiToEntity = (
     item.humanResourceRequestDescription ?? "",
   ),
   humanResourceRequestDate: String(item.humanResourceRequestDate ?? ""),
-  humanResourceRequestStatus:
-    item.humanResourceRequestStatus &&
-    Object.prototype.hasOwnProperty.call(
-      statusMapping,
-      item.humanResourceRequestStatus,
-    )
-      ? statusMapping[item.humanResourceRequestStatus]
-      : String(item.humanResourceRequestStatus ?? ""),
+  humanResourceRequestStatus: item.humanResourceRequestStatus as EStatus,
   humanResourceRequestData: String(item.humanResourceRequestData ?? ""),
-  humanResourceRequestType:
-    item.humanResourceRequestType &&
-    Object.prototype.hasOwnProperty.call(
-      typeMapping,
-      item.humanResourceRequestType,
-    )
-      ? typeMapping[item.humanResourceRequestType]
-      : String(item.humanResourceRequestType ?? ""),
+  humanResourceRequestType: item.humanResourceRequestType as EType,
   employeeId: String(item.employeeId ?? ""),
   userCodeInCharge: String(item.userCodeInCharge ?? ""),
   userNameInCharge: String(item.userNameInCharge ?? ""),
@@ -94,11 +56,7 @@ const mapTaskManagingHumanResourceRequestApiToEntity = (
   humanResourceRequestId: String(item.humanResourceRequestId ?? ""),
   taskCode: String(item.taskCode ?? ""),
   taskName: String(item.taskName ?? ""),
-  taskStatus:
-    item.taskStatus &&
-    Object.prototype.hasOwnProperty.call(taskStatusMapping, item.taskStatus)
-      ? taskStatusMapping[item.taskStatus]
-      : String(item.taskStatus ?? ""),
+  taskStatus: item.taskStatus as ETaskStatus,
   description: String(item.description ?? ""),
 });
 
