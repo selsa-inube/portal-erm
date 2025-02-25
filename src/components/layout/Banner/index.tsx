@@ -34,12 +34,11 @@ function VinculacionBanner(props: VinculacionBannerProps) {
   return (
     <StyledRadioClient>
       <Grid
-        templateRows={isMobile ? "auto" : "auto"}
         templateColumns={isMobile ? "1fr" : "auto 1fr auto"}
         height={matches["(max-width: 532px)"] ? "auto" : "14px"}
         alignItems="center"
         alignContent="center"
-        gap={spacing.s200}
+        gap={spacing.s150}
         width="100%"
       >
         <Stack gap={spacing.s150}>
