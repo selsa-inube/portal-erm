@@ -1,24 +1,28 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
-import { IHolidaysInProcess } from "@ptypes/holidays.types";
 
-import { VacationType, AuthorizationStatus } from "./enums";
+import { VacationType } from "./enums";
+import {
+  EStatus,
+  HumanResourceRequest,
+} from "@src/types/humanResourcesRequest.types";
 
-export const formatHolidaysData = (holidays: IHolidaysInProcess[]) =>
+export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => ({
     description: {
       value:
         VacationType[
-          holiday.vacationType.toUpperCase() as keyof typeof VacationType
+          holiday.humanResourceRequestData
+            .typeOfRequest as keyof typeof VacationType
         ],
     },
-    date: { value: formatDate(holiday.startDateVacationEnjoyment) },
-    days: { value: holiday.nonWorkingDaysOfVacation },
+    date: { value: formatDate(holiday.humanResourceRequestDate) },
+    days: { value: Number(holiday.humanResourceRequestData.daysEnjoyed ?? 0) },
     status: {
       value:
-        AuthorizationStatus[
-          holiday.vacationStatus.toUpperCase() as keyof typeof AuthorizationStatus
+        EStatus[
+          holiday.humanResourceRequestStatus as unknown as keyof typeof EStatus
         ],
     },
     details: {

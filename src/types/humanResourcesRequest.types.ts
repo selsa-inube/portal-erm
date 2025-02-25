@@ -18,7 +18,7 @@ export interface TaskToManageHumanResourceRequest {
 
 export interface HumanResourceRequest {
   employeeId: string;
-  humanResourceRequestData: string;
+  humanResourceRequestData: humanResourceRequestData;
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;
@@ -29,6 +29,15 @@ export interface HumanResourceRequest {
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;
+}
+
+export interface humanResourceRequestData {
+  typeOfRequest: string;
+  contract: string;
+  addressee: string;
+  startDate: string;
+  daysEnjoyed: string;
+  paidDays: string;
 }
 
 export enum EStatus {

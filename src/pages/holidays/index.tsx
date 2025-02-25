@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { getHolidaysRequestInProcess } from "@services/holidays/getHolidaysRequestInProcess";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { getDateString } from "@utils/date";
-import { parseFormattedDate } from "@utils/date";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { getHumanResourceRequests } from "@src/services/humanResourcesRequest/getHumanResourcesRequest";
 
 import { holidaysNavConfig } from "./config/nav.config";
 import { HolidaysOptionsUI } from "./interface";
@@ -25,18 +23,10 @@ function HolidaysOptions() {
       try {
         if (!user?.id) return;
 
-        const holidays = await getHolidaysRequestInProcess(user.id);
+        const holidays = await getHumanResourceRequests("vacations", user.id);
         const formattedData = formatHolidaysData(holidays || []);
 
-        const sortedData = formattedData.sort((a, b) => {
-          const dateAString = getDateString(a.date);
-          const dateBString = getDateString(b.date);
-          const dateA = parseFormattedDate(dateAString);
-          const dateB = parseFormattedDate(dateBString);
-          return dateA.getTime() - dateB.getTime();
-        });
-
-        setTableData(sortedData);
+        setTableData(formattedData);
       } catch (error) {
         console.error("Error al obtener las vacaciones:", error);
         setFlagShown(true);
