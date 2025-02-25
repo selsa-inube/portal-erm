@@ -14,6 +14,7 @@ import { decrypt } from "@utils/encrypt";
 import { usePortalData } from "@hooks/usePortalData";
 import { useStaffUserAccount } from "@hooks/useStaffUserAccount";
 import { useBusinessManagers } from "@hooks/useBusinessManagers";
+import { CertificationsRoutes } from "@routes/certifications";
 
 import { LoginRoutes } from "./routes/login";
 import { HolidaysRoutes } from "./routes/holidays";
@@ -83,6 +84,7 @@ const router = createBrowserRouter(
       <Route path="login/*" element={<LoginRoutes />} />
       <Route path="/*" element={<ProtectedAppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
+        <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />
     </>,
