@@ -49,7 +49,6 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   }
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-
   const filteredContent = Array.isArray(modalContent)
     ? modalContent.filter((item) => {
         if (filterCriteria) {
@@ -58,7 +57,6 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
         return true;
       })
     : modalContent;
-
   return createPortal(
     <Blanket>
       <StyledModal $smallScreen={isMobile}>
@@ -84,7 +82,9 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
           <Stack gap={spacing.s250} direction="column">
             {Array.isArray(filteredContent) ? (
               filteredContent.map((item, index) => {
-                const isLongContent = item.value.length > 42;
+                const isLongContent = item.value
+                  ? item.value.length > 42
+                  : false;
 
                 return (
                   <StyledBoxAttribute key={index} $smallScreen={isMobile}>

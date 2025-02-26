@@ -2,6 +2,7 @@ export interface ICertificationsTable {
   requestNumber: CertificationsTableField<string>;
   date: CertificationsTableField<string>;
   status: CertificationsTableField<string>;
+  dataDetails: CertificationsTableField<object>;
   details: CertificationsTableDetails;
   delete: CertificationsTableAction;
   type?: CertificationsTableField<string>;
@@ -22,4 +23,10 @@ interface CertificationsTableAction
   extends CertificationsTableField<string | number | JSX.Element> {
   type?: "icon" | "text" | "toggle" | "custom";
   onClick?: () => void;
+}
+
+export interface CertificationsTableDataDetails {
+  addressee: string;
+  contract: string;
+  description: string;
 }

@@ -19,7 +19,7 @@ import {
 
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 
-import { ICertificationsTable } from "./types";
+import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
@@ -48,19 +48,13 @@ function CertificationsTable({
   } = usePagination(data);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const modalContent = [
-    { label: "Destinatario", value: "A quien interese" },
-    { label: "Contrato", value: "21338 - Sistemas En Línea S.A - Indefinido" },
-    {
-      label: "Observaciones",
-      value:
-        "Me gustaría que uno de los asesores se contactaran vía telefónica, si es posible, ya que me quedan ciertas dudas que no se solucionan mediante la pagina. Agradecería una llamada al numero celular 312 3202874.",
-    },
-  ];
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
 
   const handleClose = () => {
     setIsModalOpen(false);
+    setSelectedRecord(null);
   };
 
   const mediaQueries = useMediaQueries([
@@ -97,7 +91,7 @@ function CertificationsTable({
     headerKey: string,
     cellData: {
       type?: string;
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       onClick?: () => void;
     },
     rowIndex: number,
@@ -138,7 +132,7 @@ function CertificationsTable({
         align="center"
         style={{ padding: "16px 2px" }}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, rowIndex)}
       </StyledTd>
     );
   };
@@ -146,11 +140,11 @@ function CertificationsTable({
   const renderCellContent = (
     headerKey: string,
     cellData?: {
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       type?: string;
       onClick?: () => void;
-      hasDeletePrivilege?: boolean;
     },
+    rowIndex?: number,
   ) => {
     if (loading) {
       return <SkeletonLine width="100%" animated={true} />;
@@ -166,7 +160,17 @@ function CertificationsTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
-          onClick: () => setIsModalOpen(true),
+          onClick: () => {
+            const dataDe = data[rowIndex!].dataDetails
+              ?.value as unknown as CertificationsTableDataDetails;
+            const dataDeta = [
+              { label: "Destinatario", value: dataDe.addressee },
+              { label: "Contrato", value: dataDe.contract },
+              { label: "Observaciones", value: dataDe.description },
+            ];
+            setSelectedRecord(dataDeta);
+            setIsModalOpen(true);
+          },
           icon: <MdOutlineVisibility />,
         };
 
@@ -189,7 +193,9 @@ function CertificationsTable({
         return <Icon {...iconProps} />;
       }
     }
-    return cellData?.value;
+    return typeof cellData?.value === "object"
+      ? JSON.stringify(cellData.value)
+      : cellData?.value;
   };
 
   return (
@@ -240,7 +246,15 @@ function CertificationsTable({
             currentData.map((row: ICertificationsTable, rowIndex: number) => (
               <Tr key={rowIndex} border="bottom">
                 {visibleHeaders.map((header) => {
-                  const cellData = row[header.key];
+                  const cellData = row[header.key] as {
+                    type?: string;
+                    value?:
+                      | string
+                      | number
+                      | JSX.Element
+                      | CertificationsTableDataDetails;
+                    onClick?: () => void;
+                  };
                   return renderTableCell(
                     header.key,
                     cellData ?? { value: "" },
@@ -270,10 +284,10 @@ function CertificationsTable({
           </Tfoot>
         )}
       </Table>
-      {isModalOpen && (
+      {isModalOpen && selectedRecord && (
         <RequestComponentDetail
           handleClose={handleClose}
-          modalContent={modalContent}
+          modalContent={selectedRecord}
           title="Detalles de la certificación"
           buttonLabel="Cerrar"
         />
