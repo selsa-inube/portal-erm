@@ -17,7 +17,9 @@ const mapHumanResourceRequestApiToEntity = (
   ),
   humanResourceRequestDate: String(item.humanResourceRequestDate ?? ""),
   humanResourceRequestStatus: item.humanResourceRequestStatus as EStatus,
-  humanResourceRequestData: String(item.humanResourceRequestData ?? ""),
+  humanResourceRequestData:
+    item.humanResourceRequestData ??
+    ({} as HumanResourceRequest["humanResourceRequestData"]),
   humanResourceRequestType: item.humanResourceRequestType as EType,
   employeeId: String(item.employeeId ?? ""),
   userCodeInCharge: String(item.userCodeInCharge ?? ""),

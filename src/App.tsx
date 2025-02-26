@@ -18,6 +18,7 @@ import { CertificationsRoutes } from "@routes/certifications";
 
 import { LoginRoutes } from "./routes/login";
 import { EmployeesRoutes } from "./routes/employees";
+import { HolidaysRoutes } from "./routes/holidays";
 import { Login } from "./pages/login";
 import { GlobalStyles } from "./styles/global";
 import { BusinessUnitsLoader } from "./BusinessUnitsLoader";
@@ -82,8 +83,9 @@ const router = createBrowserRouter(
         errorElement={<ErrorPage />}
       />
       <Route path="login/*" element={<LoginRoutes />} />
-      <Route path="/certifications/*" element={<ProtectedAppPage />}>
-        <Route path="*" element={<CertificationsRoutes />} />
+      <Route path="/*" element={<ProtectedAppPage />}>
+        <Route path="holidays/*" element={<HolidaysRoutes />} />
+        <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
       <Route path="/employees/*" element={<ProtectedAppPage withNav={false} />}>
         <Route path="*" element={<EmployeesRoutes />} />
