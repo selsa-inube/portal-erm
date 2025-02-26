@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 import {
   Text,
@@ -16,6 +17,9 @@ import {
   Tr,
 } from "@inubekit/inubekit";
 
+import { TextAreaModal } from "@components/modals/TextAreaModal";
+import { useErrorFlag } from "@hooks/useErrorFlag";
+
 import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
@@ -33,6 +37,28 @@ function CertificationsTable({
   loading = false,
   disableDeleteAction = false,
 }: CertificationsTableProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showFlag, setShowFlag] = useState(false);
+
+  useErrorFlag(
+    showFlag,
+    "El registro ha sido eliminado correctamente.",
+    "Eliminación exitosa",
+  );
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    handleCloseModal();
+    setShowFlag(true);
+  };
+
   const {
     totalRecords,
     handleStartPage,
@@ -158,11 +184,7 @@ function CertificationsTable({
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege
-            ? () => {
-                /* no-op */
-              }
-            : undefined,
+          onClick: hasPrivilege ? () => handleOpenModal() : undefined,
           cursorHover: hasPrivilege,
           icon: <MdDeleteOutline />,
         };
@@ -250,6 +272,16 @@ function CertificationsTable({
           </Tfoot>
         )}
       </Table>
+      {isModalOpen && (
+        <TextAreaModal
+          title="Eliminación"
+          buttonText="Eliminar"
+          inputLabel="Justificación"
+          inputPlaceholder="¿Por qué eliminarás el registro?"
+          onSubmit={handleDelete}
+          onCloseModal={handleCloseModal}
+        />
+      )}
     </>
   );
 }
