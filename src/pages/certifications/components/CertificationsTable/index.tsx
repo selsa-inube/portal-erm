@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Text,
   Icon,
@@ -15,6 +16,8 @@ import {
   Thead,
   Tr,
 } from "@inubekit/inubekit";
+
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 
 import { ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
@@ -43,6 +46,22 @@ function CertificationsTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const modalContent = [
+    { label: "Destinatario", value: "A quien interese" },
+    { label: "Contrato", value: "21338 - Sistemas En Línea S.A - Indefinido" },
+    {
+      label: "Observaciones",
+      value:
+        "Me gustaría que uno de los asesores se contactaran vía telefónica, si es posible, ya que me quedan ciertas dudas que no se solucionan mediante la pagina. Agradecería una llamada al numero celular 312 3202874.",
+    },
+  ];
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -147,6 +166,7 @@ function CertificationsTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
+          onClick: () => setIsModalOpen(true),
           icon: <MdOutlineVisibility />,
         };
 
@@ -250,6 +270,14 @@ function CertificationsTable({
           </Tfoot>
         )}
       </Table>
+      {isModalOpen && (
+        <RequestComponentDetail
+          handleClose={handleClose}
+          modalContent={modalContent}
+          title="Detalles de la certificación"
+          buttonLabel="Cerrar"
+        />
+      )}
     </>
   );
 }

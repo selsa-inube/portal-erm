@@ -121,4 +121,4 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
   );
 }
 
-export default RequestComponentDetail;
+export { RequestComponentDetail };

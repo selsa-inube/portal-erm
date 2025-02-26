@@ -4,7 +4,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { parameters, props } from "./props";
 
 import { RequestComponentDetailProps } from "../index";
-import RequestComponentDetail from "../index";
+import { RequestComponentDetail } from "../index";
 
 const meta: Meta<typeof RequestComponentDetail> = {
   title: "components/modals/RequestComponentDetail",
