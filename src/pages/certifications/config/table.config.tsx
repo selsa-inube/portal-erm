@@ -43,6 +43,7 @@ export const formatHumanResourceData = (
     dataDetails: {
       value: {
         ...request.humanResourceRequestData,
+        startDate: formatDate(request.humanResourceRequestData?.startDate),
         description: request.humanResourceRequestDescription,
       },
     },
