@@ -39,7 +39,6 @@ export function TextAreaModal(props: TextAreaModalProps) {
   const {
     title,
     buttonText,
-    inputLabel,
     inputPlaceholder,
     maxLength = 200,
     portalId = "portal",
@@ -104,7 +103,6 @@ export function TextAreaModal(props: TextAreaModalProps) {
                   <Textarea
                     {...field}
                     id="textarea"
-                    label={inputLabel}
                     placeholder={inputPlaceholder}
                     maxLength={maxLength}
                     status={
@@ -125,7 +123,10 @@ export function TextAreaModal(props: TextAreaModalProps) {
                   type="button"
                   variant="outlined"
                   appearance="gray"
-                  onClick={onSecondaryButtonClick}
+                  onClick={() => {
+                    onSecondaryButtonClick?.();
+                    onCloseModal?.();
+                  }}
                 >
                   {secondaryButtonText}
                 </Button>

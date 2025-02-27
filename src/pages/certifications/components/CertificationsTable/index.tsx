@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Text,
   Icon,
@@ -20,7 +20,9 @@ import {
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
-import { ICertificationsTable } from "./types";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+
+import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
@@ -37,7 +39,6 @@ function CertificationsTable({
   loading = false,
   disableDeleteAction = false,
 }: CertificationsTableProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showFlag, setShowFlag] = useState(false);
 
   useErrorFlag(
@@ -45,19 +46,6 @@ function CertificationsTable({
     "El registro ha sido eliminado correctamente.",
     "Eliminación exitosa",
   );
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleDelete = () => {
-    handleCloseModal();
-    setShowFlag(true);
-  };
 
   const {
     totalRecords,
@@ -69,6 +57,32 @@ function CertificationsTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
+
+  const handleOpenModal = () => {
+    setIsSecondModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsSecondModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    handleCloseModal();
+    setShowFlag(true);
+  };
+
+  const handleClose = () => {
+    setIsSecondModalOpen(false);
+    setSelectedRecord(null);
+  };
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -104,7 +118,7 @@ function CertificationsTable({
     headerKey: string,
     cellData: {
       type?: string;
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       onClick?: () => void;
     },
     rowIndex: number,
@@ -145,7 +159,7 @@ function CertificationsTable({
         align="center"
         style={{ padding: "16px 2px" }}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, rowIndex)}
       </StyledTd>
     );
   };
@@ -153,11 +167,11 @@ function CertificationsTable({
   const renderCellContent = (
     headerKey: string,
     cellData?: {
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       type?: string;
       onClick?: () => void;
-      hasDeletePrivilege?: boolean;
     },
+    rowIndex?: number,
   ) => {
     if (loading) {
       return <SkeletonLine width="100%" animated={true} />;
@@ -173,6 +187,16 @@ function CertificationsTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
+          onClick: () => {
+            const dataDetails = data[rowIndex!].dataDetails
+              ?.value as CertificationsTableDataDetails;
+            setSelectedRecord([
+              { label: "Destinatario", value: dataDetails.addressee },
+              { label: "Contrato", value: dataDetails.contract },
+              { label: "Observaciones", value: dataDetails.description },
+            ]);
+            setIsModalOpen(true);
+          },
           icon: <MdOutlineVisibility />,
         };
 
@@ -191,7 +215,9 @@ function CertificationsTable({
         return <Icon {...iconProps} />;
       }
     }
-    return cellData?.value;
+    return typeof cellData?.value === "object"
+      ? JSON.stringify(cellData.value)
+      : cellData?.value;
   };
 
   return (
@@ -242,7 +268,15 @@ function CertificationsTable({
             currentData.map((row: ICertificationsTable, rowIndex: number) => (
               <Tr key={rowIndex} border="bottom">
                 {visibleHeaders.map((header) => {
-                  const cellData = row[header.key];
+                  const cellData = row[header.key] as {
+                    type?: string;
+                    value?:
+                      | string
+                      | number
+                      | JSX.Element
+                      | CertificationsTableDataDetails;
+                    onClick?: () => void;
+                  };
                   return renderTableCell(
                     header.key,
                     cellData ?? { value: "" },
@@ -272,14 +306,22 @@ function CertificationsTable({
           </Tfoot>
         )}
       </Table>
-      {isModalOpen && (
+      {isModalOpen && selectedRecord && (
+        <RequestComponentDetail
+          handleClose={handleClose}
+          modalContent={selectedRecord}
+          title="Detalles de la certificación"
+          buttonLabel="Cerrar"
+        />
+      )}
+      {isSecondModalOpen && (
         <TextAreaModal
           title="Eliminación"
           buttonText="Eliminar"
           inputLabel="Justificación"
           inputPlaceholder="¿Por qué eliminarás el registro?"
           onSubmit={handleDelete}
-          onCloseModal={handleCloseModal}
+          onCloseModal={handleClose}
         />
       )}
     </>
