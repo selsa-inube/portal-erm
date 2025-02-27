@@ -161,14 +161,13 @@ function CertificationsTable({
           size: "16px",
           cursorHover: true,
           onClick: () => {
-            const dataDe = data[rowIndex!].dataDetails
-              ?.value as unknown as CertificationsTableDataDetails;
-            const dataDeta = [
-              { label: "Destinatario", value: dataDe.addressee },
-              { label: "Contrato", value: dataDe.contract },
-              { label: "Observaciones", value: dataDe.description },
-            ];
-            setSelectedRecord(dataDeta);
+            const dataDetails = data[rowIndex!].dataDetails
+              ?.value as CertificationsTableDataDetails;
+            setSelectedRecord([
+              { label: "Destinatario", value: dataDetails.addressee },
+              { label: "Contrato", value: dataDetails.contract },
+              { label: "Observaciones", value: dataDetails.description },
+            ]);
             setIsModalOpen(true);
           },
           icon: <MdOutlineVisibility />,
