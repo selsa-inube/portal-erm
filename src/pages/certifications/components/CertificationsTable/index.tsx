@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Text,
   Icon,
@@ -16,7 +17,9 @@ import {
   Tr,
 } from "@inubekit/inubekit";
 
-import { ICertificationsTable } from "./types";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+
+import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
@@ -43,6 +46,16 @@ function CertificationsTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setSelectedRecord(null);
+  };
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -78,7 +91,7 @@ function CertificationsTable({
     headerKey: string,
     cellData: {
       type?: string;
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       onClick?: () => void;
     },
     rowIndex: number,
@@ -119,7 +132,7 @@ function CertificationsTable({
         align="center"
         style={{ padding: "16px 2px" }}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, rowIndex)}
       </StyledTd>
     );
   };
@@ -127,11 +140,11 @@ function CertificationsTable({
   const renderCellContent = (
     headerKey: string,
     cellData?: {
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | CertificationsTableDataDetails;
       type?: string;
       onClick?: () => void;
-      hasDeletePrivilege?: boolean;
     },
+    rowIndex?: number,
   ) => {
     if (loading) {
       return <SkeletonLine width="100%" animated={true} />;
@@ -147,6 +160,16 @@ function CertificationsTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
+          onClick: () => {
+            const dataDetails = data[rowIndex!].dataDetails
+              ?.value as CertificationsTableDataDetails;
+            setSelectedRecord([
+              { label: "Destinatario", value: dataDetails.addressee },
+              { label: "Contrato", value: dataDetails.contract },
+              { label: "Observaciones", value: dataDetails.description },
+            ]);
+            setIsModalOpen(true);
+          },
           icon: <MdOutlineVisibility />,
         };
 
@@ -169,7 +192,9 @@ function CertificationsTable({
         return <Icon {...iconProps} />;
       }
     }
-    return cellData?.value;
+    return typeof cellData?.value === "object"
+      ? JSON.stringify(cellData.value)
+      : cellData?.value;
   };
 
   return (
@@ -220,7 +245,15 @@ function CertificationsTable({
             currentData.map((row: ICertificationsTable, rowIndex: number) => (
               <Tr key={rowIndex} border="bottom">
                 {visibleHeaders.map((header) => {
-                  const cellData = row[header.key];
+                  const cellData = row[header.key] as {
+                    type?: string;
+                    value?:
+                      | string
+                      | number
+                      | JSX.Element
+                      | CertificationsTableDataDetails;
+                    onClick?: () => void;
+                  };
                   return renderTableCell(
                     header.key,
                     cellData ?? { value: "" },
@@ -250,6 +283,14 @@ function CertificationsTable({
           </Tfoot>
         )}
       </Table>
+      {isModalOpen && selectedRecord && (
+        <RequestComponentDetail
+          handleClose={handleClose}
+          modalContent={selectedRecord}
+          title="Detalles de la certificación"
+          buttonLabel="Cerrar"
+        />
+      )}
     </>
   );
 }

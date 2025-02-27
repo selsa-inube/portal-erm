@@ -1,13 +1,16 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
+import { ICertificationsTable } from "../components/CertificationsTable/types";
 import {
   EStatus,
   EType,
   HumanResourceRequest,
 } from "@src/types/humanResourcesRequest.types";
 
-export const formatHumanResourceData = (requests: HumanResourceRequest[]) =>
+export const formatHumanResourceData = (
+  requests: HumanResourceRequest[],
+): ICertificationsTable[] =>
   requests.map((request) => ({
     requestNumber: { value: request.humanResourceRequestNumber },
     type: {
@@ -36,5 +39,11 @@ export const formatHumanResourceData = (requests: HumanResourceRequest[]) =>
       type: "icon" as const,
       onClick: () =>
         console.log(`Eliminar solicitud ${request.humanResourceRequestId}`),
+    },
+    dataDetails: {
+      value: {
+        ...request.humanResourceRequestData,
+        description: request.humanResourceRequestDescription,
+      },
     },
   }));
