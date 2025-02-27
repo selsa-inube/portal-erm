@@ -97,7 +97,7 @@ export function TextAreaModal(props: TextAreaModalProps) {
             onCloseModal?.();
           }}
         >
-          {({ errors, touched, isValid }) => (
+          {({ errors, touched, values }) => (
             <Form>
               <Field name="textarea">
                 {({ field }: FieldProps) => (
@@ -133,9 +133,9 @@ export function TextAreaModal(props: TextAreaModalProps) {
                   {secondaryButtonText}
                 </Button>
                 <Button
-                  type={readOnly ? "button" : "submit"}
-                  onClick={readOnly ? onCloseModal : undefined}
-                  disabled={!isValid || disableTextarea}
+                  type="submit"
+                  disabled={!values.textarea || disableTextarea}
+                  appearance={values.textarea ? "primary" : "gray"}
                 >
                   {buttonText}
                 </Button>
