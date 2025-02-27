@@ -17,6 +17,9 @@ import {
   Tr,
 } from "@inubekit/inubekit";
 
+import { TextAreaModal } from "@components/modals/TextAreaModal";
+import { useErrorFlag } from "@hooks/useErrorFlag";
+
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 
 import { CertificationsTableDataDetails, ICertificationsTable } from "./types";
@@ -36,6 +39,14 @@ function CertificationsTable({
   loading = false,
   disableDeleteAction = false,
 }: CertificationsTableProps) {
+  const [showFlag, setShowFlag] = useState(false);
+
+  useErrorFlag(
+    showFlag,
+    "El registro ha sido eliminado correctamente.",
+    "Eliminación exitosa",
+  );
+
   const {
     totalRecords,
     handleStartPage,
@@ -48,12 +59,28 @@ function CertificationsTable({
   } = usePagination(data);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
   >(null);
 
+  const handleOpenModal = () => {
+    setIsSecondModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsSecondModalOpen(false);
+  };
+
+  const handleDelete = () => {
+    handleCloseModal();
+    setShowFlag(true);
+  };
+
   const handleClose = () => {
-    setIsModalOpen(false);
+    setIsSecondModalOpen(false);
     setSelectedRecord(null);
   };
 
@@ -181,11 +208,7 @@ function CertificationsTable({
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege
-            ? () => {
-                /* no-op */
-              }
-            : undefined,
+          onClick: hasPrivilege ? () => handleOpenModal() : undefined,
           cursorHover: hasPrivilege,
           icon: <MdDeleteOutline />,
         };
@@ -289,6 +312,16 @@ function CertificationsTable({
           modalContent={selectedRecord}
           title="Detalles de la certificación"
           buttonLabel="Cerrar"
+        />
+      )}
+      {isSecondModalOpen && (
+        <TextAreaModal
+          title="Eliminación"
+          buttonText="Eliminar"
+          inputLabel="Justificación"
+          inputPlaceholder="¿Por qué eliminarás el registro?"
+          onSubmit={handleDelete}
+          onCloseModal={handleClose}
         />
       )}
     </>
