@@ -12,6 +12,10 @@ import {
   StyledMain,
 } from "./styles";
 
+interface AppPageProps {
+  withNav?: boolean;
+}
+
 const renderLogo = (imgUrl: string) => {
   return (
     <StyledContentImg to="/">
@@ -20,7 +24,8 @@ const renderLogo = (imgUrl: string) => {
   );
 };
 
-function AppPage() {
+function AppPage(props: AppPageProps) {
+  const { withNav = true } = props;
   const { logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
@@ -41,11 +46,11 @@ function AppPage() {
         />
         <StyledContainer>
           <Grid
-            templateColumns={!isTablet ? "auto 1fr" : "1fr"}
+            templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
-            height={"95vh"}
+            height="95vh"
           >
-            {!isTablet && (
+            {withNav && !isTablet && (
               <Nav navigation={nav} actions={actions} collapse={true} />
             )}
             <StyledMain>

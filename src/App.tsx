@@ -17,6 +17,7 @@ import { useBusinessManagers } from "@hooks/useBusinessManagers";
 import { CertificationsRoutes } from "@routes/certifications";
 
 import { LoginRoutes } from "./routes/login";
+import { EmployeesRoutes } from "./routes/employees";
 import { HolidaysRoutes } from "./routes/holidays";
 import { Login } from "./pages/login";
 import { GlobalStyles } from "./styles/global";
@@ -86,7 +87,11 @@ const router = createBrowserRouter(
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
+      <Route path="/employees/*" element={<ProtectedAppPage withNav={false} />}>
+        <Route path="*" element={<EmployeesRoutes />} />
+      </Route>
       <Route path="logout" element={<LogOut />} />
+      <Route path="*" element={<ProtectedAppPage />} />
     </>,
   ),
 );
