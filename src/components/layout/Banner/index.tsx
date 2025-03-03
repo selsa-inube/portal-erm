@@ -34,10 +34,7 @@ function VinculacionBanner(props: VinculacionBannerProps) {
   const isMobile = matches["(max-width: 460px)"];
 
   const statusKey = status.toLowerCase() as StatusKey;
-  const { color, icon } = statusConfig[statusKey] ?? {
-    color: "neutral",
-    icon: <MdOutlineManageAccounts />,
-  };
+  const { color, icon } = statusConfig[statusKey] ?? statusConfig;
 
   return (
     <StyledRadioClient>

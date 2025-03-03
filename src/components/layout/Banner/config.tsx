@@ -1,4 +1,9 @@
-import { MdOutlineSchedule, MdCancel, MdCheckCircle } from "react-icons/md";
+import {
+  MdOutlineSchedule,
+  MdCancel,
+  MdCheckCircle,
+  MdOutlineManageAccounts,
+} from "react-icons/md";
 
 export const statusConfig = {
   prospecto: { color: "warning", icon: <MdOutlineSchedule /> },
@@ -9,6 +14,7 @@ export const statusConfig = {
   "en proceso de retiro": { color: "danger", icon: <MdCancel /> },
   retirado: { color: "danger", icon: <MdCancel /> },
   activo: { color: "success", icon: <MdCheckCircle /> },
+  neutral: { color: "primary", icon: <MdOutlineManageAccounts /> },
 } as const;
 
 export type StatusKey = keyof typeof statusConfig;
