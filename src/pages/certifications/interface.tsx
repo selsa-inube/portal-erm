@@ -51,7 +51,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               variant="filled"
               iconBefore={<MdOutlineAdd />}
               type="link"
-              path="/certifications"
+              path="/certifications/new-certification"
               fullwidth={isMobile}
             >
               Nueva certificación
