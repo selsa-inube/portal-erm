@@ -190,11 +190,12 @@ function CertificationsTable({
           onClick: () => {
             const dataDetails = data[rowIndex!].dataDetails
               ?.value as CertificationsTableDataDetails;
-            setSelectedRecord([
+            const dataDeta = [
               { label: "Destinatario", value: dataDetails.addressee },
               { label: "Contrato", value: dataDetails.contract },
               { label: "Observaciones", value: dataDetails.description },
-            ]);
+            ];
+            setSelectedRecord(dataDeta);
             setIsModalOpen(true);
           },
           icon: <MdOutlineVisibility />,
