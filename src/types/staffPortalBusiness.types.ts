@@ -10,6 +10,7 @@ interface IStaffPortalByBusinessManager
   extends IEmployeePortalByBusinessManager {
   publicCode: string;
   url: string;
+  staffPortalId: string;
   optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
 }
 
