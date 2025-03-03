@@ -156,7 +156,7 @@ function App() {
   return (
     <AppProvider
       dataPortal={portalData}
-      businessManagersData={businessManagersData}
+      businessManagersData={[businessManagersData]}
       businessUnitsData={[]}
     >
       <GlobalStyles />

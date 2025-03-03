@@ -13,13 +13,20 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
     descriptionUse:
       typeof resend.descriptionUse === "string" ? resend.descriptionUse : "",
     publicCode: typeof resend.publicCode === "string" ? resend.publicCode : "",
-    staffPortalCatalogId:
-      typeof resend.staffPortalCatalogId === "string"
-        ? resend.staffPortalCatalogId
-        : "",
     staffPortalId:
       typeof resend.staffPortalId === "string" ? resend.staffPortalId : "",
     url: typeof resend.url === "string" ? resend.url : "",
+    businessUnit:
+      typeof resend.businessUnit === "string" ? resend.businessUnit : "",
+    portalCode: typeof resend.portalCode === "string" ? resend.portalCode : "",
+    employeePortalCatalogId:
+      typeof resend.employeePortalCatalogId === "string"
+        ? resend.employeePortalCatalogId
+        : "",
+    employeePortalId:
+      typeof resend.employeePortalId === "string"
+        ? resend.employeePortalId
+        : "",
     optionsByStaffPortalBusinessManager: Array.isArray(
       resend.optionsByStaffPortalBusinessManager,
     )
