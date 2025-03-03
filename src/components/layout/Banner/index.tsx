@@ -6,10 +6,12 @@ import {
   Stack,
   Button,
 } from "@inubekit/inubekit";
-import { MdAdd, MdCheckCircle, MdOutlineManageAccounts } from "react-icons/md";
+import { MdAdd, MdOutlineManageAccounts } from "react-icons/md";
 
 import bannerImage from "@assets/images/banner.png";
 import { spacing } from "@design/tokens/spacing";
+
+import { statusConfig, StatusKey } from "./config";
 
 import {
   StyledRadioClient,
@@ -31,6 +33,12 @@ function VinculacionBanner(props: VinculacionBannerProps) {
   const matches = useMediaQueries(mediaQueries);
   const isMobile = matches["(max-width: 460px)"];
 
+  const statusKey = status.toLowerCase() as StatusKey;
+  const { color, icon } = statusConfig[statusKey] ?? {
+    color: "neutral",
+    icon: <MdOutlineManageAccounts />,
+  };
+
   return (
     <StyledRadioClient>
       <Grid
@@ -47,14 +55,14 @@ function VinculacionBanner(props: VinculacionBannerProps) {
             <Text size="medium">{name}</Text>
             <Stack gap={spacing.s075} alignItems="center">
               <Icon
-                appearance="success"
-                icon={<MdCheckCircle />}
+                appearance={color}
+                icon={icon}
                 cursorHover={true}
                 spacing="narrow"
                 shape="rectangle"
                 size="12px"
               />
-              <Text size="small" appearance="success">
+              <Text size="small" appearance={color}>
                 {status}
               </Text>
             </Stack>

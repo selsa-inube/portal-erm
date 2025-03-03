@@ -4,7 +4,7 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-const StyledRadioClient = styled.label`
+const StyledRadioClient = styled.div`
   position: relative;
   display: flex;
   align-items: center;
