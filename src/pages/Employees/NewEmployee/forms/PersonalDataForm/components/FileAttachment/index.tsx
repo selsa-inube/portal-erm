@@ -5,22 +5,20 @@ import { AttachDocumentModal } from "../../modals/AttachDocumentModal";
 import { DeleteAttachModal } from "../../modals/DeleteAttachModal";
 
 interface FileAttachmentProps {
-  onFileChange?: (file: File | undefined) => void;
+  attachedFile?: File;
+  onFileChange: (file: File | undefined) => void;
 }
 
-function FileAttachment({ onFileChange }: FileAttachmentProps) {
+function FileAttachment(props: FileAttachmentProps) {
+  const { attachedFile, onFileChange } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [attachedFile, setAttachedFile] = useState<File | undefined>(undefined);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const handleAttach = (file: File) => {
-    setAttachedFile(file);
-    if (onFileChange) {
-      onFileChange(file);
-    }
+    onFileChange(file);
     setIsModalOpen(false);
   };
 
@@ -28,10 +26,7 @@ function FileAttachment({ onFileChange }: FileAttachmentProps) {
   const handleCloseDeleteModal = () => setIsDeleteModalOpen(false);
 
   const handleDelete = () => {
-    setAttachedFile(undefined);
-    if (onFileChange) {
-      onFileChange(undefined);
-    }
+    onFileChange(undefined);
     setIsDeleteModalOpen(false);
   };
 

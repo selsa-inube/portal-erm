@@ -115,6 +115,7 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
             </Grid>
             <Divider dashed />
             <FileAttachment
+              attachedFile={formik.values.attachedFile}
               onFileChange={(file) =>
                 void formik.setFieldValue("attachedFile", file)
               }
