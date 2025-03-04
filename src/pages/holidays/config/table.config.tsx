@@ -1,12 +1,12 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
-
-import { VacationType } from "./enums";
 import {
   EStatus,
   HumanResourceRequest,
-} from "@src/types/humanResourcesRequest.types";
+} from "@ptypes/humanResourcesRequest.types";
+
+import { VacationType } from "./enums";
 
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => ({
