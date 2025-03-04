@@ -5,21 +5,36 @@ import {
   useMediaQuery,
   Text,
 } from "@inubekit/inubekit";
+import { FormikProps } from "formik";
 
 import { spacing } from "@design/tokens/spacing";
+
+import { PersonalDataForm } from "./forms/PersonalDataForm";
+import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 
 interface NewEmployeeUIProps {
   steps: IAssistedStep[];
   currentStep: number;
+  personalDataRef: React.RefObject<FormikProps<IPersonalDataEntry>>;
+  isCurrentFormValid: boolean;
+  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
 }
 
-function NewEmployeeUI(props: NewEmployeeUIProps) {
+function NewEmployeeUI(
+  props: NewEmployeeUIProps & {
+    initialPersonalDataValues: IPersonalDataEntry;
+  },
+) {
   const {
     steps,
     currentStep,
+    personalDataRef,
+    initialPersonalDataValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -42,7 +57,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
       <Assisted
         step={steps[currentStep - 1]}
         totalSteps={steps.length}
-        disableNext={false}
+        disableNext={!isCurrentFormValid}
         size={isTablet ? "small" : "large"}
         controls={{
           goBackText: "Anterior",
@@ -55,7 +70,15 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
       />
 
       <Stack direction="column" gap={spacing.s500}>
-        {currentStep === 1 && <div>Contenido Paso 1 (Vacío)</div>}
+        {currentStep === 1 && (
+          <PersonalDataForm
+            ref={personalDataRef}
+            initialValues={initialPersonalDataValues}
+            withNextButton={true}
+            onFormValid={setIsCurrentFormValid}
+            handleNextStep={handleNextStep}
+          />
+        )}
         {currentStep === 2 && <div>Contenido Paso 2 (Vacío)</div>}
         {currentStep === 3 && <div>Contenido Paso 3 (Vacío)</div>}
         {currentStep === 4 && <div>Contenido Paso 4 (Vacío)</div>}
