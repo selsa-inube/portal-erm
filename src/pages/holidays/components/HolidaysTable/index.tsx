@@ -1,4 +1,5 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { useState } from "react";
 import {
   Col,
   Colgroup,
@@ -16,7 +17,9 @@ import {
   SkeletonLine,
 } from "@inubekit/inubekit";
 
-import { IHolidaysTable } from "./types";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+
+import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
@@ -43,6 +46,16 @@ function HolidaysTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+    setSelectedRecord(null);
+  };
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -77,11 +90,12 @@ function HolidaysTable({
   const renderCellContent = (
     headerKey: string,
     cellData?: {
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | HolidayTableDataDetails;
       type?: string;
       onClick?: () => void;
       hasDeletePrivilege?: boolean;
     },
+    rowIndex?: number,
   ) => {
     if (loading) {
       return <SkeletonLine width="100%" animated={true} />;
@@ -97,6 +111,18 @@ function HolidaysTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
+          onClick: () => {
+            const dataDe = data[rowIndex!].dataDetails
+              ?.value as unknown as HolidayTableDataDetails;
+            const dataDeta = [
+              { label: "Días de disfrute", value: dataDe.daysEnjoyed },
+              { label: "Fecha de inicio", value: dataDe.startDate },
+              { label: "Contrato", value: dataDe.contract },
+              { label: "Observaciones", value: dataDe.description },
+            ];
+            setSelectedRecord(dataDeta);
+            setIsModalOpen(true);
+          },
           icon: <MdOutlineVisibility />,
         };
 
@@ -119,14 +145,16 @@ function HolidaysTable({
         return <Icon {...iconProps} />;
       }
     }
-    return cellData?.value;
+    return typeof cellData?.value === "object"
+      ? JSON.stringify(cellData.value)
+      : cellData?.value;
   };
 
   const renderTableCell = (
     headerKey: string,
     cellData: {
       type?: string;
-      value?: string | number | JSX.Element;
+      value?: string | number | JSX.Element | HolidayTableDataDetails;
       onClick?: () => void;
     },
     rowIndex: number,
@@ -172,7 +200,7 @@ function HolidaysTable({
         align="center"
         style={{ padding: "16px 2px" }}
       >
-        {renderCellContent(headerKey, cellData)}
+        {renderCellContent(headerKey, cellData, rowIndex)}
       </StyledTd>
     );
   };
@@ -220,7 +248,15 @@ function HolidaysTable({
             currentData.map((row: IHolidaysTable, rowIndex: number) => (
               <Tr key={rowIndex} border="bottom">
                 {visibleHeaders.map((header) => {
-                  const cellData = row[header.key];
+                  const cellData = row[header.key] as {
+                    type?: string;
+                    value?:
+                      | string
+                      | number
+                      | JSX.Element
+                      | HolidayTableDataDetails;
+                    onClick?: () => void;
+                  };
                   return renderTableCell(
                     header.key,
                     cellData ?? { value: "" },
@@ -249,6 +285,14 @@ function HolidaysTable({
           </Tfoot>
         )}
       </Table>
+      {isModalOpen && selectedRecord && (
+        <RequestComponentDetail
+          handleClose={handleClose}
+          modalContent={selectedRecord}
+          title="Detalles de la certificación"
+          buttonLabel="Cerrar"
+        />
+      )}
     </>
   );
 }
