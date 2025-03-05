@@ -13,7 +13,7 @@ const AppContext = createContext<IAppContextType | undefined>(undefined);
 
 interface AppProviderProps {
   children: ReactNode;
-  businessManagersData: IBusinessManager[];
+  businessManagersData: IBusinessManager;
   dataPortal: IStaffPortalByBusinessManager;
   businessUnitsData: IBusinessUnit[];
 }
@@ -21,6 +21,7 @@ interface AppProviderProps {
 function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
+  console.log("AppProvider -> businessManagersData", businessManagersData);
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;
@@ -70,7 +71,7 @@ function AppProvider(props: AppProviderProps) {
   const [provisionedPortal, setProvisionedPortal] =
     useState<IStaffPortalByBusinessManager>(dataPortal);
   const [businessManagers, setBusinessManagers] =
-    useState<IBusinessManager[]>(businessManagersData);
+    useState<IBusinessManager>(businessManagersData);
   const [businessUnits, setBusinessUnits] =
     useState<IBusinessUnit[]>(businessUnitsData);
 

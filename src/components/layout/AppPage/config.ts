@@ -14,18 +14,16 @@ export const mockDataPortal: IStaffPortalByBusinessManager = {
   employeePortalId: "EP123",
   staffPortalId: "SP123",
 };
-export const mockBusinessManagersData: IBusinessManager[] = [
-  {
-    id: "1",
-    publicCode: "BM001",
-    language: "es",
-    abbreviatedName: "Gerente 1",
-    description: "Gerente de ventas",
-    urlBrand: "https://example.com/brand.png",
-    urlLogo: "https://example.com/logo.png",
-    customerId: "C001",
-  },
-];
+export const mockBusinessManagersData: IBusinessManager = {
+  id: "1",
+  publicCode: "BM001",
+  language: "es",
+  abbreviatedName: "Gerente 1",
+  description: "Gerente de ventas",
+  urlBrand: "https://example.com/brand.png",
+  urlLogo: "https://example.com/logo.png",
+  customerId: "C001",
+};
 
 export const mockBusinessUnitsData = [
   {
