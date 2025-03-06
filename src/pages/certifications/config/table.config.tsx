@@ -1,12 +1,13 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
-import { ICertificationsTable } from "../components/CertificationsTable/types";
 import {
   EStatus,
   EType,
   HumanResourceRequest,
-} from "@src/types/humanResourcesRequest.types";
+} from "@ptypes/humanResourcesRequest.types";
+
+import { ICertificationsTable } from "../components/CertificationsTable/types";
 
 export const formatHumanResourceData = (
   requests: HumanResourceRequest[],

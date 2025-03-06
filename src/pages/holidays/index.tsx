@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { getHumanResourceRequests } from "@src/services/humanResourcesRequest/getHumanResourcesRequest";
+import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 
 import { holidaysNavConfig } from "./config/nav.config";
 import { HolidaysOptionsUI } from "./interface";

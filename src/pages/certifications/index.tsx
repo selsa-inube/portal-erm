@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { getHumanResourceRequests } from "@src/services/humanResourcesRequest/getHumanResourcesRequest";
+import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { certificationsNavConfig } from "./config/nav.config";
