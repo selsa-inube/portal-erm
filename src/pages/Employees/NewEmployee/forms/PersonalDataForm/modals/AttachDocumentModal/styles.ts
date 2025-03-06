@@ -9,6 +9,11 @@ interface IStyledModal {
   theme?: typeof inube;
 }
 
+interface IStyledAttachContainer {
+  $isDragging?: boolean;
+  theme?: typeof inube;
+}
+
 const StyledModal = styled.div<IStyledModal>`
   overflow: hidden;
   display: flex;
@@ -39,7 +44,7 @@ const StyledContainerClose = styled.div`
   cursor: pointer;
 `;
 
-const StyledAttachContainer = styled.div`
+const StyledAttachContainer = styled.div<IStyledAttachContainer>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -49,7 +54,15 @@ const StyledAttachContainer = styled.div`
   gap: ${spacing.s200};
   border-radius: ${spacing.s100};
   border: 2px dashed
-    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    ${({ theme, $isDragging }) =>
+      $isDragging
+        ? theme?.palette?.blue?.B300 || inube.palette.blue.B300
+        : theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  background-color: ${({ theme, $isDragging }) =>
+    $isDragging
+      ? theme?.palette?.blue?.B50 || inube.palette.blue.B50
+      : theme?.palette?.neutral.N0 || theme?.palette?.neutral.N0};
+  transition: border 0.3s ease;
 `;
 
 export { StyledModal, StyledContainerClose, StyledAttachContainer };
