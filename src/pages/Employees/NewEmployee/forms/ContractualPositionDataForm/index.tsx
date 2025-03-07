@@ -4,21 +4,42 @@ import * as Yup from "yup";
 
 import { validationMessages } from "@validations/validationMessages";
 
+import { contractualPositionDataRequiredFields } from "./config/formConfig";
 import { ContractualPositionDataFormUI } from "./interface";
 import { IContractualPositionData } from "./types";
 
 const createValidationSchema = () =>
   Yup.object().shape({
-    normativeFramework: Yup.string().required(validationMessages.required),
-    contractType: Yup.string().required(validationMessages.required),
-    startDate: Yup.string().required(validationMessages.required),
-    endDate: Yup.string().required(validationMessages.required),
-    company: Yup.string().required(validationMessages.required),
-    workingShift: Yup.string().required(validationMessages.required),
-    team: Yup.string().required(validationMessages.required),
-    position: Yup.string().required(validationMessages.required),
-    salaryProfile: Yup.string().required(validationMessages.required),
-    jobMode: Yup.string().required(validationMessages.required),
+    normativeFramework: contractualPositionDataRequiredFields.normativeFramework
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    contractType: contractualPositionDataRequiredFields.contractType
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    startDate: contractualPositionDataRequiredFields.startDate
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    endDate: contractualPositionDataRequiredFields.endDate
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    company: contractualPositionDataRequiredFields.company
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    workingShift: contractualPositionDataRequiredFields.workingShift
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    team: contractualPositionDataRequiredFields.team
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    position: contractualPositionDataRequiredFields.position
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    salaryProfile: contractualPositionDataRequiredFields.salaryProfile
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
+    jobMode: contractualPositionDataRequiredFields.jobMode
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
   });
 
 const validationSchema = createValidationSchema();

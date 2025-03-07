@@ -15,9 +15,11 @@ import { mockAlertCards } from "@mocks/requirements/requirements.mock";
 
 import { PersonalDataForm } from "./forms/PersonalDataForm";
 import { ContractualPositionDataForm } from "./forms/ContractualPositionDataForm";
+import { LegalAccountingLocationForm } from "./forms/LegalAccountingLocationForm";
 import { RequirementsModal } from "./modals/RequirementsModal";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
+import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
 
 interface NewEmployeeUIProps {
   steps: IAssistedStep[];
@@ -29,6 +31,10 @@ interface NewEmployeeUIProps {
     FormikProps<IContractualPositionData>
   >;
   initialContractualPositionValues: IContractualPositionData;
+  legalAccountingLocationFormRef: React.RefObject<
+    FormikProps<ILegalAccountingLocation>
+  >;
+  initialLegalAccountingLocationValues: ILegalAccountingLocation;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -44,6 +50,8 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
     initialPersonalDataValues,
     contractualPositionDataFormRef,
     initialContractualPositionValues,
+    legalAccountingLocationFormRef,
+    initialLegalAccountingLocationValues,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -125,7 +133,16 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
             />
           )}
 
-          {currentStep === 3 && <div>Contenido Paso 3 (Vacío)</div>}
+          {currentStep === 3 && (
+            <LegalAccountingLocationForm
+              ref={legalAccountingLocationFormRef}
+              initialValues={initialLegalAccountingLocationValues}
+              withNextButton={true}
+              onFormValid={setIsCurrentFormValid}
+              handleNextStep={handleNextStep}
+              handlePreviousStep={handlePreviousStep}
+            />
+          )}
           {currentStep === 4 && <div>Contenido Paso 4 (Vacío)</div>}
           {currentStep === 5 && <div>Contenido Paso 5 (Vacío)</div>}
           {currentStep === 6 && <div>Contenido Paso 6 (Vacío)</div>}
