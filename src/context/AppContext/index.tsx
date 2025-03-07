@@ -21,7 +21,6 @@ interface AppProviderProps {
 function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
-  console.log("AppProvider -> businessManagersData", businessManagersData);
   const { user: auth0User } = useAuth0();
   const [user, setUser] = useState<{
     username: string;

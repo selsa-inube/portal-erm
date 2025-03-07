@@ -1,5 +1,4 @@
 import { FormikProps } from "formik";
-import { useState } from "react";
 import * as Yup from "yup";
 import {
   Stack,
@@ -9,16 +8,13 @@ import {
   Grid,
   Divider,
 } from "@inubekit/inubekit";
-import { MdCheckCircleOutline } from "react-icons/md";
 
 import { isRequired } from "@utils/forms";
 import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms";
-import { mockAlertCards } from "@mocks/requirements/requirements.mock";
 
 import { IPersonalDataEntry } from "./types";
 import { StyledContainer } from "./styles";
-import { RequirementsModal } from "./modals/RequirementsModal";
 import { FileAttachment } from "./components/FileAttachment";
 
 interface PersonalDataFormUIProps {
@@ -34,35 +30,15 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <form>
-      <Stack direction="column" alignItems="flex-end" margin={spacing.s075}>
-        <Button
-          appearance="gray"
-          variant="outlined"
-          spacing="compact"
-          iconBefore={<MdCheckCircleOutline />}
-          onClick={handleOpenModal}
-        >
-          Requisitos
-        </Button>
-      </Stack>
       <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
         <StyledContainer $isMobile={isMobile}>
           <Stack direction="column" width="100%" gap={spacing.s250}>
             <Grid
               templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
-              gap="16px"
+              gap={spacing.s200}
               width="100%"
               autoRows="unset"
             >
@@ -135,13 +111,6 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
           </Stack>
         )}
       </Stack>
-
-      {isModalOpen && (
-        <RequirementsModal
-          alertCards={mockAlertCards}
-          onCloseModal={handleCloseModal}
-        />
-      )}
     </form>
   );
 }
