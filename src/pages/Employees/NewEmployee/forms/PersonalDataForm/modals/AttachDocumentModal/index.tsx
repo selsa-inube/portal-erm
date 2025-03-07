@@ -30,7 +30,9 @@ export interface AttachDocumentModalProps {
 export function AttachDocumentModal(props: AttachDocumentModalProps) {
   const { portalId = "portal", onAttach, onCloseModal } = props;
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragCounter = useRef(0);
   const MAX_FILE_SIZE = 2.5 * 1024 * 1024;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
@@ -57,8 +59,30 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
     }
   };
 
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    dragCounter.current++;
+    if (dragCounter.current === 1) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    dragCounter.current--;
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    dragCounter.current = 0;
+    setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
       if (file.type === "application/pdf") {
@@ -72,10 +96,6 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
       }
       e.dataTransfer.clearData();
     }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
   };
 
   const handleBrowseClick = () => {
@@ -104,16 +124,21 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
           </StyledContainerClose>
         </Stack>
         <Divider />
-        <StyledAttachContainer onDrop={handleDrop} onDragOver={handleDragOver}>
+        <StyledAttachContainer
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          $isDragging={isDragging}
+        >
           <Icon icon={<MdOutlineCloudUpload />} appearance="gray" size="32px" />
           <Stack direction="column" alignItems="center">
-            <Text>Arrastra un documento </Text>
+            <Text>Arrastra un documento</Text>
             <Text>o</Text>
           </Stack>
           <Button spacing="compact" onClick={handleBrowseClick}>
             Busca un documento
           </Button>
-
           <input
             type="file"
             accept="application/pdf"
@@ -140,7 +165,6 @@ export function AttachDocumentModal(props: AttachDocumentModalProps) {
             </Stack>
           </>
         )}
-
         <Stack
           alignItems="flex-end"
           justifyContent="flex-end"

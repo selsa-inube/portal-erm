@@ -3,7 +3,11 @@ import { Meta, StoryFn } from "@storybook/react";
 
 import { AppPage } from ".";
 import { AppProvider } from "@context/AppContext";
-import { mockDataPortal } from "./config";
+import {
+  mockDataPortal,
+  mockBusinessManagersData,
+  mockBusinessUnitsData,
+} from "./config";
 
 const meta: Meta<typeof AppPage> = {
   title: "layout/appPage",
@@ -11,7 +15,11 @@ const meta: Meta<typeof AppPage> = {
   decorators: [
     (Story: StoryFn) => (
       <BrowserRouter>
-        <AppProvider dataPortal={mockDataPortal}>
+        <AppProvider
+          dataPortal={mockDataPortal}
+          businessManagersData={mockBusinessManagersData}
+          businessUnitsData={mockBusinessUnitsData}
+        >
           <Story />
         </AppProvider>
       </BrowserRouter>

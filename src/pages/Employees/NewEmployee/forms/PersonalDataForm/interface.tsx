@@ -30,6 +30,7 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+
   return (
     <form>
       <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>

@@ -17,10 +17,6 @@ function NewEmployee() {
     attachedFile: undefined,
   });
 
-  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
-  const personalDataRef = useRef<FormikProps<IPersonalDataEntry>>(null);
-
   const [contractualPositionData, setContractualPositionData] =
     useState<IContractualPositionData>({
       id: "",
@@ -36,6 +32,9 @@ function NewEmployee() {
       jobMode: "",
     });
 
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+
+  const personalDataRef = useRef<FormikProps<IPersonalDataEntry>>(null);
   const contractualPositionDataFormRef =
     useRef<FormikProps<IContractualPositionData>>(null);
 
