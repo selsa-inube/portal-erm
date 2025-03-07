@@ -5,6 +5,7 @@ import { NewEmployeeUI } from "./interface";
 import { newEmployeeSteps } from "./config/assisted.config";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
+import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
 
 function NewEmployee() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -32,11 +33,20 @@ function NewEmployee() {
       jobMode: "",
     });
 
+  const [legalAccountingLocation, setLegalAccountingLocation] =
+    useState<ILegalAccountingLocation>({
+      proyect: "",
+      zonalSegmentation: "",
+      costCenter: "",
+    });
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
   const personalDataRef = useRef<FormikProps<IPersonalDataEntry>>(null);
   const contractualPositionDataFormRef =
     useRef<FormikProps<IContractualPositionData>>(null);
+  const legalAccountingLocationFormRef =
+    useRef<FormikProps<ILegalAccountingLocation>>(null);
 
   const updateFormValues = () => {
     if (currentStep === 1 && personalDataRef.current) {
@@ -45,6 +55,9 @@ function NewEmployee() {
     } else if (currentStep === 2 && contractualPositionDataFormRef.current) {
       setContractualPositionData(contractualPositionDataFormRef.current.values);
       setIsCurrentFormValid(contractualPositionDataFormRef.current.isValid);
+    } else if (currentStep === 3 && legalAccountingLocationFormRef.current) {
+      setLegalAccountingLocation(legalAccountingLocationFormRef.current.values);
+      setIsCurrentFormValid(legalAccountingLocationFormRef.current.isValid);
     }
   };
 
@@ -65,6 +78,7 @@ function NewEmployee() {
 
     console.log("Personal Data:", personalData);
     console.log("Contractual Position Data:", contractualPositionData);
+    console.log("Ubicación jurídica y contable Data:", legalAccountingLocation);
 
     alert("Asistido finalizado (ver consola para datos).");
   };
@@ -78,6 +92,8 @@ function NewEmployee() {
       initialPersonalDataValues={personalData}
       contractualPositionDataFormRef={contractualPositionDataFormRef}
       initialContractualPositionValues={contractualPositionData}
+      legalAccountingLocationFormRef={legalAccountingLocationFormRef}
+      initialLegalAccountingLocationValues={legalAccountingLocation}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
