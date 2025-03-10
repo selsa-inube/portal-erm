@@ -1,4 +1,3 @@
-// styles.ts
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
@@ -29,9 +28,12 @@ const StyledRadioClient = styled.div`
 const StyledBannerImage = styled.img`
   width: 34px;
   height: 34px;
+  object-fit: contain;
   border: 0.5px solid
     ${({ theme }) => theme?.palette?.blue?.B400 || inube.palette?.blue?.B400};
-  border-radius: 4px;
+  border-radius: 2px;
+  min-width: 34px;
+  min-height: 34px;
 `;
 
 const MobileIconWrapper = styled.div`

@@ -6,6 +6,7 @@ import {
 } from "react-icons/md";
 
 export const statusConfig = {
+  inculado: { color: "success", icon: <MdCheckCircle /> },
   prospecto: { color: "warning", icon: <MdOutlineSchedule /> },
   "en proceso de vinculación": {
     color: "warning",
