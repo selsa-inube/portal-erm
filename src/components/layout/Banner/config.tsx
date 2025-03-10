@@ -1,4 +1,3 @@
-// statusConfig.ts
 import { MdOutlineSchedule, MdCancel, MdCheckCircle } from "react-icons/md";
 
 export type StatusKey =
