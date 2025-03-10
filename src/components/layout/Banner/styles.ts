@@ -19,7 +19,7 @@ const StyledRadioClient = styled.div`
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 
   @media (max-width: 459px) {
     padding: ${spacing.s100} ${spacing.s075} ${spacing.s300};
