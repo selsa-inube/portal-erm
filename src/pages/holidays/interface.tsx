@@ -62,7 +62,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               spacing="wide"
               variant="filled"
               type="link"
-              path="#"
+              path="/holidays/request-enjoyment"
               iconBefore={<MdOutlineAirplanemodeActive />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}

@@ -17,8 +17,8 @@ const nav: INav = {
     administrate: {
       name: "",
       links: {
-        vacations: {
-          id: "vacations",
+        holidays: {
+          id: "holidays",
           label: "Vacaciones",
           icon: <MdBeachAccess />,
           path: "/holidays",
