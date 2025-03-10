@@ -49,7 +49,7 @@ function AppPage() {
           <Stack padding={spacing.s075}>
             <VinculacionBanner
               name="José Manuel Hernández Díaz"
-              status="Activo"
+              status="vinculado"
               imageUrl={logoUrl}
               onVinculate={handleVinculate}
             />
