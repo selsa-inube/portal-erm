@@ -42,7 +42,6 @@ export const statusList: StatusConfig[] = [
     label: "En proceso de retiro",
   },
   { key: "retirado", color: "danger", icon: <MdCancel />, label: "Retirado" },
-  { key: "activo", color: "success", icon: <MdCheckCircle />, label: "Activo" },
 ];
 
 export function getStatusConfig(status: string): StatusConfig {
