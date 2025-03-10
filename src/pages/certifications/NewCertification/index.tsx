@@ -8,7 +8,7 @@ import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
 import { NewCertificationUI } from "./interface";
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
-import { RequestInfoModal } from "./modals/RequestInfoModal";
+import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { ModalState } from "./types";
 
 function NewCertification() {

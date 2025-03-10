@@ -7,7 +7,7 @@ import { props } from "./props";
 
 const story: Meta<typeof RequestInfoModal> = {
   component: RequestInfoModal,
-  title: "modals/RequestInfoModal",
+  title: "components/modals/RequestInfoModal",
   argTypes: props,
 };
 
