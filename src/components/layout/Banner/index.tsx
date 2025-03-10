@@ -53,7 +53,6 @@ function VinculacionBanner(props: VinculacionBannerProps) {
               <Icon
                 appearance={color}
                 icon={icon}
-                cursorHover={true}
                 spacing="narrow"
                 shape="rectangle"
                 size="12px"
