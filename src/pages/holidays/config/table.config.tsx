@@ -1,12 +1,12 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
 
 import { formatDate } from "@utils/date";
-
-import { VacationType } from "./enums";
 import {
   EStatus,
   HumanResourceRequest,
-} from "@src/types/humanResourcesRequest.types";
+} from "@ptypes/humanResourcesRequest.types";
+
+import { VacationType } from "./enums";
 
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => ({
@@ -28,11 +28,24 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
     details: {
       value: <MdOutlineVisibility />,
       type: "icon" as const,
-      onClick: () => console.log("Ver detalles"),
+      onClick: () =>
+        console.log(
+          `Ver detalles de la solicitud ${holiday.humanResourceRequestId}`,
+        ),
     },
     delete: {
       value: <MdDeleteOutline />,
       type: "icon" as const,
-      onClick: () => console.log("Eliminar vacaciones"),
+      onClick: () =>
+        console.log(`Eliminar solicitud ${holiday.humanResourceRequestId}`),
+    },
+    dataDetails: {
+      value: {
+        ...holiday.humanResourceRequestData,
+        startDate: holiday.humanResourceRequestData?.startDate
+          ? formatDate(holiday.humanResourceRequestData.startDate)
+          : "",
+        description: holiday.humanResourceRequestDescription,
+      },
     },
   }));

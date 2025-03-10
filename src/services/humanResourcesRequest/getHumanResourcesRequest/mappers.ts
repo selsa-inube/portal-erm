@@ -5,7 +5,7 @@ import {
   HumanResourceRequest,
   HumanResourceRequestTraceability,
   TaskToManageHumanResourceRequest,
-} from "@src/types/humanResourcesRequest.types";
+} from "@ptypes/humanResourcesRequest.types";
 
 const mapHumanResourceRequestApiToEntity = (
   item: Partial<HumanResourceRequest>,
