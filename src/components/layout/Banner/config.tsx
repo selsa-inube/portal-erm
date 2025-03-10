@@ -5,8 +5,7 @@ export type StatusKey =
   | "prospecto"
   | "proceso"
   | "retiro"
-  | "retirado"
-  | "activo";
+  | "retirado";
 
 export interface StatusConfig {
   key: StatusKey;
@@ -45,7 +44,11 @@ export const statusList: StatusConfig[] = [
 
 export function getStatusConfig(status: string): StatusConfig {
   return (
-    statusList.find((item) => item.key === status.toLowerCase()) ??
-    statusList.find((item) => item.key === "activo")!
+    statusList.find((item) => item.key === status.toLowerCase()) ?? {
+      key: "vinculado",
+      color: "danger",
+      icon: <MdCancel />,
+      label: "Estado desconocido",
+    }
   );
 }
