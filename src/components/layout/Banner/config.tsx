@@ -47,7 +47,7 @@ export function getStatusConfig(status: string): StatusConfig {
     statusList.find((item) => item.key === status.toLowerCase()) ?? {
       key: "vinculado",
       color: "success",
-      icon: <MdCancel />,
+      icon: <MdCheckCircle />,
       label: "Vinculado",
     }
   );
