@@ -3,7 +3,6 @@ import {
   Text,
   Icon,
   Divider,
-  useMediaQuery,
   IIconAppearance,
 } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
@@ -11,17 +10,23 @@ import { spacing } from "@design/tokens/spacing";
 import { StyledAlertCard } from "./styles";
 
 interface AlertCardProps {
-  title?: string;
   requirement: string;
   cause: string;
   icon: React.ReactNode;
+  title?: string;
   iconAppearance?: IIconAppearance;
+  ellipsis?: boolean;
 }
 
 function AlertCard(props: AlertCardProps) {
-  const { title, requirement, cause, icon, iconAppearance = "warning" } = props;
-
-  const isMobile = useMediaQuery("(max-width: 450px)");
+  const {
+    requirement,
+    cause,
+    icon,
+    title,
+    iconAppearance = "warning",
+    ellipsis = false,
+  } = props;
 
   return (
     <Stack direction="column">
@@ -33,8 +38,8 @@ function AlertCard(props: AlertCardProps) {
         )}
       </Stack>
 
-      <StyledAlertCard $isMobile={isMobile}>
-        <Stack direction="column" gap={spacing.s100} margin={spacing.s150}>
+      <StyledAlertCard>
+        <Stack direction="column" gap={spacing.s100}>
           <Stack
             direction="row"
             alignItems="center"
@@ -49,16 +54,21 @@ function AlertCard(props: AlertCardProps) {
 
           <Divider />
 
-          <Text type="body" size="medium" appearance="gray" ellipsis>
+          <Text type="body" size="medium" appearance="gray" ellipsis={ellipsis}>
             {requirement}
           </Text>
 
-          <Stack direction="column" gap="4px">
+          <Stack direction="column" gap={spacing.s050}>
             <Text type="body" size="large">
               Causa de incumplimiento:
             </Text>
             <Divider />
-            <Text type="body" size="medium" appearance="gray" ellipsis>
+            <Text
+              type="body"
+              size="medium"
+              appearance="gray"
+              ellipsis={ellipsis}
+            >
               {cause}
             </Text>
           </Stack>

@@ -20,6 +20,7 @@ import { RequirementsModal } from "./modals/RequirementsModal";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
 import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
+import { UnmetRequirementsForm } from "./forms/UnmetRequirementsForm";
 
 interface NewEmployeeUIProps {
   steps: IAssistedStep[];
@@ -144,7 +145,13 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
             />
           )}
           {currentStep === 4 && <div>Contenido Paso 4 (Vacío)</div>}
-          {currentStep === 5 && <div>Contenido Paso 5 (Vacío)</div>}
+          {currentStep === 5 && currentStep === 5 && (
+            <UnmetRequirementsForm
+              withNextButton={true}
+              handleNextStep={handleNextStep}
+              handlePreviousStep={handlePreviousStep}
+            />
+          )}
           {currentStep === 6 && <div>Contenido Paso 6 (Vacío)</div>}
         </Stack>
       </Stack>
