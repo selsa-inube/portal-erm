@@ -21,7 +21,7 @@ const nav: INav = {
           id: "vacations",
           label: "Vacaciones",
           icon: <MdBeachAccess />,
-          path: "/holidays",
+          path: "/vacations",
         },
         disability: {
           id: "disability",
