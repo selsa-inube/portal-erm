@@ -1,9 +1,12 @@
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
 import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -31,6 +34,22 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useErrorFlag(
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
+  );
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   return (
     <>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
+import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestEnjoymentUI } from "./interface";
@@ -60,9 +61,23 @@ function RequestEnjoyment() {
     setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
   };
 
+  const handleConfirmSendModal = () => {
+    setModalState({
+      isSendModalVisible: false,
+      isRequestInfoModalVisible: true,
+    });
+  };
+
   const handleSubmitRequestInfoModal = () => {
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/holidays");
+    navigate("/holidays", {
+      state: {
+        showFlag: true,
+        flagTitle: "Solicitud enviada",
+        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
+        isSuccess: true,
+      },
+    });
   };
 
   const {
@@ -90,13 +105,19 @@ function RequestEnjoyment() {
       />
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          title="Confirmar Envío"
-          descriptionText="¿Realmente deseas enviar la solicitud de disfrute de vacaciones?"
-          buttonText="Enviar"
-          secondaryButtonText="Cancelar"
+          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
+          onSubmitButtonClick={handleConfirmSendModal}
           onCloseModal={handleCloseSendModal}
+          onSecondaryButtonClick={handleCloseSendModal}
+        />
+      )}
+
+      {modalState.isRequestInfoModalVisible && (
+        <RequestInfoModal
+          requestId="#45678822"
+          staffName="Nombre Nombre Apellido Apellido"
+          onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
-          onSecondaryButtonClick={handleSubmitRequestInfoModal}
         />
       )}
     </>
