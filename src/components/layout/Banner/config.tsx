@@ -1,21 +1,53 @@
-import {
-  MdOutlineSchedule,
-  MdCancel,
-  MdCheckCircle,
-  MdOutlineManageAccounts,
-} from "react-icons/md";
+// statusConfig.ts
+import { MdOutlineSchedule, MdCancel, MdCheckCircle } from "react-icons/md";
 
-export const statusConfig = {
-  inculado: { color: "success", icon: <MdCheckCircle /> },
-  prospecto: { color: "warning", icon: <MdOutlineSchedule /> },
-  "en proceso de vinculación": {
+export type StatusKey =
+  | "vinculado"
+  | "prospecto"
+  | "proceso"
+  | "retiro"
+  | "retirado"
+  | "activo";
+
+export interface StatusConfig {
+  key: StatusKey;
+  color: "success" | "warning" | "danger";
+  icon: JSX.Element;
+  label: string;
+}
+
+export const statusList: StatusConfig[] = [
+  {
+    key: "vinculado",
+    color: "success",
+    icon: <MdCheckCircle />,
+    label: "Vinculado",
+  },
+  {
+    key: "prospecto",
     color: "warning",
     icon: <MdOutlineSchedule />,
+    label: "Prospecto",
   },
-  "en proceso de retiro": { color: "danger", icon: <MdCancel /> },
-  retirado: { color: "danger", icon: <MdCancel /> },
-  activo: { color: "success", icon: <MdCheckCircle /> },
-  neutral: { color: "primary", icon: <MdOutlineManageAccounts /> },
-} as const;
+  {
+    key: "proceso",
+    color: "warning",
+    icon: <MdOutlineSchedule />,
+    label: "En proceso de vinculación",
+  },
+  {
+    key: "retiro",
+    color: "danger",
+    icon: <MdCancel />,
+    label: "En proceso de retiro",
+  },
+  { key: "retirado", color: "danger", icon: <MdCancel />, label: "Retirado" },
+  { key: "activo", color: "success", icon: <MdCheckCircle />, label: "Activo" },
+];
 
-export type StatusKey = keyof typeof statusConfig;
+export function getStatusConfig(status: string): StatusConfig {
+  return (
+    statusList.find((item) => item.key === status.toLowerCase()) ??
+    statusList.find((item) => item.key === "activo")!
+  );
+}
