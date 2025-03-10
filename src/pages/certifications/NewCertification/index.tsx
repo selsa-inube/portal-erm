@@ -67,7 +67,14 @@ function NewCertification() {
 
   const handleSubmitRequestInfoModal = () => {
     setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/certifications");
+    navigate("/certifications", {
+      state: {
+        showFlag: true,
+        flagTitle: "Solicitud enviada",
+        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
+        isSuccess: true,
+      },
+    });
   };
 
   return (
