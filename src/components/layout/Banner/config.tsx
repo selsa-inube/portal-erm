@@ -48,7 +48,7 @@ export function getStatusConfig(status: string): StatusConfig {
       key: "vinculado",
       color: "danger",
       icon: <MdCancel />,
-      label: "Estado desconocido",
+      label: "Vinculado",
     }
   );
 }
