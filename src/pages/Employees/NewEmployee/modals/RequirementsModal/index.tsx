@@ -10,8 +10,7 @@ import {
   Button,
 } from "@inubekit/inubekit";
 
-import { AlertCard } from "@components/data";
-import { AlertCardProps } from "@components/data";
+import { AlertCard, AlertCardProps } from "@components/data/AlertCard";
 import { spacing } from "@design/tokens/spacing";
 
 import {
