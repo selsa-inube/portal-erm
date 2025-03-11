@@ -76,7 +76,8 @@ function CertificationsTable({
 
   const handleDelete = () => {
     handleCloseModal();
-    setShowFlag(true);
+    setShowFlag(false);
+    setTimeout(() => setShowFlag(true), 0);
   };
 
   const handleClose = () => {
