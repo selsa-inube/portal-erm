@@ -56,40 +56,38 @@ function BoxAttribute(props: BoxAttributeProps) {
             {label}
           </Text>
         )}
-
-        {withButton ??
-          ((typeof value === "string" || typeof value === "number"
-            ? String(value)
-            : "") && (
-            <Stack
-              alignItems="center"
-              justifyContent={
-                direction === "column" || iconAfter ? "flex-start" : "flex-end"
-              }
-            >
-              {withButton ? (
-                <ButtonAttribute
-                  icon={buttonIcon}
-                  value={buttonValue}
-                  onClick={onClickButton}
-                  disabled={buttonDisabled}
-                />
-              ) : (
-                value && (
-                  <Text
-                    type="body"
-                    size={isMobile || downloadable ? "small" : "medium"}
-                    appearance="gray"
-                    textAlign={
-                      direction === "column" || iconAfter ? "start" : "end"
-                    }
-                  >
-                    {JSON.stringify(value)}
-                  </Text>
-                )
-              )}
-            </Stack>
-          ))}
+        {(withButton ?? (value !== undefined && value !== null)) && (
+          <Stack
+            alignItems="center"
+            justifyContent={
+              direction === "column" || iconAfter ? "flex-start" : "flex-end"
+            }
+          >
+            {withButton ? (
+              <ButtonAttribute
+                icon={buttonIcon}
+                value={buttonValue}
+                onClick={onClickButton}
+                disabled={buttonDisabled}
+              />
+            ) : (
+              value && (
+                <Text
+                  type="body"
+                  size={isMobile || downloadable ? "small" : "medium"}
+                  appearance="gray"
+                  textAlign={
+                    direction === "column" || iconAfter ? "start" : "end"
+                  }
+                >
+                  {typeof value === "object" && value !== null
+                    ? JSON.stringify(value)
+                    : value}
+                </Text>
+              )
+            )}
+          </Stack>
+        )}
 
         {iconAfter && (
           <Stack alignItems="center" justifyContent="flex-end">

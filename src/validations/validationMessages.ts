@@ -6,7 +6,7 @@ const validationMessages = {
   required: "Este campo no puede estar vacío",
   date: "Formato de fecha incorrecto. Ejemplo de formato: 01/Ene/1990.",
   onlyLetters: "Este campo debe contener solo letras",
-  onlyNumbers: "Este campo debe contener solo numeros",
+  onlyNumbers: "Este campo debe contener solo números",
   notPastDate: "La fecha no puede ser anterior o igual al día actual",
 };
 
