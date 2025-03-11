@@ -1,6 +1,6 @@
 import { MdWarningAmber } from "react-icons/md";
 
-import { AlertCardProps } from "@components/data";
+import { AlertCardProps } from "@components/data/AlertCard";
 
 export const mockAlertCards: AlertCardProps[] = [
   {

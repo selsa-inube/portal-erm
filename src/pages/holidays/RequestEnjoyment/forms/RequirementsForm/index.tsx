@@ -1,7 +1,7 @@
 import React from "react";
 import { Stack, Button, useMediaQuery } from "@inubekit/inubekit";
 
-import { AlertCard } from "@src/components/data/AlertCard";
+import { AlertCard } from "@components/data/AlertCard";
 
 import { StyledContainer } from "./styles";
 import { alerts } from "./config/alertConfig";
