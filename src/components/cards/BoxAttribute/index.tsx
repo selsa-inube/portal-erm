@@ -56,7 +56,6 @@ function BoxAttribute(props: BoxAttributeProps) {
             {label}
           </Text>
         )}
-
         {(withButton ?? (value !== undefined && value !== null)) && (
           <Stack
             alignItems="center"
