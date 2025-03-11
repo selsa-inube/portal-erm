@@ -1,8 +1,10 @@
 import { Outlet } from "react-router-dom";
-import { Nav, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
+import { Nav, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { VinculacionBanner } from "@components/layout/Banner";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledAppPage,
@@ -29,6 +31,10 @@ function AppPage(props: AppPageProps) {
   const { logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
+  const handleVinculate = () => {
+    console.log("Vinculación agregada");
+  };
+
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -45,6 +51,14 @@ function AppPage(props: AppPageProps) {
           menu={userMenu}
         />
         <StyledContainer>
+          <Stack padding={spacing.s075}>
+            <VinculacionBanner
+              name="José Manuel Hernández Díaz"
+              status="vinculado"
+              imageUrl={logoUrl}
+              onVinculate={handleVinculate}
+            />
+          </Stack>
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
