@@ -1,7 +1,7 @@
 import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
 import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
-import { useNavigate, useLocation } from "react-router-dom";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -80,7 +80,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               spacing="wide"
               variant="filled"
               type="link"
-              path="#"
+              path="/holidays/request-enjoyment"
               iconBefore={<MdOutlineAirplanemodeActive />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
