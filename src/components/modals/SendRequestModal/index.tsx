@@ -1,33 +1,41 @@
 import { createPortal } from "react-dom";
 import { MdClear } from "react-icons/md";
 import {
+  Text,
   Icon,
   Stack,
-  Text,
-  useMediaQuery,
+  Button,
   Blanket,
   Divider,
-  Button,
+  useMediaQuery,
 } from "@inubekit/inubekit";
-
-import { AlertCard, AlertCardProps } from "@components/data/AlertCard";
 
 import { spacing } from "@design/tokens/spacing";
 
-import {
-  StyledModal,
-  StyledContainerClose,
-  StyledContainerCards,
-} from "./styles";
+import { StyledModal, StyledContainerClose } from "./styles";
 
-export interface RequirementsModalProps {
+export interface SendRequestModalProps {
+  descriptionText: string;
+  buttonText?: string;
+  title?: string;
   portalId?: string;
-  alertCards: AlertCardProps[];
+  secondaryButtonText?: string;
   onCloseModal?: () => void;
+  onSubmitButtonClick?: () => void;
+  onSecondaryButtonClick?: () => void;
 }
 
-export function RequirementsModal(props: RequirementsModalProps) {
-  const { portalId = "portal", alertCards, onCloseModal } = props;
+export function SendRequestModal(props: SendRequestModalProps) {
+  const {
+    descriptionText,
+    buttonText = "Enviar",
+    title = "Enviar solicitud",
+    portalId = "portal",
+    secondaryButtonText = "Cancelar",
+    onCloseModal,
+    onSubmitButtonClick,
+    onSecondaryButtonClick,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
   const portalNode = document.getElementById(portalId);
@@ -43,7 +51,7 @@ export function RequirementsModal(props: RequirementsModalProps) {
       <StyledModal $smallScreen={isMobile}>
         <Stack alignItems="center" justifyContent="space-between">
           <Text type="headline" size="small">
-            Requisitos
+            {title}
           </Text>
           <StyledContainerClose onClick={onCloseModal}>
             <Stack alignItems="center" gap={spacing.s100}>
@@ -58,22 +66,17 @@ export function RequirementsModal(props: RequirementsModalProps) {
           </StyledContainerClose>
         </Stack>
         <Divider />
-        <StyledContainerCards $smallScreen={isMobile}>
-          {alertCards.map((item, index) => (
-            <AlertCard
-              key={index}
-              icon={item.icon}
-              iconAppearance={item.iconAppearance}
-              requirement={item.requirement}
-              cause={item.cause}
-            />
-          ))}
-        </StyledContainerCards>
-        <Divider />
-        <Stack direction="column" alignItems="flex-end">
-          <Button onClick={onCloseModal} fullwidth={isMobile}>
-            Cerrar
+        <Text>{descriptionText}</Text>
+        <Stack justifyContent="end" gap={spacing.s250}>
+          <Button
+            type="button"
+            variant="outlined"
+            appearance="gray"
+            onClick={onSecondaryButtonClick}
+          >
+            {secondaryButtonText}
           </Button>
+          <Button onClick={onSubmitButtonClick}>{buttonText}</Button>
         </Stack>
       </StyledModal>
     </Blanket>,

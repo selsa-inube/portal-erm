@@ -1,4 +1,10 @@
-import { createContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  ReactNode,
+} from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import selsaLogo from "@assets/images/selsa.png";
@@ -144,4 +150,12 @@ function AppProvider(props: AppProviderProps) {
   );
 }
 
-export { AppProvider, AppContext };
+const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error("useAppContext must be used within an AppProvider");
+  }
+  return context;
+};
+
+export { AppProvider, AppContext, useAppContext };

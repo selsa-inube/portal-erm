@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
 import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { AppMenu } from "@components/layout/AppMenu";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
@@ -30,7 +33,22 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasActiveContract = true,
   } = props;
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  useErrorFlag(
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
+  );
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   return (
     <>
@@ -74,7 +92,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               spacing="wide"
               variant="filled"
               type="link"
-              path="#"
+              path="/holidays/request-payment"
               iconBefore={<MdOutlinePayments />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
