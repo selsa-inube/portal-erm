@@ -1,8 +1,11 @@
 import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { MdOutlineAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledCertificationsContainer } from "./styles";
@@ -29,7 +32,22 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     isLoading,
   } = props;
 
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  useErrorFlag(
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
+  );
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   return (
     <>
@@ -51,7 +69,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               variant="filled"
               iconBefore={<MdOutlineAdd />}
               type="link"
-              path="/certifications"
+              path="/certifications/new-certification"
               fullwidth={isMobile}
             >
               Nueva certificación

@@ -1,7 +1,7 @@
 import { Stack, Button, Grid, useMediaQuery } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
-import { AlertCard, AlertCardProps } from "@components/data";
+import { AlertCard, AlertCardProps } from "@components/data/AlertCard";
 
 import { StyledContainer } from "./styles";
 
