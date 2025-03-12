@@ -10,6 +10,7 @@ const StyledRadioClient = styled.div`
   justify-content: space-between;
   padding: ${spacing.s200} ${spacing.s075};
   box-sizing: border-box;
+  height: 46px;
   min-width: 100%;
   box-shadow: 0px 1px 3px 1px
     ${({ theme }) =>
@@ -21,6 +22,7 @@ const StyledRadioClient = styled.div`
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 
   @media (max-width: 459px) {
+    height: auto;
     padding: ${spacing.s100} ${spacing.s075} ${spacing.s300};
   }
 `;
