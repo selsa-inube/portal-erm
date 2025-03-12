@@ -16,6 +16,7 @@ import {
 
 interface AppPageProps {
   withNav?: boolean;
+  withBanner?: boolean;
 }
 
 const renderLogo = (imgUrl: string) => {
@@ -27,7 +28,7 @@ const renderLogo = (imgUrl: string) => {
 };
 
 function AppPage(props: AppPageProps) {
-  const { withNav = true } = props;
+  const { withNav = true, withBanner = true } = props;
   const { logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
@@ -51,14 +52,16 @@ function AppPage(props: AppPageProps) {
           menu={userMenu}
         />
         <StyledContainer>
-          <Stack padding={spacing.s075}>
-            <VinculacionBanner
-              name="José Manuel Hernández Díaz"
-              status="vinculado"
-              imageUrl={logoUrl}
-              onVinculate={handleVinculate}
-            />
-          </Stack>
+          {withBanner && (
+            <Stack padding={spacing.s075}>
+              <VinculacionBanner
+                name="José Manuel Hernández Díaz"
+                status="vinculado"
+                imageUrl={logoUrl}
+                onVinculate={handleVinculate}
+              />
+            </Stack>
+          )}
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"

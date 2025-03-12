@@ -6,6 +6,7 @@ import { newEmployeeSteps } from "./config/assisted.config";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
 import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
+import { IAssignment } from "./types";
 
 function NewEmployee() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -39,6 +40,19 @@ function NewEmployee() {
       zonalSegmentation: "",
       costCenter: "",
     });
+
+  const [assignments, setAssignments] = useState<IAssignment[]>([
+    {
+      title: "Asignación 1",
+      assignment: "Salario básico.",
+      value: "$ 1.800.000",
+    },
+    {
+      title: "Asignación 2",
+      assignment: "Auxilio de conectividad.",
+      value: "$ 240.000",
+    },
+  ]);
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
@@ -79,6 +93,7 @@ function NewEmployee() {
     console.log("Personal Data:", personalData);
     console.log("Contractual Position Data:", contractualPositionData);
     console.log("Ubicación jurídica y contable Data:", legalAccountingLocation);
+    console.log("Assignments:", assignments);
 
     alert("Asistido finalizado (ver consola para datos).");
   };
@@ -94,6 +109,8 @@ function NewEmployee() {
       initialContractualPositionValues={contractualPositionData}
       legalAccountingLocationFormRef={legalAccountingLocationFormRef}
       initialLegalAccountingLocationValues={legalAccountingLocation}
+      assignments={assignments}
+      onAssignmentsChange={setAssignments}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
       handleFinishAssisted={handleFinishAssisted}
