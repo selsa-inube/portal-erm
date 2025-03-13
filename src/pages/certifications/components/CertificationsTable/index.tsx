@@ -318,8 +318,8 @@ function CertificationsTable({
       )}
       {isSecondModalOpen && (
         <TextAreaModal
-          title="Eliminación"
-          buttonText="Eliminar"
+          title="Cancelación"
+          buttonText="Cancelar"
           inputLabel="Justificación"
           inputPlaceholder="¿Por qué eliminarás el registro?"
           onSubmit={handleDelete}
