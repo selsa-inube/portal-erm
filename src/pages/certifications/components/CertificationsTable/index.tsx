@@ -43,8 +43,8 @@ function CertificationsTable({
 
   useErrorFlag(
     showFlag,
-    "El registro ha sido eliminado correctamente.",
-    "Eliminación exitosa",
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
   );
 
   const {
