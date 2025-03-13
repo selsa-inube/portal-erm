@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import { ErrorPage } from "@components/layout/ErrorPage";
-import { NewEmployee } from "@pages/Employees/NewEmployee";
+import { NewEmployee } from "@pages/employees/NewEmployee";
 
 function EmployeesRoutes() {
   return (

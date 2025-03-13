@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 
+import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import { AlertCardProps } from "@components/data/AlertCard";
+
 import { NewEmployeeUI } from "./interface";
 import { newEmployeeSteps } from "./config/assisted.config";
 import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
@@ -13,7 +16,7 @@ function NewEmployee() {
 
   const [personalData, setPersonalData] = useState<IPersonalDataEntry>({
     id: "",
-    identificationNumber: 0,
+    identificationNumber: "",
     lastNames: "",
     names: "",
     attachedFile: undefined,
@@ -44,15 +47,17 @@ function NewEmployee() {
   const [assignments, setAssignments] = useState<IAssignment[]>([
     {
       title: "Asignación 1",
-      assignment: "Salario básico.",
+      assignment: "Salario básico",
       value: "$ 1.800.000",
     },
     {
       title: "Asignación 2",
-      assignment: "Auxilio de conectividad.",
+      assignment: "Auxilio de conectividad",
       value: "$ 240.000",
     },
   ]);
+
+  const [requirements] = useState<AlertCardProps[]>(mockAlertCards);
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
@@ -94,6 +99,7 @@ function NewEmployee() {
     console.log("Contractual Position Data:", contractualPositionData);
     console.log("Ubicación jurídica y contable Data:", legalAccountingLocation);
     console.log("Assignments:", assignments);
+    console.log("Requerimientos:", requirements);
 
     alert("Asistido finalizado (ver consola para datos).");
   };
@@ -110,6 +116,8 @@ function NewEmployee() {
       legalAccountingLocationFormRef={legalAccountingLocationFormRef}
       initialLegalAccountingLocationValues={legalAccountingLocation}
       assignments={assignments}
+      requirements={requirements}
+      setCurrentStep={setCurrentStep}
       onAssignmentsChange={setAssignments}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
