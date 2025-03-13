@@ -9,16 +9,17 @@ interface IStyledModal {
 }
 
 const StyledModal = styled.div<IStyledModal>`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  white-space: nowrap;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  height: ${({ $smallScreen }) => ($smallScreen ? "318px" : "326px")};
-  width: ${({ $smallScreen }) => ($smallScreen ? "303px" : "402px")};
+  height: ${({ $smallScreen }) => ($smallScreen ? "264px" : "280px")};
+  width: ${({ $smallScreen }) => ($smallScreen ? "311px" : "402px")};
   padding: ${({ $smallScreen }) =>
-    $smallScreen ? spacing.s200 : spacing.s300};
-  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s200)};
+    $smallScreen ? spacing.s150 : `${spacing.s200} ${spacing.s300}`};
+  gap: ${spacing.s150};
   border-radius: ${spacing.s100};
 `;
 

@@ -2,7 +2,7 @@ interface IPersonalDataEntry {
   id: string;
   names: string;
   lastNames: string;
-  identificationNumber: number;
+  identificationNumber: string;
   attachedFile?: File;
 }
 
