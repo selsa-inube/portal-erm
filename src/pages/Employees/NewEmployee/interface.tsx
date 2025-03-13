@@ -21,6 +21,8 @@ import { IPersonalDataEntry } from "./forms/PersonalDataForm/types";
 import { IContractualPositionData } from "./forms/ContractualPositionDataForm/types";
 import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/types";
 import { UnmetRequirementsForm } from "./forms/UnmetRequirementsForm";
+import { AssignmentForm } from "./forms/AssignmentForm";
+import { IAssignment } from "./types";
 
 interface NewEmployeeUIProps {
   steps: IAssistedStep[];
@@ -36,6 +38,8 @@ interface NewEmployeeUIProps {
     FormikProps<ILegalAccountingLocation>
   >;
   initialLegalAccountingLocationValues: ILegalAccountingLocation;
+  assignments: IAssignment[];
+  onAssignmentsChange: (assignments: IAssignment[]) => void;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
   handleFinishAssisted: () => void;
@@ -53,6 +57,8 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
     initialContractualPositionValues,
     legalAccountingLocationFormRef,
     initialLegalAccountingLocationValues,
+    assignments,
+    onAssignmentsChange,
     handleNextStep,
     handlePreviousStep,
     handleFinishAssisted,
@@ -144,7 +150,15 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 4 && <div>Contenido Paso 4 (Vacío)</div>}
+          {currentStep === 4 && currentStep === 4 && (
+            <AssignmentForm
+              withNextButton={true}
+              assignments={assignments}
+              onAssignmentsChange={onAssignmentsChange}
+              handleNextStep={handleNextStep}
+              handlePreviousStep={handlePreviousStep}
+            />
+          )}
           {currentStep === 5 && currentStep === 5 && (
             <UnmetRequirementsForm
               withNextButton={true}
