@@ -31,7 +31,9 @@ function VinculationBanner(props: VinculationBannerProps) {
         <Stack gap={spacing.s150}>
           <StyledBannerImage src={bannerImage} alt={name} />
           <Stack direction="column">
-            <Text size="medium">{name}</Text>
+            <Text type="label" weight="bold" size="medium">
+              {name}
+            </Text>
             <Stack gap={spacing.s075} alignItems="center">
               <Icon
                 appearance={color}
@@ -40,7 +42,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                 shape="rectangle"
                 size="12px"
               />
-              <Text size="small" appearance={color}>
+              <Text type="label" size="small" appearance={color}>
                 {label}
               </Text>
             </Stack>
