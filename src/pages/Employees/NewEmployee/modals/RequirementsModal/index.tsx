@@ -65,6 +65,7 @@ export function RequirementsModal(props: RequirementsModalProps) {
               iconAppearance={item.iconAppearance}
               requirement={item.requirement}
               cause={item.cause}
+              ellipsis
             />
           ))}
         </StyledContainerCards>
