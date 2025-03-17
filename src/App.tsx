@@ -87,7 +87,10 @@ const router = createBrowserRouter(
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
       </Route>
-      <Route path="/employees/*" element={<ProtectedAppPage withNav={false} />}>
+      <Route
+        path="/employees/*"
+        element={<ProtectedAppPage withNav={false} withBanner={false} />}
+      >
         <Route path="*" element={<EmployeesRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />

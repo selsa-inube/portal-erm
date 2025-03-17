@@ -2,8 +2,8 @@ import { useEffect, forwardRef, useImperativeHandle } from "react";
 import { FormikProps, useFormik } from "formik";
 import { object, string } from "yup";
 
-import { validationMessages } from "@src/validations/validationMessages";
-import { validationRules } from "@src/validations/validationRules";
+import { validationMessages } from "@validations/validationMessages";
+import { validationRules } from "@validations/validationRules";
 
 import { generalInformationRequiredFields } from "./config/formConfig";
 import { GeneralInformationFormUI } from "./interface";
