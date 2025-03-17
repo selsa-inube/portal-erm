@@ -104,6 +104,11 @@ function NewEmployee() {
   const handleFinishAssisted = () => {
     updateFormValues();
     setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+
+    console.log("Personal Data:", personalData);
+    console.log("Contractual Position Data:", contractualPositionData);
+    console.log("Ubicación jurídica y contable Data:", legalAccountingLocation);
+    console.log("Assignments:", assignments);
   };
 
   const handleCloseSendModal = () => {

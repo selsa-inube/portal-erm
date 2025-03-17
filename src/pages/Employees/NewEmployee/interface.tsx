@@ -156,7 +156,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 4 && currentStep === 4 && (
+          {currentStep === 4 && (
             <AssignmentForm
               withNextButton={true}
               assignments={assignments}
@@ -165,7 +165,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 5 && currentStep === 5 && (
+          {currentStep === 5 && (
             <UnmetRequirementsForm
               alertCards={requirements}
               withNextButton={true}
