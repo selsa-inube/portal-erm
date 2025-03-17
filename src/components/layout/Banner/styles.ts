@@ -7,7 +7,7 @@ const StyledRadioClient = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  height: 46px;
   padding: ${spacing.s200} ${spacing.s075};
   box-sizing: border-box;
   min-width: 100%;
@@ -19,10 +19,6 @@ const StyledRadioClient = styled.div`
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-
-  @media (max-width: 459px) {
-    padding: ${spacing.s100} ${spacing.s075} ${spacing.s300};
-  }
 `;
 
 const StyledBannerImage = styled.img`
@@ -36,10 +32,4 @@ const StyledBannerImage = styled.img`
   min-height: 34px;
 `;
 
-const MobileIconWrapper = styled.div`
-  @media (max-width: 550px) {
-    position: absolute;
-    top: ${spacing.s150};
-  }
-`;
-export { StyledRadioClient, StyledBannerImage, MobileIconWrapper };
+export { StyledRadioClient, StyledBannerImage };
