@@ -12,6 +12,7 @@ import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 
@@ -28,6 +29,7 @@ function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
   const { user: auth0User } = useAuth0();
+
   const [user, setUser] = useState<{
     username: string;
     id: string;
@@ -121,6 +123,8 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [logoUrl, preferences, user]);
 
+  const [employees, setEmployees] = useState<Employee[]>([]);
+
   return (
     <AppContext.Provider
       value={{
@@ -143,6 +147,8 @@ function AppProvider(props: AppProviderProps) {
         setBusinessUnitsIsFetching,
         selectedClient,
         setSelectedClient,
+        employees,
+        setEmployees,
       }}
     >
       {children}

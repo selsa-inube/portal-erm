@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Text,
+  Icon,
   Button,
   Stack,
   Autosuggest,
@@ -17,7 +19,9 @@ import useAllEmployees from "@hooks/useEmployeeConsultation";
 function SelectEmployeePage() {
   const { employees, loading, error } = useAllEmployees();
   const [selectedOption, setSelectedOption] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const navigate = useNavigate();
 
   const employeeOptions = employees.map((emp) => ({
     id: emp.employeeId,
@@ -39,14 +43,19 @@ function SelectEmployeePage() {
       initialValues={{ employee: "" }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        const selectedEmployee = employeeOptions.find(
-          (opt) => opt.value === values.employee,
-        );
-        if (selectedEmployee) {
-          console.log("Empleado seleccionado:", selectedEmployee);
-        } else {
-          console.error("Empleado no encontrado");
-        }
+        setIsSubmitting(true);
+        setTimeout(() => {
+          const selectedEmployee = employeeOptions.find(
+            (opt) => opt.value === values.employee,
+          );
+          if (selectedEmployee) {
+            console.log("Empleado seleccionado:", selectedEmployee);
+            navigate("/");
+          } else {
+            console.error("Empleado no encontrado");
+          }
+          setIsSubmitting(false);
+        }, 1500);
       }}
     >
       {(formik: FormikProps<{ employee: string }>) => (
@@ -108,22 +117,19 @@ function SelectEmployeePage() {
                             onFocus={() => {
                               setSelectedOption(selectedOption);
                             }}
-                            size="wide"
+                            size="compact"
                             fullwidth
                           />
                         )}
-
                         <Button
                           appearance="primary"
+                          loading={isSubmitting}
                           spacing="wide"
                           variant="filled"
                           type="submit"
                           disabled={!formik.isValid || !formik.dirty || loading}
-                          iconBefore={
-                            isMobile ? <MdOutlineArrowForward /> : undefined
-                          }
                         >
-                          {!isMobile && "Continuar"}
+                          Continuar
                         </Button>
                       </Stack>
 
@@ -190,18 +196,26 @@ function SelectEmployeePage() {
                         fullwidth
                       />
                     )}
-                    <Button
-                      appearance="primary"
-                      spacing="wide"
-                      variant="filled"
-                      type="submit"
-                      disabled={!formik.isValid || !formik.dirty || loading}
-                      iconBefore={
-                        isMobile ? <MdOutlineArrowForward /> : undefined
-                      }
-                    >
-                      {!isMobile && "Continuar"}
-                    </Button>
+
+                    {isSubmitting ? (
+                      <Spinner size="medium" />
+                    ) : (
+                      <Icon
+                        appearance="primary"
+                        disabled={!formik.isValid || !formik.dirty || loading}
+                        icon={<MdOutlineArrowForward />}
+                        cursorHover={true}
+                        parentHover={false}
+                        spacing="wide"
+                        variant="filled"
+                        shape="rectangle"
+                        size="40px"
+                        onClick={() => {
+                          formik.handleSubmit();
+                          navigate("/");
+                        }}
+                      />
+                    )}
                   </Stack>
 
                   {formik.errors.employee && formik.touched.employee && (
@@ -224,9 +238,7 @@ function SelectEmployeePage() {
                   console.log("Redirigir a agregar nuevo empleado")
                 }
               >
-                {isMobile
-                  ? "Vincular nuevo empleado"
-                  : "Agregar nuevo empleado"}
+                Vincular nuevo empleado
               </Button>
             </Stack>
           </Stack>

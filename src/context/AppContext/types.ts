@@ -5,6 +5,7 @@ import {
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 interface BusinessManager {
   id: string;
@@ -57,4 +58,6 @@ export interface IAppContextType {
   setBusinessUnitsIsFetching: React.Dispatch<React.SetStateAction<boolean>>;
   selectedClient: IClient | null;
   setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
+  employees: Employee[];
+  setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
 }
