@@ -40,6 +40,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                 icon={icon}
                 spacing="narrow"
                 shape="rectangle"
+                variant="outlined"
                 size="12px"
               />
               <Text type="label" size="small" appearance={color}>
