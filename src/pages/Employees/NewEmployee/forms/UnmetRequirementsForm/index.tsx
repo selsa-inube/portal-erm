@@ -1,18 +1,20 @@
-import { mockAlertCards } from "@mocks/requirements/requirements-2.mock";
+import { AlertCardProps } from "@components/data/AlertCard";
 
 import { UnmetRequirementsFormUI } from "./interface";
 
 interface UnmetRequirementsFormProps {
+  alertCards?: AlertCardProps[];
   withNextButton?: boolean;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
 }
 
 function UnmetRequirementsForm(props: UnmetRequirementsFormProps) {
-  const { withNextButton, handleNextStep, handlePreviousStep } = props;
+  const { alertCards, withNextButton, handleNextStep, handlePreviousStep } =
+    props;
   return (
     <UnmetRequirementsFormUI
-      alertCards={mockAlertCards}
+      alertCards={alertCards}
       withNextButton={withNextButton}
       handleNextStep={handleNextStep}
       handlePreviousStep={handlePreviousStep}
