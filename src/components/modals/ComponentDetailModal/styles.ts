@@ -13,10 +13,11 @@ export const StyledModal = styled.div<IStyledModal>`
   display: flex;
   flex-direction: column;
   max-height: ${({ $smallScreen }) => ($smallScreen ? "auto" : "526px")};
-  width: ${({ $smallScreen }) => ($smallScreen ? "398px" : "450px")};
+  width: ${({ $smallScreen }) => ($smallScreen ? "302px" : "402px")};
   background-color: ${inube.palette.neutral.N0};
-  padding: ${spacing.s300};
-  gap: ${spacing.s300};
+  padding: ${({ $smallScreen }) =>
+    $smallScreen ? spacing.s200 : spacing.s300};
+  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s300)};
   border-radius: ${spacing.s100};
 `;
 

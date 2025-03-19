@@ -1,4 +1,4 @@
-import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
+import { MdOutlineVisibility, MdOutlineHighlightOff } from "react-icons/md";
 import { useState } from "react";
 import {
   Col,
@@ -39,12 +39,16 @@ function HolidaysTable({
   disableDeleteAction = false,
 }: HolidaysTableProps) {
   const [showFlag, setShowFlag] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<
+    { label: string; value: string }[] | null
+  >(null);
 
-  useErrorFlag(
-    showFlag,
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-  );
+  const mediaQueries = useMediaQueries([
+    "(max-width: 1024px)",
+    "(max-width: 542px)",
+  ]);
 
   const {
     totalRecords,
@@ -57,53 +61,34 @@ function HolidaysTable({
     currentData,
   } = usePagination(data);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
-
-  const [selectedRecord, setSelectedRecord] = useState<
-    { label: string; value: string }[] | null
-  >(null);
-
-  const handleOpenModal = () => {
-    setIsSecondModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsSecondModalOpen(false);
-  };
-
-  const handleDelete = () => {
-    handleCloseModal();
-    setShowFlag(false);
-    setTimeout(() => setShowFlag(true), 0);
-  };
-
-  const handleClose = () => {
-    setIsSecondModalOpen(false);
-    setSelectedRecord(null);
-  };
-
-  const mediaQueries = useMediaQueries([
-    "(max-width: 1024px)",
-    "(max-width: 542px)",
-  ]);
+  useErrorFlag(
+    showFlag,
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
+  );
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
-      return headers
-        .filter((header) => ["date", "status", "days"].includes(header.key))
-        .concat({
+      return [
+        ...headers.filter((header) => ["date", "status"].includes(header.key)),
+        {
           label: "Acciones",
           key: "mobileActions",
           action: true,
           style: { width: "50px" },
-        });
-    } else if (mediaQueries["(max-width: 1024px)"]) {
+        },
+      ];
+    }
+    if (mediaQueries["(max-width: 1024px)"]) {
       return headers.filter((header) =>
         ["date", "status", "days", "details", "delete"].includes(header.key),
       );
     }
-    return headers;
+    return headers.filter((header) =>
+      ["date", "status", "days", "description", "details", "delete"].includes(
+        header.key,
+      ),
+    );
   };
 
   const visibleHeaders = determineVisibleHeaders();
@@ -112,6 +97,33 @@ function HolidaysTable({
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
       : columns;
+
+  const handleOpenModal = () => setIsSecondModalOpen(true);
+  const handleCloseModal = () => setIsSecondModalOpen(false);
+
+  const handleClose = () => {
+    setIsSecondModalOpen(false);
+    setSelectedRecord(null);
+  };
+
+  const handleDelete = () => {
+    handleCloseModal();
+    setShowFlag(false);
+    setTimeout(() => setShowFlag(true), 0);
+  };
+
+  const handleOpenDetailsModal = (rowIndex: number) => {
+    const dataDe = data[rowIndex].dataDetails
+      ?.value as unknown as HolidayTableDataDetails;
+    const dataDeta = [
+      { label: "Días de disfrute", value: dataDe.daysEnjoyed },
+      { label: "Fecha de inicio", value: dataDe.startDate },
+      { label: "Contrato", value: dataDe.contract },
+      { label: "Observaciones", value: dataDe.description },
+    ];
+    setSelectedRecord(dataDeta);
+    setIsModalOpen(true);
+  };
 
   const renderCellContent = (
     headerKey: string,
@@ -128,8 +140,7 @@ function HolidaysTable({
     }
 
     if (
-      cellData &&
-      cellData.type === "icon" &&
+      cellData?.type === "icon" &&
       (headerKey === "details" || headerKey === "delete")
     ) {
       if (headerKey === "details") {
@@ -137,21 +148,10 @@ function HolidaysTable({
           appearance: "dark",
           size: "16px",
           cursorHover: true,
-          onClick: () => {
-            const dataDe = data[rowIndex!].dataDetails
-              ?.value as unknown as HolidayTableDataDetails;
-            const dataDeta = [
-              { label: "Días de disfrute", value: dataDe.daysEnjoyed },
-              { label: "Fecha de inicio", value: dataDe.startDate },
-              { label: "Contrato", value: dataDe.contract },
-              { label: "Observaciones", value: dataDe.description },
-            ];
-            setSelectedRecord(dataDeta);
-            setIsModalOpen(true);
-          },
+          onClick: () =>
+            rowIndex !== undefined && handleOpenDetailsModal(rowIndex),
           icon: <MdOutlineVisibility />,
         };
-
         return <Icon {...iconProps} />;
       }
 
@@ -160,13 +160,14 @@ function HolidaysTable({
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege ? () => handleOpenModal() : undefined,
+          onClick: hasPrivilege ? handleOpenModal : undefined,
           cursorHover: hasPrivilege,
-          icon: <MdDeleteOutline />,
+          icon: <MdOutlineHighlightOff />,
         };
         return <Icon {...iconProps} />;
       }
     }
+
     return typeof cellData?.value === "object"
       ? JSON.stringify(cellData.value)
       : cellData?.value;
@@ -183,6 +184,7 @@ function HolidaysTable({
   ) => {
     const isMobileAction =
       headerKey === "mobileActions" && mediaQueries["(max-width: 542px)"];
+
     if (isMobileAction) {
       return (
         <Td
@@ -195,12 +197,10 @@ function HolidaysTable({
             <SkeletonLine width="100%" animated={true} />
           ) : (
             <Detail
-              onClickDetails={() => {
-                /* no-op */
-              }}
+              onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
               onClickEliminate={
-                !disableDeleteAction ? cellData?.onClick : undefined
+                !disableDeleteAction ? handleOpenModal : undefined
               }
               disableDeleteAction={disableDeleteAction}
             />
@@ -227,6 +227,85 @@ function HolidaysTable({
     );
   };
 
+  const renderHeaderRow = () => {
+    if (!mediaQueries["(max-width: 542px)"]) {
+      const headerSlice = mediaQueries["(max-width: 1024px)"]
+        ? headers.slice(1, 4)
+        : headers.slice(0, 4);
+
+      return (
+        <Tr border="bottom">
+          {headerSlice.map((header, index) => (
+            <StyledTh key={index} align="center" style={header.style}>
+              <b>{header.label}</b>
+            </StyledTh>
+          ))}
+          <StyledTh
+            key="acciones"
+            colSpan={2}
+            align="center"
+            style={{ width: "120px" }}
+            action
+          >
+            <b>Acciones</b>
+          </StyledTh>
+        </Tr>
+      );
+    }
+
+    return (
+      <Tr border="bottom">
+        {visibleHeaders.map((header, index) => (
+          <StyledTh
+            key={index}
+            align="center"
+            style={header.style}
+            action={header.key === "mobileActions"}
+          >
+            <b>{header.label}</b>
+          </StyledTh>
+        ))}
+      </Tr>
+    );
+  };
+
+  const renderLoadingRows = () =>
+    Array.from({ length: 3 }).map((_, idx) => (
+      <Tr key={idx} border="bottom">
+        {visibleHeaders.map((_, index) => (
+          <Td key={index} colSpan={1} align="center" type="custom">
+            <SkeletonLine width="100%" animated />
+          </Td>
+        ))}
+      </Tr>
+    ));
+
+  const renderEmptyState = () => (
+    <Tr border="bottom">
+      <Td colSpan={visibleHeaders.length} align="center" type="custom">
+        <Text size="medium">No tiene solicitudes en trámite.</Text>
+      </Td>
+    </Tr>
+  );
+
+  const renderDataRows = () =>
+    currentData.map((row: IHolidaysTable, rowIndex: number) => (
+      <Tr key={rowIndex} border="bottom">
+        {visibleHeaders.map((header) => {
+          const cellData = row[header.key as keyof IHolidaysTable] as {
+            type?: string;
+            value?: string | number | JSX.Element | HolidayTableDataDetails;
+            onClick?: () => void;
+          };
+          return renderTableCell(
+            header.key,
+            cellData ?? { value: "" },
+            rowIndex,
+          );
+        })}
+      </Tr>
+    ));
+
   return (
     <>
       <Table>
@@ -235,59 +314,13 @@ function HolidaysTable({
             <Col key={index} span={col.span} style={col.style} />
           ))}
         </Colgroup>
-        <Thead>
-          <Tr border="bottom">
-            {visibleHeaders.map((header, index) => (
-              <StyledTh
-                key={index}
-                action={header.action}
-                align="center"
-                style={header.style}
-              >
-                <b>{header.label}</b>
-              </StyledTh>
-            ))}
-          </Tr>
-        </Thead>
+        <Thead>{renderHeaderRow()}</Thead>
         <Tbody>
-          {loading ? (
-            Array.from({ length: 3 }).map((_, idx) => (
-              <Tr key={idx} border="bottom">
-                {visibleHeaders.map((_, index) => (
-                  <Td key={index} colSpan={1} align="center" type="custom">
-                    <SkeletonLine width="100%" animated />
-                  </Td>
-                ))}
-              </Tr>
-            ))
-          ) : data.length === 0 ? (
-            <Tr border="bottom">
-              <Td colSpan={visibleHeaders.length} align="center" type="custom">
-                <Text size="medium">No tiene solicitudes en trámite.</Text>
-              </Td>
-            </Tr>
-          ) : (
-            currentData.map((row: IHolidaysTable, rowIndex: number) => (
-              <Tr key={rowIndex} border="bottom">
-                {visibleHeaders.map((header) => {
-                  const cellData = row[header.key] as {
-                    type?: string;
-                    value?:
-                      | string
-                      | number
-                      | JSX.Element
-                      | HolidayTableDataDetails;
-                    onClick?: () => void;
-                  };
-                  return renderTableCell(
-                    header.key,
-                    cellData ?? { value: "" },
-                    rowIndex,
-                  );
-                })}
-              </Tr>
-            ))
-          )}
+          {loading
+            ? renderLoadingRows()
+            : data.length === 0
+              ? renderEmptyState()
+              : renderDataRows()}
         </Tbody>
         {data.length > 0 && (
           <Tfoot>
@@ -307,6 +340,7 @@ function HolidaysTable({
           </Tfoot>
         )}
       </Table>
+
       {isModalOpen && selectedRecord && (
         <RequestComponentDetail
           handleClose={handleClose}
@@ -315,6 +349,7 @@ function HolidaysTable({
           buttonLabel="Cerrar"
         />
       )}
+
       {isSecondModalOpen && (
         <TextAreaModal
           title="Cancelación"

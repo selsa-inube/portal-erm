@@ -3,7 +3,7 @@ import { Nav, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
 import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculacionBanner } from "@components/layout/Banner";
+import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
 
 import {
@@ -32,10 +32,6 @@ function AppPage(props: AppPageProps) {
   const { logoUrl, selectedClient } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
-  const handleVinculate = () => {
-    console.log("Vinculación agregada");
-  };
-
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
@@ -53,12 +49,11 @@ function AppPage(props: AppPageProps) {
         />
         <StyledContainer>
           {withBanner && (
-            <Stack padding={spacing.s075}>
-              <VinculacionBanner
+            <Stack padding={`${spacing.s075} ${spacing.s200}`}>
+              <VinculationBanner
                 name="José Manuel Hernández Díaz"
                 status="vinculado"
                 imageUrl={logoUrl}
-                onVinculate={handleVinculate}
               />
             </Stack>
           )}
