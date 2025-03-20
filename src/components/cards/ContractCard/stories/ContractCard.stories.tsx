@@ -21,14 +21,20 @@ const Template: StoryFn<ContractCardProps> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
+  isContractValid: true,
+  lastSalary: 3290000,
   startDate: "02/Sep/2024",
   endDate: "31/Dic/2025",
-  contractState: "Vigente",
   lastCharge: "Cargo anterior",
-  lastSalary: 3290000,
   contractType: "Tiempo completo",
   normativeFramework: "Marco XYZ",
   company: "Empresa ABC",
+};
+
+export const InvalidContract = Template.bind({});
+InvalidContract.args = {
+  ...Default.args,
+  isContractValid: false,
 };
 
 export default meta;
