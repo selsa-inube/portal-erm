@@ -60,4 +60,6 @@ export interface IAppContextType {
   setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
   employees: Employee[];
   setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
+  selectedEmployee: Employee;
+  setSelectedEmployee: (employee: Employee) => void;
 }
