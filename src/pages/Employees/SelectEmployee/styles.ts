@@ -14,11 +14,68 @@ const StyledAppPage = styled.div`
 `;
 
 const StyledQuickAccessContainer = styled.div`
-  padding: ${spacing.s250};
-  border: 1px solid
-    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  gap: ${spacing.s250};
-  border-radius: ${spacing.s100};
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 769px) {
+    padding: ${spacing.s250};
+    gap: ${spacing.s250};
+    border-radius: ${spacing.s100};
+    border: 1px solid
+      ${({ theme }) =>
+        theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  }
 `;
 
-export { StyledAppPage, StyledQuickAccessContainer };
+const StyledDropdownMenu = styled.div`
+  position: absolute;
+  cursor: pointer;
+  top: 70px;
+  left: 20px;
+  width: 73%;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    width: 90%;
+    left: 0px;
+  }
+`;
+
+const StyledDropdownItem = styled.div`
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) =>
+      theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    & > * {
+      color: ${({ theme }) =>
+        theme?.palette?.blue?.B400 || inube.palette.blue.B400};
+    }
+  }
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const StyledTextfieldContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+export {
+  StyledAppPage,
+  StyledQuickAccessContainer,
+  StyledDropdownMenu,
+  StyledDropdownItem,
+  StyledTextfieldContainer,
+};

@@ -1,125 +1,150 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useMediaQuery } from "@inubekit/inubekit";
 import * as Yup from "yup";
+
 import { useAllEmployees } from "@hooks/useEmployeeConsultation";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
 
-interface EmployeeOption {
-  id: string;
-  label: string;
-  value: string;
+export interface UseSelectEmployeeReturn {
+  employees: Employee[];
+  filteredEmployees: Employee[];
+  loading: boolean;
+  error: string | null;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  refetch: () => void;
+  validationSchema: Yup.ObjectSchema<{ keyword: string }>;
+  handleEmployeeSelection: (
+    emp: Employee,
+    formik: FormikProps<{ keyword: string }>,
+  ) => void;
+  selectedEmployee: Employee;
+  handleSubmit: (values: { employee: string }) => void;
+  isSubmitting: boolean;
 }
 
-export const useSelectEmployee = () => {
-  const { employees: fetchedEmployees, loading, error } = useAllEmployees();
-  const { employees, setEmployees, setSelectedEmployee } = useAppContext();
-  const [selectedOption, setSelectedOption] = useState("");
-  const [searchValue, setSearchValue] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function useSelectEmployee(): UseSelectEmployeeReturn {
+  const { employees, loading, error, refetch } = useAllEmployees();
+  const { setSelectedEmployee, selectedEmployee } = useAppContext();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (fetchedEmployees.length > 0 && fetchedEmployees !== employees) {
-      setEmployees(fetchedEmployees);
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  const filteredEmployees = useMemo(() => {
+    if (!debouncedSearchTerm.trim()) return [];
+
+    const results = employees.filter(
+      (emp) =>
+        emp.names.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        emp.identificationDocumentNumber.includes(debouncedSearchTerm),
+    );
+
+    if (results.length === 0) {
+      return [
+        {
+          employeeId: "no-results",
+          names: "No hay resultados para esta búsqueda.",
+          identificationDocumentNumber: "",
+        },
+      ] as Employee[];
     }
-  }, [fetchedEmployees, employees, setEmployees]);
+
+    return results;
+  }, [debouncedSearchTerm, employees]);
 
   useEffect(() => {
-    const storedEmployeeId = localStorage.getItem("selectedEmployeeId");
-    if (storedEmployeeId) {
-      const existingEmployee = employees.find(
-        (emp) => emp.employeeId === storedEmployeeId,
-      );
-      if (existingEmployee) {
-        setSelectedOption(
-          `${existingEmployee.identificationDocumentNumber} - ${existingEmployee.names}`,
-        );
-        setSelectedEmployee(existingEmployee);
-      }
+    const storedEmployee = localStorage.getItem("selectedEmployee");
+    if (storedEmployee) {
+      const existingEmployee = JSON.parse(storedEmployee);
+      setSelectedEmployee(existingEmployee);
     }
   }, [employees, setSelectedEmployee]);
 
-  const normalizeString = (str: string | undefined) =>
-    (str ?? "")
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase();
-
-  const filteredOptions: EmployeeOption[] = employees
-    .map((emp) => ({
-      id: emp.employeeId,
-      label: normalizeString(
-        `${emp.identificationDocumentNumber} - ${emp.names}`,
-      ),
-      value: normalizeString(
-        `${emp.identificationDocumentNumber} - ${emp.names}`,
-      ),
-    }))
-    .filter((opt) => opt.label.includes(normalizeString(searchValue)));
-
-  const showNoResults = searchValue.length > 0 && filteredOptions.length === 0;
-
-  const employeeOptions =
-    searchValue.length > 0 && filteredOptions.length === 0
-      ? [
-          {
-            id: "no-results",
-            label: "No hay resultados para esta búsqueda.",
-            value: "no-results",
-          },
-        ]
-      : filteredOptions;
+  useEffect(() => {
+    if (selectedEmployee) {
+      localStorage.setItem(
+        "selectedEmployee",
+        JSON.stringify(selectedEmployee),
+      );
+    }
+  }, [selectedEmployee]);
 
   const validationSchema = Yup.object({
-    employee: Yup.string()
+    keyword: Yup.string()
+      .trim()
       .required("Para continuar, primero debes seleccionar un empleado.")
-      .oneOf(
-        employeeOptions.map((opt) => opt.value),
-        "Debes seleccionar una opción válida.",
+      .test(
+        "is-valid-employee",
+        "Debes seleccionar un empleado de la lista.",
+        (value) => {
+          if (!value) return false;
+          return employees.some(
+            (emp) =>
+              `${emp.identificationDocumentNumber} - ${emp.names}` === value,
+          );
+        },
       ),
   });
+
+  const handleEmployeeSelection = (
+    emp: Employee,
+    formik: FormikProps<{ keyword: string }>,
+  ) => {
+    if (emp.employeeId === "no-results") return;
+
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      formik.setFieldValue(
+        "keyword",
+        `${emp.identificationDocumentNumber} - ${emp.names}`,
+      );
+      setSelectedEmployee(emp);
+      setSearchTerm("");
+      setIsSubmitting(false);
+    }, 300);
+  };
 
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
     setTimeout(() => {
-      const selectedEmployeeOption = employeeOptions.find(
-        (opt) => opt.value === values.employee,
+      const selectedEmployeeOption = employees.find(
+        (emp) => emp.employeeId === values.employee,
       );
 
       if (selectedEmployeeOption) {
-        const fullEmployee = employees.find(
-          (emp) => emp.employeeId === selectedEmployeeOption.id,
-        );
-
-        if (fullEmployee) {
-          setSelectedEmployee(fullEmployee);
-          localStorage.setItem("selectedEmployeeId", fullEmployee.employeeId);
-          navigate("/");
-        } else {
-          console.error("Empleado no encontrado en la lista completa.");
-        }
+        setSelectedEmployee(selectedEmployeeOption);
+        navigate("/");
       } else {
         console.error("Empleado no encontrado");
       }
-
       setIsSubmitting(false);
-    }, 1500);
+    }, 300);
   };
 
   return {
-    employeeOptions,
-    showNoResults,
+    employees,
+    filteredEmployees,
     loading,
     error,
-    selectedOption,
-    setSelectedOption,
-    searchValue,
-    setSearchValue,
-    isMobile,
-    isSubmitting,
+    searchTerm,
+    setSearchTerm,
+    refetch,
     validationSchema,
+    handleEmployeeSelection,
+    selectedEmployee,
     handleSubmit,
+    isSubmitting,
   };
-};
+}
