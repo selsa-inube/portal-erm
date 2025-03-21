@@ -11,7 +11,7 @@ const StyledContractCard = styled.div<IStyledContainer>`
   height: 344px;
   border-radius: 8px;
   padding: ${spacing.s150};
-  box-shadow: 0px 1px 2px 0px
+  box-shadow: 0px 2px 6px 1px
     ${({ theme }) => theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
   user-select: none;
 `;
