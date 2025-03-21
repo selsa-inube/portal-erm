@@ -8,7 +8,7 @@ function LoadingApp() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/");
+      navigate("/employees/select-employee");
     }, 2000);
 
     return () => clearTimeout(timer);
