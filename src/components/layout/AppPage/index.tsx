@@ -60,7 +60,7 @@ function AppPage(props: AppPageProps) {
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
-            height="95vh"
+            height="85vh"
           >
             {withNav && !isTablet && (
               <Nav navigation={nav} actions={actions} collapse={true} />
