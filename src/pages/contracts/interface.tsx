@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   useMediaQuery,
   Stack,
@@ -8,11 +9,16 @@ import {
 } from "@inubekit/inubekit";
 import { MdOutlineAdd, MdOutlineInfo } from "react-icons/md";
 
+import {
+  ContractCard,
+  ContractCardProps,
+} from "@components/cards/ContractCard";
 import { spacing } from "@design/tokens/spacing";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { ContractCard } from "@components/cards/ContractCard";
 import { contractCardMock } from "@mocks/contracts/contracts.mock";
+import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { currencyFormat } from "@utils/forms/currency";
 
 import {
   StyledContractsContainer,
@@ -67,6 +73,14 @@ function ContractsUI(props: ContractsUIProps) {
 
   const handleAddVinculation = () => {
     console.log("Add Vinculation");
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
+
+  const handleDetailsClick = (contract: ContractCardProps) => {
+    setSelectedContract(contract);
+    setIsModalOpen(true);
   };
 
   return (
@@ -206,7 +220,11 @@ function ContractsUI(props: ContractsUIProps) {
             justifyContent={isMobile ? "center" : "flex-start"}
           >
             {sortedContracts.map((contract, index) => (
-              <ContractCard key={index} {...contract} />
+              <ContractCard
+                key={index}
+                {...contract}
+                onDetailsClick={() => handleDetailsClick(contract)}
+              />
             ))}
             {canCreateRequest && !isTablet && (
               <StyledAddVinculation>
@@ -236,6 +254,39 @@ function ContractsUI(props: ContractsUIProps) {
             onClick={canCreateRequest ? handleAddVinculation : undefined}
           />
         </StyledAddVinculationMobile>
+      )}
+
+      {isModalOpen && selectedContract && (
+        <RequestComponentDetail
+          title="Detalles"
+          buttonLabel="Cerrar"
+          modalContent={[
+            { label: "Sitio de trabajo", value: selectedContract.workplace },
+            {
+              label: "Fecha de formalización",
+              value: selectedContract.formalizationDate,
+            },
+            { label: "Jornada laboral", value: selectedContract.contractType },
+            {
+              label: "Perfil salarial",
+              value: currencyFormat(selectedContract.lastSalary),
+            },
+            ...(selectedContract.isContractValid
+              ? []
+              : [
+                  {
+                    label: "Fecha de retiro",
+                    value: selectedContract.retirementDate || "",
+                  },
+                  {
+                    label: "Causal de retiro",
+                    value: selectedContract.retirementReason || "",
+                  },
+                ]),
+          ]}
+          handleClose={() => setIsModalOpen(false)}
+          stackDirection="column"
+        />
       )}
     </>
   );

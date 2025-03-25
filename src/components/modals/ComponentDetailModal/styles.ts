@@ -12,7 +12,7 @@ export const StyledModal = styled.div<IStyledModal>`
   overflow: auto;
   display: flex;
   flex-direction: column;
-  max-height: ${({ $smallScreen }) => ($smallScreen ? "auto" : "526px")};
+  max-height: "auto";
   width: ${({ $smallScreen }) => ($smallScreen ? "302px" : "402px")};
   background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>

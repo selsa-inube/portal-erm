@@ -15,6 +15,12 @@ interface ContractCardProps {
   contractType: string;
   normativeFramework: string;
   company: string;
+  workplace: string;
+  formalizationDate: string;
+  salaryProfile: number;
+  retirementDate?: string;
+  retirementReason?: string;
+  onDetailsClick?: () => void;
 }
 
 function ContractCard(props: ContractCardProps) {
@@ -27,6 +33,7 @@ function ContractCard(props: ContractCardProps) {
     contractType,
     normativeFramework,
     company,
+    onDetailsClick,
   } = props;
 
   return (
@@ -131,6 +138,7 @@ function ContractCard(props: ContractCardProps) {
               iconBefore={<MdOutlineVisibility />}
               spacing="compact"
               cursorHover
+              onClick={onDetailsClick}
             >
               Más detalles
             </Button>

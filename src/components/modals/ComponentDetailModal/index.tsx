@@ -1,6 +1,5 @@
 import { createPortal } from "react-dom";
 import { MdClear } from "react-icons/md";
-
 import {
   Icon,
   Text,
@@ -27,6 +26,7 @@ export interface RequestComponentDetailProps {
   buttonLabel: string;
   modalContent: string | ModalContent[];
   portalId?: string;
+  stackDirection?: "row" | "column";
   handleClose: () => void;
   filterCriteria?: (item: ModalContent) => boolean;
 }
@@ -37,6 +37,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
     buttonLabel,
     modalContent,
     portalId = "portal",
+    stackDirection,
     handleClose,
     filterCriteria,
   } = props;
@@ -50,13 +51,11 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
 
   const isMobile = useMediaQuery("(max-width: 700px)");
   const filteredContent = Array.isArray(modalContent)
-    ? modalContent.filter((item) => {
-        if (filterCriteria) {
-          return filterCriteria(item);
-        }
-        return true;
-      })
+    ? modalContent.filter((item) =>
+        filterCriteria ? filterCriteria(item) : true,
+      )
     : modalContent;
+
   return createPortal(
     <Blanket>
       <StyledModal $smallScreen={isMobile}>
@@ -79,7 +78,7 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
 
         <Divider />
         <StyledContainerContent>
-          <Stack gap={spacing.s250} direction="column">
+          <Stack gap={spacing.s150} direction="column">
             {Array.isArray(filteredContent) ? (
               filteredContent.map((item, index) => {
                 const isLongContent = item.value
@@ -89,7 +88,11 @@ function RequestComponentDetail(props: RequestComponentDetailProps) {
                 return (
                   <StyledBoxAttribute key={index} $smallScreen={isMobile}>
                     <Stack
-                      direction={isLongContent || isMobile ? "column" : "row"}
+                      direction={
+                        isLongContent || isMobile
+                          ? "column"
+                          : (stackDirection ?? "row")
+                      }
                       justifyContent="space-between"
                     >
                       <Text type="label" size="medium" weight="bold">
