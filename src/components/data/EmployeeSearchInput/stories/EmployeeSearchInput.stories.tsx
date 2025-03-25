@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { StoryFn, Meta } from "@storybook/react";
-import { SearchInput } from "./index";
 import { Formik } from "formik";
 
-const filteredEmployeesMock = [
-  { identificationDocumentNumber: "123", names: "Juan Pérez" },
-  { identificationDocumentNumber: "456", names: "Ana García" },
-  { identificationDocumentNumber: "789", names: "Carlos López" },
-];
+import { filteredEmployeesMock } from "./config";
+
+import { SearchInput } from "../index";
 
 interface Employee {
   names: string;
