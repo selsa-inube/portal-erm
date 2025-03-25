@@ -7,8 +7,6 @@ import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
 
-import { EmployeeFormValues } from "./EmployeeSearchInput";
-
 export interface UseSelectEmployeeReturn {
   employees: Employee[];
   filteredEmployees: Employee[];
@@ -20,7 +18,7 @@ export interface UseSelectEmployeeReturn {
   validationSchema: Yup.ObjectSchema<{ keyword: string }>;
   handleEmployeeSelection: (
     emp: Employee,
-    formik: FormikProps<EmployeeFormValues>,
+    formik: FormikProps<{ keyword: string }>,
   ) => void;
   selectedEmployee: Employee;
   handleSubmit: (values: { employee: string }) => void;
@@ -98,27 +96,27 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     }
   }, [selectedEmployee]);
 
-  const validationSchema = Yup.object().shape({
+  const validationSchema = Yup.object({
     keyword: Yup.string()
       .trim()
-      .required("Para continuar, primero debes seleccionar un empleado.") // Mensaje que debe mostrarse
+      .required("Para continuar, primero debes seleccionar un empleado.")
       .test(
         "is-valid-employee",
         "Debes seleccionar un empleado de la lista.",
-        function (value) {
+        (value) => {
           if (!value) return false;
-          const empleadosValidos = employees.map(
+          return employees.some(
             (emp) =>
-              `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}`,
+              `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}` ===
+              value,
           );
-          return empleadosValidos.includes(value);
         },
       ),
   });
 
   const handleEmployeeSelection = (
     emp: Employee,
-    formik: FormikProps<EmployeeFormValues>,
+    formik: FormikProps<{ keyword: string }>,
   ) => {
     if (emp.employeeId === "no-results") return;
 
@@ -134,7 +132,6 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
       setIsSubmitting(false);
     }, 300);
   };
-
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
     setTimeout(() => {
