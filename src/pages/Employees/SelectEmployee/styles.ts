@@ -39,19 +39,29 @@ const StyledDropdownMenu = styled.div`
   border-radius: 4px;
   z-index: 10;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding-top: ${spacing.s050};
+  padding-bottom: ${spacing.s050};
+
+  max-height: 300px;
+  overflow-y: auto;
 
   @media (max-width: 768px) {
     width: 90%;
+    top: 50px;
     left: 0px;
   }
 `;
 
 const StyledDropdownItem = styled.div`
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: ${spacing.s100} ${spacing.s200};
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   &:hover {
     background-color: ${({ theme }) =>
@@ -62,9 +72,11 @@ const StyledDropdownItem = styled.div`
     }
   }
 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  & > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const StyledTextfieldContainer = styled.div`

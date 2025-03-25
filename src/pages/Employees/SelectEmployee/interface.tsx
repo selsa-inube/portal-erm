@@ -7,6 +7,8 @@ import { useAllEmployees } from "@hooks/useEmployeeConsultation";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { useAppContext } from "@context/AppContext";
 
+import { EmployeeFormValues } from "./EmployeeSearchInput";
+
 export interface UseSelectEmployeeReturn {
   employees: Employee[];
   filteredEmployees: Employee[];
@@ -18,7 +20,7 @@ export interface UseSelectEmployeeReturn {
   validationSchema: Yup.ObjectSchema<{ keyword: string }>;
   handleEmployeeSelection: (
     emp: Employee,
-    formik: FormikProps<{ keyword: string }>,
+    formik: FormikProps<EmployeeFormValues>,
   ) => void;
   selectedEmployee: Employee;
   handleSubmit: (values: { employee: string }) => void;
@@ -41,20 +43,36 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
+  const normalizeText = (text: string) => {
+    return text
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  };
+
   const filteredEmployees = useMemo(() => {
     if (!debouncedSearchTerm.trim()) return [];
 
-    const results = employees.filter(
-      (emp) =>
-        emp.names.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-        emp.identificationDocumentNumber.includes(debouncedSearchTerm),
-    );
+    const normalizedSearch = normalizeText(debouncedSearchTerm);
+
+    const results = employees.filter((emp) => {
+      const normalizedName = normalizeText(emp.names);
+      const normalizedSurname = normalizeText(emp.surnames);
+      const normalizedId = normalizeText(emp.identificationDocumentNumber);
+
+      return (
+        normalizedName.includes(normalizedSearch) ||
+        normalizedSurname.includes(normalizedSearch) ||
+        normalizedId.includes(normalizedSearch)
+      );
+    });
 
     if (results.length === 0) {
       return [
         {
           employeeId: "no-results",
           names: "No hay resultados para esta búsqueda.",
+          surnames: "",
           identificationDocumentNumber: "",
         },
       ] as Employee[];
@@ -80,26 +98,27 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     }
   }, [selectedEmployee]);
 
-  const validationSchema = Yup.object({
+  const validationSchema = Yup.object().shape({
     keyword: Yup.string()
       .trim()
-      .required("Para continuar, primero debes seleccionar un empleado.")
+      .required("Para continuar, primero debes seleccionar un empleado.") // Mensaje que debe mostrarse
       .test(
         "is-valid-employee",
         "Debes seleccionar un empleado de la lista.",
-        (value) => {
+        function (value) {
           if (!value) return false;
-          return employees.some(
+          const empleadosValidos = employees.map(
             (emp) =>
-              `${emp.identificationDocumentNumber} - ${emp.names}` === value,
+              `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}`,
           );
+          return empleadosValidos.includes(value);
         },
       ),
   });
 
   const handleEmployeeSelection = (
     emp: Employee,
-    formik: FormikProps<{ keyword: string }>,
+    formik: FormikProps<EmployeeFormValues>,
   ) => {
     if (emp.employeeId === "no-results") return;
 
@@ -108,7 +127,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     setTimeout(() => {
       formik.setFieldValue(
         "keyword",
-        `${emp.identificationDocumentNumber} - ${emp.names}`,
+        `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}`,
       );
       setSelectedEmployee(emp);
       setSearchTerm("");

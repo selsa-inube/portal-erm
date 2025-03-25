@@ -1,27 +1,15 @@
 import { Formik, FormikProps } from "formik";
-import {
-  Text,
-  Button,
-  Textfield,
-  Stack,
-  Icon,
-  Spinner,
-  useMediaQuery,
-} from "@inubekit/inubekit";
-import {
-  MdOutlineAdd,
-  MdOutlineCancel,
-  MdOutlineArrowForward,
-} from "react-icons/md";
+import { Text, Button, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { MdOutlineAdd } from "react-icons/md";
 import { spacing } from "@design/tokens/spacing";
-import {
-  StyledAppPage,
-  StyledQuickAccessContainer,
-  StyledDropdownMenu,
-  StyledDropdownItem,
-  StyledTextfieldContainer,
-} from "./styles";
+import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
 import { useSelectEmployee } from "./interface";
+import { EmployeeSearchField } from "./EmployeeSearchInput/index";
+
+interface EmployeeFormValues {
+  keyword?: string;
+  employee: string;
+}
 
 function SelectEmployeePage() {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -39,14 +27,14 @@ function SelectEmployeePage() {
   } = useSelectEmployee();
 
   return (
-    <Formik
-      initialValues={{ keyword: "" }}
+    <Formik<EmployeeFormValues>
+      initialValues={{ keyword: "", employee: "" }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         console.log("Empleado seleccionado:", values.keyword);
       }}
     >
-      {(formik: FormikProps<{ keyword: string }>) => (
+      {(formik: FormikProps<EmployeeFormValues>) => (
         <StyledAppPage>
           <Stack direction="column" gap={spacing.s250}>
             <StyledQuickAccessContainer>
@@ -62,111 +50,24 @@ function SelectEmployeePage() {
                   <Text appearance="gray">Cargando empleados...</Text>
                 )}
                 {error && <Text appearance="danger">{error}</Text>}
+
                 <StyledQuickAccessContainer>
                   <form onSubmit={formik.handleSubmit}>
-                    <Stack
-                      gap={spacing.s150}
-                      alignItems="center"
-                      width={isMobile ? "100%" : "534px"}
-                      direction={"row"}
-                    >
-                      <StyledTextfieldContainer>
-                        <Textfield
-                          placeholder="Palabra clave"
-                          name="keyword"
-                          id="names"
-                          size="compact"
-                          value={formik.values.keyword}
-                          onChange={(e) => {
-                            formik.handleChange(e);
-                            setSearchTerm(e.target.value);
-                          }}
-                          fullwidth
-                          onBlur={formik.handleBlur}
-                          status={
-                            formik.touched.keyword && formik.errors.keyword
-                              ? "invalid"
-                              : undefined
-                          }
-                          message={
-                            formik.touched.keyword && formik.errors.keyword
-                              ? formik.errors.keyword
-                              : undefined
-                          }
-                          iconAfter={
-                            formik.values.keyword ? (
-                              <Icon
-                                size="18px"
-                                icon={<MdOutlineCancel />}
-                                appearance="gray"
-                                onClick={() => {
-                                  formik.setFieldValue("keyword", "");
-                                  setSearchTerm("");
-                                }}
-                              />
-                            ) : undefined
-                          }
-                        />
-                      </StyledTextfieldContainer>
-
-                      {isMobile ? (
-                        <Icon
-                          appearance="primary"
-                          disabled={!formik.isValid || !formik.dirty || loading}
-                          icon={
-                            isSubmitting ? (
-                              <Spinner appearance="primary" />
-                            ) : (
-                              <MdOutlineArrowForward />
-                            )
-                          }
-                          cursorHover={!loading}
-                          spacing="wide"
-                          variant="filled"
-                          shape="rectangle"
-                          size="40px"
-                          onClick={() => {
-                            if (selectedEmployee) {
-                              handleSubmit({
-                                employee: selectedEmployee.employeeId,
-                              });
-                            }
-                          }}
-                        />
-                      ) : (
-                        <Button
-                          appearance="primary"
-                          loading={isSubmitting}
-                          spacing="wide"
-                          variant="filled"
-                          disabled={!formik.isValid || !formik.dirty}
-                          onClick={() => {
-                            if (selectedEmployee) {
-                              handleSubmit({
-                                employee: selectedEmployee.employeeId,
-                              });
-                            }
-                          }}
-                        >
-                          Continuar
-                        </Button>
-                      )}
-                    </Stack>
-
-                    {filteredEmployees.length > 0 && (
-                      <StyledDropdownMenu>
-                        {filteredEmployees.map((emp) => (
-                          <StyledDropdownItem
-                            key={emp.identificationDocumentNumber}
-                            onClick={() => handleEmployeeSelection(emp, formik)}
-                          >
-                            <Text appearance="gray">
-                              {emp.identificationDocumentNumber} - {emp.names}
-                            </Text>
-                          </StyledDropdownItem>
-                        ))}
-                      </StyledDropdownMenu>
-                    )}
+                    <EmployeeSearchField
+                      formik={
+                        formik as unknown as FormikProps<EmployeeFormValues>
+                      }
+                      isMobile={isMobile}
+                      setSearchTerm={setSearchTerm}
+                      filteredEmployees={filteredEmployees}
+                      handleEmployeeSelection={(emp) =>
+                        handleEmployeeSelection(emp, formik)
+                      }
+                      selectedEmployee={selectedEmployee}
+                      handleSubmit={handleSubmit}
+                      isSubmitting={isSubmitting}
+                      loading={loading}
+                    />
                   </form>
                 </StyledQuickAccessContainer>
               </Stack>

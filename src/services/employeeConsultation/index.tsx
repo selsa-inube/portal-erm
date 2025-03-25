@@ -17,6 +17,13 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
+      const params = new URLSearchParams({
+        page: page.toString(),
+        per_page: perPage.toString(),
+        sort: "FirstName:asc",
+        contract_status: "Formalized",
+      });
+
       const options: RequestInit = {
         method: "GET",
         headers: {
@@ -28,7 +35,7 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
       };
 
       const res = await fetch(
-        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?page=${page}&per_page=${perPage}&sort=FirstName:asc`,
+        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?${params.toString()}`,
         options,
       );
 
