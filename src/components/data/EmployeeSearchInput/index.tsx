@@ -77,7 +77,9 @@ export const SearchInput = <T extends object>({
               key={index}
               onClick={() => handleItemSelection(item, formik)}
             >
-              <Text appearance="gray">{renderItemLabel(item)}</Text>
+              <Text appearance="gray" as="span">
+                {renderItemLabel(item)}
+              </Text>
             </StyledDropdownItem>
           ))}
         </StyledDropdownMenu>
