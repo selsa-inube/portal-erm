@@ -11,6 +11,10 @@ const StyledAppPage = styled.div`
 const StyledContainer = styled.div`
   display: inherit;
   overflow: hidden;
+
+  nav {
+    height: 95%;
+  }
 `;
 
 const StyledMain = styled.main`
