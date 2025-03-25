@@ -1,30 +1,38 @@
 import { Stack, Text, Icon } from "@inubekit/inubekit";
-import { MdOutlineInfo } from "react-icons/md";
+import { MdOutlineInfo, MdClose } from "react-icons/md";
 
-import { StyledContainer, StyledLi, StyledUl, StyledActions } from "./styles";
+import {
+  StyledContainer,
+  StyledLi,
+  StyledUl,
+  StyledActions,
+  StyledCloseIcon,
+} from "./styles";
 import { Actions } from "./config";
 
 interface ActionModalProps {
-  onClickEdit?: () => void;
-  onClickEliminate?: () => void;
-  onClickAdd?: () => void;
-  onClickRenew?: () => void;
   disableDeleteAction?: boolean;
   disableModifyAction?: boolean;
   disableRenewAction?: boolean;
   disableAddAction?: boolean;
+  onClickEdit?: () => void;
+  onClickEliminate?: () => void;
+  onClickAdd?: () => void;
+  onClickRenew?: () => void;
+  onClose?: () => void;
 }
 
 export function ActionModal(props: ActionModalProps) {
   const {
-    onClickEdit,
-    onClickEliminate,
-    onClickAdd,
-    onClickRenew,
     disableDeleteAction,
     disableModifyAction,
     disableRenewAction,
     disableAddAction,
+    onClickEdit,
+    onClickEliminate,
+    onClickAdd,
+    onClickRenew,
+    onClose,
   } = props;
 
   const actionsLi = Actions(
@@ -34,54 +42,30 @@ export function ActionModal(props: ActionModalProps) {
     onClickEliminate,
   );
 
-  const addActionIndex = actionsLi.findIndex(
-    (item) => item.label === "Agregar",
-  );
-  if (addActionIndex !== -1) {
-    actionsLi[addActionIndex].onClick = onClickAdd;
-    actionsLi[addActionIndex].isDisabled = disableAddAction ?? !onClickAdd;
-    if (actionsLi[addActionIndex].isDisabled) {
-      actionsLi[addActionIndex].appearance = "gray";
-    }
-  }
+  const modifyActions = [
+    { label: "Agregar", onClick: onClickAdd, disable: disableAddAction },
+    { label: "Modificar", onClick: onClickEdit, disable: disableModifyAction },
+    { label: "Renovar", onClick: onClickRenew, disable: disableRenewAction },
+    {
+      label: "Terminar",
+      onClick: onClickEliminate,
+      disable: disableDeleteAction,
+      danger: true,
+    },
+  ];
 
-  const modifyActionIndex = actionsLi.findIndex(
-    (item) => item.label === "Modificar",
-  );
-  if (modifyActionIndex !== -1) {
-    actionsLi[modifyActionIndex].onClick = onClickEdit;
-    actionsLi[modifyActionIndex].isDisabled =
-      disableModifyAction ?? !onClickEdit;
-    if (actionsLi[modifyActionIndex].isDisabled) {
-      actionsLi[modifyActionIndex].appearance = "gray";
+  modifyActions.forEach(({ label, onClick, disable, danger }) => {
+    const actionIndex = actionsLi.findIndex((item) => item.label === label);
+    if (actionIndex !== -1) {
+      actionsLi[actionIndex].onClick = onClick;
+      actionsLi[actionIndex].isDisabled = disable ?? !onClick;
+      actionsLi[actionIndex].appearance = actionsLi[actionIndex].isDisabled
+        ? "gray"
+        : danger
+          ? "danger"
+          : actionsLi[actionIndex].appearance;
     }
-  }
-
-  const renewActionIndex = actionsLi.findIndex(
-    (item) => item.label === "Renovar",
-  );
-  if (renewActionIndex !== -1) {
-    actionsLi[renewActionIndex].onClick = onClickRenew;
-    actionsLi[renewActionIndex].isDisabled =
-      disableRenewAction ?? !onClickRenew;
-    if (actionsLi[renewActionIndex].isDisabled) {
-      actionsLi[renewActionIndex].appearance = "gray";
-    }
-  }
-
-  const deleteActionIndex = actionsLi.findIndex(
-    (item) => item.label === "Terminar",
-  );
-  if (deleteActionIndex !== -1) {
-    actionsLi[deleteActionIndex].onClick = onClickEliminate;
-    actionsLi[deleteActionIndex].isDisabled =
-      disableDeleteAction ?? !onClickEliminate;
-    if (actionsLi[deleteActionIndex].isDisabled) {
-      actionsLi[deleteActionIndex].appearance = "gray";
-    } else {
-      actionsLi[deleteActionIndex].appearance = "danger";
-    }
-  }
+  });
 
   return (
     <StyledContainer>
@@ -124,6 +108,15 @@ export function ActionModal(props: ActionModalProps) {
               </StyledLi>
             ))}
           </StyledUl>
+          <StyledCloseIcon>
+            <Icon
+              icon={<MdClose />}
+              appearance="dark"
+              size="18px"
+              onClick={onClose}
+              cursorHover
+            />
+          </StyledCloseIcon>
         </Stack>
       </StyledActions>
     </StyledContainer>

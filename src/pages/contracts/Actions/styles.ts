@@ -44,4 +44,10 @@ const StyledActions = styled.div<IStyledActions>`
     ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
 `;
 
-export { StyledContainer, StyledUl, StyledLi, StyledActions };
+const StyledCloseIcon = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 8px;
+`;
+
+export { StyledContainer, StyledUl, StyledLi, StyledActions, StyledCloseIcon };
