@@ -13,7 +13,7 @@ const StyledContainer = styled.div`
   overflow: hidden;
 
   nav {
-    height: 95%;
+    height: 97%;
   }
 `;
 
