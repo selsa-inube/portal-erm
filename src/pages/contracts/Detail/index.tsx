@@ -40,14 +40,15 @@ export function Detail(props: DetailProps) {
       />
       {modalOpen && (
         <ActionModal
-          onClickEdit={onClickEdit}
-          onClickEliminate={onClickEliminate}
-          onClickAdd={onClickAdd}
-          onClickRenew={onClickRenew}
           disableDeleteAction={disableDeleteAction}
           disableModifyAction={disableModifyAction}
           disableRenewAction={disableRenewAction}
           disableAddAction={disableAddAction}
+          onClickEdit={onClickEdit}
+          onClickEliminate={onClickEliminate}
+          onClickAdd={onClickAdd}
+          onClickRenew={onClickRenew}
+          onClose={() => setModalOpen(false)}
         />
       )}
     </Stack>
