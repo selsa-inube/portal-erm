@@ -35,6 +35,7 @@ function ContractCard(props: ContractCardProps) {
       alignItems="center"
       width="212px"
       gap={spacing.s100}
+      padding={spacing.s150}
     >
       <Text
         type="title"

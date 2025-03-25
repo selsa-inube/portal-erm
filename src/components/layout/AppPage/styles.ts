@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import { spacing } from "@design/tokens/spacing";
+
 const StyledAppPage = styled.div`
   display: inherit;
   box-sizing: border-box;
@@ -9,12 +11,17 @@ const StyledAppPage = styled.div`
 const StyledContainer = styled.div`
   display: inherit;
   overflow: hidden;
+
+  nav {
+    height: 95%;
+  }
 `;
 
 const StyledMain = styled.main`
   box-sizing: border-box;
   height: calc(100vh - 54px);
   overflow-y: auto;
+  padding-bottom: ${spacing.s600};
 `;
 const StyledContentImg = styled(Link)`
   width: 100px;
