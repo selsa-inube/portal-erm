@@ -18,6 +18,7 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { contractCardMock } from "@mocks/contracts/contracts.mock";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { SelectModal } from "@components/modals/SelectModal";
 import { currencyFormat } from "@utils/forms/currency";
 
 import {
@@ -27,6 +28,7 @@ import {
   StyledAddVinculationMobile,
 } from "./styles";
 import { Detail } from "./Detail";
+import { ModalType } from "./types";
 
 interface ContractsUIProps {
   appName: string;
@@ -36,52 +38,98 @@ interface ContractsUIProps {
   canCreateRequest?: boolean;
 }
 
-function ContractsUI(props: ContractsUIProps) {
-  const {
-    appName,
-    appRoute,
-    navigatePage,
-    hasPendingRequest = false,
-    canCreateRequest = false,
-  } = props;
+function ContractsUI({
+  appName,
+  appRoute,
+  navigatePage,
+  hasPendingRequest = false,
+  canCreateRequest = false,
+}: ContractsUIProps) {
   const isTablet = useMediaQuery("(max-width: 1235px)");
   const isMobile = useMediaQuery("(max-width: 550px)");
 
   const hasFixedEndDate = contractCardMock.some(
     (contract) => contract.endDate !== "Indefinido",
   );
-
   const sortedContracts = [...contractCardMock].sort(
     (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
   );
-
   const hasValidContract = contractCardMock.some(
     (contract) => contract.isContractValid,
   );
 
+  const [modals, setModals] = useState<Record<ModalType, boolean>>({
+    terminate: false,
+    renew: false,
+    modify: false,
+    detail: false,
+  });
+  const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
+
+  const openModal = (modal: ModalType) =>
+    setModals((prev) => ({ ...prev, [modal]: true }));
+  const closeModal = (modal: ModalType) =>
+    setModals((prev) => ({ ...prev, [modal]: false }));
+
   const handleTerminate = () => {
     console.log("Terminate contract");
+    openModal("terminate");
   };
 
   const handleRenew = () => {
     console.log("Renew contract");
+    openModal("renew");
   };
 
   const handleModify = () => {
     console.log("Modify contract");
+    openModal("modify");
   };
 
   const handleAddVinculation = () => {
     console.log("Add Vinculation");
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
-
   const handleDetailsClick = (contract: ContractCardProps) => {
     setSelectedContract(contract);
-    setIsModalOpen(true);
+    openModal("detail");
   };
+
+  const terminationOptions = contractCardMock
+    .filter((contract) => contract.isContractValid)
+    .map((contract, index) => ({
+      id: index.toString(),
+      label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+      value: index.toString(),
+    }));
+
+  const renewOptions = contractCardMock
+    .filter((contract) => contract.endDate !== "Indefinido")
+    .map((contract, index) => ({
+      id: index.toString(),
+      label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+      value: index.toString(),
+    }));
+
+  const modifyOptions = contractCardMock.map((contract, index) => ({
+    id: index.toString(),
+    label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+    value: index.toString(),
+  }));
+
+  const commonSelectModalProps = {
+    title: "Selecciona un contrato",
+    description:
+      "Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada.",
+    portalId: "portal",
+    loading: false,
+  };
+
+  const handleSubmit =
+    (action: ModalType) => (values: { selection: string }) => {
+      console.log(`Selected option for ${action}:`, values);
+      closeModal(action);
+    };
 
   return (
     <>
@@ -95,7 +143,7 @@ function ContractsUI(props: ContractsUIProps) {
             <Text type="title" size="medium">
               Consulta histórica de contratos
             </Text>
-            {isTablet && (
+            {isTablet ? (
               <Detail
                 onClickEdit={hasValidContract ? handleModify : undefined}
                 onClickEliminate={
@@ -110,8 +158,7 @@ function ContractsUI(props: ContractsUIProps) {
                 disableDeleteAction={!hasValidContract}
                 disableAddAction={!canCreateRequest}
               />
-            )}
-            {!isTablet && (
+            ) : (
               <Stack gap={spacing.s150}>
                 <Stack gap={spacing.s025} alignItems="center">
                   <Button
@@ -241,6 +288,7 @@ function ContractsUI(props: ContractsUIProps) {
           </Stack>
         </StyledContractsContainer>
       </AppMenu>
+
       {isTablet && canCreateRequest && (
         <StyledAddVinculationMobile>
           <Icon
@@ -256,7 +304,7 @@ function ContractsUI(props: ContractsUIProps) {
         </StyledAddVinculationMobile>
       )}
 
-      {isModalOpen && selectedContract && (
+      {modals.detail && selectedContract && (
         <RequestComponentDetail
           title="Detalles"
           buttonLabel="Cerrar"
@@ -271,9 +319,8 @@ function ContractsUI(props: ContractsUIProps) {
               label: "Perfil salarial",
               value: currencyFormat(selectedContract.lastSalary),
             },
-            ...(selectedContract.isContractValid
-              ? []
-              : [
+            ...(!selectedContract.isContractValid
+              ? [
                   {
                     label: "Fecha de retiro",
                     value: selectedContract.retirementDate || "",
@@ -282,10 +329,38 @@ function ContractsUI(props: ContractsUIProps) {
                     label: "Causal de retiro",
                     value: selectedContract.retirementReason || "",
                   },
-                ]),
+                ]
+              : []),
           ]}
-          handleClose={() => setIsModalOpen(false)}
+          handleClose={() => closeModal("detail")}
           stackDirection="column"
+        />
+      )}
+
+      {modals.terminate && (
+        <SelectModal
+          {...commonSelectModalProps}
+          selectionOptions={terminationOptions}
+          onCloseModal={() => closeModal("terminate")}
+          onSubmit={handleSubmit("terminate")}
+        />
+      )}
+
+      {modals.renew && (
+        <SelectModal
+          {...commonSelectModalProps}
+          selectionOptions={renewOptions}
+          onCloseModal={() => closeModal("renew")}
+          onSubmit={handleSubmit("renew")}
+        />
+      )}
+
+      {modals.modify && (
+        <SelectModal
+          {...commonSelectModalProps}
+          selectionOptions={modifyOptions}
+          onCloseModal={() => closeModal("modify")}
+          onSubmit={handleSubmit("modify")}
         />
       )}
     </>

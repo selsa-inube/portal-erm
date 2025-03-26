@@ -35,7 +35,7 @@ const StyledActions = styled.div<IStyledActions>`
   width: 162px;
   height: 144px;
   position: absolute;
-  z-index: 999;
+  z-index: 1;
   right: 10px;
   top: 100%;
   background-color: ${({ theme }) =>
