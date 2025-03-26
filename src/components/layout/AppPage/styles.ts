@@ -42,10 +42,10 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
   position: absolute;
-  top: ${({ $isTablet }) => ($isTablet ? "8.5px" : "13px")};
+  top: ${({ $isTablet }) => ($isTablet ? "15px" : "13px")};
   transform: ${({ $collapse }) =>
     $collapse ? "rotate(-90deg)" : "rotate(90deg)"};
-  left: ${({ $isTablet }) => ($isTablet ? "200px" : "160px")};
+  left: ${({ $isTablet }) => ($isTablet ? "140px" : "160px")};
 `;
 
 const StyledCollapse = styled.div`

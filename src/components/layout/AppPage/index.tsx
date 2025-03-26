@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom"; // <-- Importa useNavigate
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   Nav,
   Stack,
@@ -72,8 +72,8 @@ function AppPage(props: AppPageProps) {
   const handleLogoClick = (businessUnit: IBusinessUnit) => {
     setSelectedClient({
       id: businessUnit.businessUnitPublicCode,
-      name: businessUnit.abbreviatedName,
-      sigla: businessUnit.descriptionUse,
+      name: businessUnit.descriptionUse,
+      sigla: businessUnit.abbreviatedName,
       logo: businessUnit.urlLogo,
     });
 
