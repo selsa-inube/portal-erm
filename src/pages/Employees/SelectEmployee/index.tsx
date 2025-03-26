@@ -33,7 +33,7 @@ function SelectEmployeePage() {
       initialValues={{ keyword: "" }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log("Empleado seleccionado:", values.keyword);
+        console.log("Formulario enviado con valores:", values);
       }}
     >
       {(formik: FormikProps<{ keyword: string }>) => (
@@ -56,7 +56,7 @@ function SelectEmployeePage() {
                 <form onSubmit={formik.handleSubmit}>
                   <Stack
                     gap={spacing.s150}
-                    alignItems="center"
+                    alignItems="start"
                     width={isMobile ? "100%" : "576px"}
                     direction={"row"}
                   >
@@ -69,11 +69,18 @@ function SelectEmployeePage() {
                       renderItemLabel={(item) => {
                         return (
                           <Stack>
-                            {item.identificationDocumentNumber} - {item.names}{" "}
-                            {item.surnames}
+                            <Text
+                              type="body"
+                              size={isMobile ? "small" : "medium"}
+                            >
+                              {item.employeeId === "no-results"
+                                ? "No hay resultados para esta búsqueda."
+                                : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
+                            </Text>
                           </Stack>
                         );
                       }}
+                      placeholder="Palabra clave"
                     />
 
                     {isMobile ? (

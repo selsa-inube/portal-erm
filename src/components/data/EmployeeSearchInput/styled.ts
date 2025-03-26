@@ -9,7 +9,7 @@ const StyledDropdownMenu = styled.div`
   top: 50px;
   left: 0px;
   width: 100%;
-  background: white;
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   z-index: 10;
@@ -27,8 +27,8 @@ const StyledDropdownMenu = styled.div`
   }
 `;
 
-const StyledDropdownItem = styled.div`
-  padding: ${spacing.s100} ${spacing.s200};
+const StyledDropdownItem = styled.div<{ $isselected: boolean }>`
+  padding: ${spacing.s050} ${spacing.s200};
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -37,6 +37,11 @@ const StyledDropdownItem = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-height: 40px;
+  background-color: ${({ $isselected, theme }) =>
+    $isselected
+      ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
+      : "#fff"};
 
   &:hover {
     background-color: ${({ theme }) =>

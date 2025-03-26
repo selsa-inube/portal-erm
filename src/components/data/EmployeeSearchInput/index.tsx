@@ -1,5 +1,5 @@
-import React from "react";
-import { Input, Icon, Text } from "@inubekit/inubekit";
+import React, { useState } from "react";
+import { Input, Icon } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import { MdOutlineCancel } from "react-icons/md";
 import {
@@ -30,6 +30,28 @@ export const SearchInput = <T extends object>({
   renderItemLabel,
   placeholder = "Buscar...",
 }: SearchInputProps<T>) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (filteredItems.length === 0) return;
+
+    if (e.key === "ArrowDown") {
+      setSelectedIndex((prev) =>
+        prev === null || prev === filteredItems.length - 1 ? 0 : prev + 1,
+      );
+    } else if (e.key === "ArrowUp") {
+      setSelectedIndex((prev) =>
+        prev === null || prev === 0 ? filteredItems.length - 1 : prev - 1,
+      );
+    } else if (e.key === "Enter" && selectedIndex !== null) {
+      handleItemSelection(filteredItems[selectedIndex], formik);
+    }
+  };
+
+  const handleMouseEnter = (index: number) => {
+    setSelectedIndex(index);
+  };
+
   const handleClearValue = () => {
     formik.setFieldValue("keyword", "");
     setValue("");
@@ -49,6 +71,7 @@ export const SearchInput = <T extends object>({
         }}
         fullwidth
         onBlur={formik.handleBlur}
+        onKeyUp={handleKeyDown}
         status={
           formik.touched.keyword && formik.errors.keyword
             ? "invalid"
@@ -76,10 +99,10 @@ export const SearchInput = <T extends object>({
             <StyledDropdownItem
               key={index}
               onClick={() => handleItemSelection(item, formik)}
+              onMouseEnter={() => handleMouseEnter(index)}
+              $isselected={selectedIndex === index}
             >
-              <Text appearance="gray" as="span">
-                {renderItemLabel(item)}
-              </Text>
+              {renderItemLabel(item)}
             </StyledDropdownItem>
           ))}
         </StyledDropdownMenu>

@@ -36,7 +36,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300);
+    }, 900);
 
     return () => clearTimeout(handler);
   }, [searchTerm]);
@@ -130,7 +130,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
       setSelectedEmployee(emp);
       setSearchTerm("");
       setIsSubmitting(false);
-    }, 300);
+    }, 200);
   };
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
