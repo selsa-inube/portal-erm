@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { inube } from "@inubekit/foundations";
+import { inube } from "@inubekit/inubekit";
 
 const StyledContainer = styled.div`
   box-shadow: 2px 2px 3px 2px

@@ -42,6 +42,7 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
 const StyledCollapse = styled.div`
   position: absolute;
   top: 48px;
+  z-index: 1;
 `;
 
 export {
