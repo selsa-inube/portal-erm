@@ -12,6 +12,7 @@ import { MdCheckCircleOutline } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
 import { mockAlertCards } from "@mocks/requirements/requirements.mock";
+import { AlertCardProps } from "@components/data/AlertCard";
 
 import { PersonalDataForm } from "./forms/PersonalDataForm";
 import { ContractualPositionDataForm } from "./forms/ContractualPositionDataForm";
@@ -23,6 +24,7 @@ import { ILegalAccountingLocation } from "./forms/LegalAccountingLocationForm/ty
 import { UnmetRequirementsForm } from "./forms/UnmetRequirementsForm";
 import { AssignmentForm } from "./forms/AssignmentForm";
 import { IAssignment } from "./types";
+import { VerificationForm } from "./forms/VerificationForm";
 
 interface NewEmployeeUIProps {
   steps: IAssistedStep[];
@@ -39,6 +41,8 @@ interface NewEmployeeUIProps {
   >;
   initialLegalAccountingLocationValues: ILegalAccountingLocation;
   assignments: IAssignment[];
+  requirements: AlertCardProps[];
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
   onAssignmentsChange: (assignments: IAssignment[]) => void;
   handleNextStep: () => void;
   handlePreviousStep: () => void;
@@ -58,6 +62,8 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
     legalAccountingLocationFormRef,
     initialLegalAccountingLocationValues,
     assignments,
+    requirements,
+    setCurrentStep,
     onAssignmentsChange,
     handleNextStep,
     handlePreviousStep,
@@ -99,7 +105,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
           controls={{
             goBackText: "Anterior",
             goNextText: "Siguiente",
-            submitText: "Enviar",
+            submitText: "Finalizar",
           }}
           onNextClick={handleNextStep}
           onBackClick={handlePreviousStep}
@@ -150,7 +156,7 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 4 && currentStep === 4 && (
+          {currentStep === 4 && (
             <AssignmentForm
               withNextButton={true}
               assignments={assignments}
@@ -159,14 +165,51 @@ function NewEmployeeUI(props: NewEmployeeUIProps) {
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 5 && currentStep === 5 && (
+          {currentStep === 5 && (
             <UnmetRequirementsForm
+              alertCards={requirements}
               withNextButton={true}
               handleNextStep={handleNextStep}
               handlePreviousStep={handlePreviousStep}
             />
           )}
-          {currentStep === 6 && <div>Contenido Paso 6 (Vacío)</div>}
+          {currentStep === 6 && (
+            <VerificationForm
+              updatedData={{
+                personalInformation: {
+                  isValid: personalDataRef.current?.isValid ?? false,
+                  values:
+                    personalDataRef.current?.values ??
+                    initialPersonalDataValues,
+                },
+                contractualPositionData: {
+                  isValid:
+                    contractualPositionDataFormRef.current?.isValid ?? false,
+                  values:
+                    contractualPositionDataFormRef.current?.values ??
+                    initialContractualPositionValues,
+                },
+                legalAccountingLocation: {
+                  isValid:
+                    legalAccountingLocationFormRef.current?.isValid ?? false,
+                  values:
+                    legalAccountingLocationFormRef.current?.values ??
+                    initialLegalAccountingLocationValues,
+                },
+                assignmentForm: {
+                  isValid: true,
+                  values: assignments,
+                },
+                unmetRequirements: {
+                  isValid: true,
+                  values: requirements,
+                },
+              }}
+              handleStepChange={(stepId) => setCurrentStep(stepId)}
+              handlePreviousStep={handlePreviousStep}
+              handleSubmit={handleFinishAssisted}
+            />
+          )}
         </Stack>
       </Stack>
 

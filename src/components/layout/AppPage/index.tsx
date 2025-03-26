@@ -12,7 +12,7 @@ import { MdOutlineChevronRight } from "react-icons/md";
 
 import { nav, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculacionBanner } from "@components/layout/Banner";
+import { VinculationBanner } from "@components/layout/Banner";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { spacing } from "@design/tokens/spacing";
@@ -122,11 +122,10 @@ function AppPage(props: AppPageProps) {
         <StyledContainer>
           {withBanner && (
             <Stack padding={spacing.s075}>
-              <VinculacionBanner
+              <VinculationBanner
                 name="José Manuel Hernández Díaz"
                 status="vinculado"
                 imageUrl={logoUrl}
-                onVinculate={() => console.log("Vinculación agregada")}
               />
             </Stack>
           )}
