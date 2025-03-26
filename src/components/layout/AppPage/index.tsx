@@ -54,6 +54,7 @@ function AppPage(props: AppPageProps) {
                 name="José Manuel Hernández Díaz"
                 status="vinculado"
                 imageUrl={logoUrl}
+                redirectUrl="/employees/select-employee"
               />
             </Stack>
           )}

@@ -1,4 +1,5 @@
 import { Text, Icon, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { useNavigate } from "react-router-dom";
 import { MdOutlineGroup } from "react-icons/md";
 
 import bannerImage from "@assets/images/banner.png";
@@ -11,10 +12,13 @@ export interface VinculationBannerProps {
   name: string;
   status: string;
   imageUrl: string;
+  redirectUrl?: string;
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status } = props;
+  const { name, status, redirectUrl } = props;
+
+  const navigate = useNavigate();
 
   const { color, icon, label } = getStatusConfig(status);
 
@@ -49,15 +53,18 @@ function VinculationBanner(props: VinculationBannerProps) {
             </Stack>
           </Stack>
         </Stack>
-        <Icon
-          appearance="primary"
-          icon={<MdOutlineGroup />}
-          cursorHover={true}
-          spacing="narrow"
-          variant="outlined"
-          shape="rectangle"
-          size="22px"
-        />
+        {redirectUrl ? (
+          <Icon
+            appearance="primary"
+            icon={<MdOutlineGroup />}
+            cursorHover={true}
+            spacing="narrow"
+            variant="outlined"
+            shape="rectangle"
+            size="22px"
+            onClick={() => navigate(redirectUrl)}
+          />
+        ) : null}
       </Stack>
     </StyledRadioClient>
   );
