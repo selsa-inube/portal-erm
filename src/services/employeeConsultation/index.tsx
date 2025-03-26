@@ -17,6 +17,13 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), fetchTimeout);
 
+      const params = new URLSearchParams({
+        page: page.toString(),
+        per_page: perPage.toString(),
+        sort: "FirstName:asc",
+        contract_status: "Formalized",
+      });
+
       const options: RequestInit = {
         method: "GET",
         headers: {
@@ -24,12 +31,11 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
           "X-Business-Unit": environment.BUSINESS_UNIT ?? "",
           "Content-type": "application/json; charset=UTF-8",
         },
-
         signal: controller.signal,
       };
 
       const res = await fetch(
-        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?page=${page}&per_page=${perPage}`,
+        `${environment.IVITE_IPORTAL_EMPLOYEE_QUERY_PROCESS_SERVICE}/employees?${params.toString()}`,
         options,
       );
 
@@ -49,13 +55,15 @@ const getAllEmployees = async (page = 1, perPage = 50): Promise<Employee[]> => {
         };
       }
 
-      return data.map(mapEmployeeApiToEntity);
-    } catch (error) {
+      const employees: Employee[] = data.map(mapEmployeeApiToEntity);
+
+      return employees.sort((a: Employee, b: Employee) =>
+        a.names.localeCompare(b.names),
+      );
+    } catch {
       if (attempt === maxRetries) {
         throw new Error(
-          `Todos los intentos fallaron. No se pudo obtener la lista de empleados. Error: ${
-            error instanceof Error ? error.message : String(error)
-          }`,
+          `Todos los intentos fallaron. No se pudo obtener la lista de empleados.`,
         );
       }
     }

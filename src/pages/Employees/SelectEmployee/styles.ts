@@ -14,11 +14,18 @@ const StyledAppPage = styled.div`
 `;
 
 const StyledQuickAccessContainer = styled.div`
-  padding: ${spacing.s250};
-  border: 1px solid
-    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  gap: ${spacing.s250};
-  border-radius: ${spacing.s100};
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  @media (min-width: 769px) {
+    padding: ${spacing.s250};
+    gap: ${spacing.s250};
+    border-radius: ${spacing.s100};
+    border: 1px solid
+      ${({ theme }) =>
+        theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+  }
 `;
 
 export { StyledAppPage, StyledQuickAccessContainer };
