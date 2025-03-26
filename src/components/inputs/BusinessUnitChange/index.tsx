@@ -1,7 +1,7 @@
 import { MdCheck } from "react-icons/md";
-import { Stack, Icon } from "@inubekit/inubekit";
-import { Divider } from "@inubekit/inubekit";
+import { Stack, Icon, Divider } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 
 import {
@@ -41,7 +41,9 @@ const BusinessUnitChange = (props: BusinessUnitChangeProps) => {
                     alt={businessUnit.abbreviatedName}
                   />
                   {selectedClient === businessUnit.abbreviatedName && (
-                    <Stack margin={`0px 12px 0`}>
+                    <Stack
+                      margin={`${spacing.s0} ${spacing.s150} ${spacing.s0}`}
+                    >
                       <Icon
                         icon={<MdCheck />}
                         appearance="primary"
@@ -51,7 +53,9 @@ const BusinessUnitChange = (props: BusinessUnitChangeProps) => {
                     </Stack>
                   )}
                 </StyledLi>
-                {index !== businessUnits.length - 1 && <Divider />}
+                <Stack padding={`${spacing.s0} ${spacing.s150}`}>
+                  {index !== businessUnits.length - 1 && <Divider />}
+                </Stack>
               </StyledContainerOption>
             ))
           )}

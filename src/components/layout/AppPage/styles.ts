@@ -34,6 +34,8 @@ const StyledContentImg = styled(Link)`
 
 const StyledLogo = styled.img`
   max-width: 100px;
+  max-height: 32px;
+  height: auto;
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`

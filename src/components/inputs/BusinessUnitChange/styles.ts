@@ -1,13 +1,16 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 const StyledContainer = styled.div`
   box-shadow: 2px 2px 3px 2px
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  border-radius: 8px;
+  border-radius: ${spacing.s100};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  margin-left: 10px;
+  margin-left: ${spacing.s050};
+  margin-top: ${spacing.s100};
   z-index: 3;
 `;
 
@@ -15,8 +18,8 @@ const StyledUl = styled.ul`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 0px;
-  padding: 0px 2px;
+  margin: ${spacing.s0};
+  padding: ${spacing.s0} ${spacing.s050};
 `;
 
 const StyledLi = styled.li`
@@ -25,11 +28,6 @@ const StyledLi = styled.li`
   align-items: center;
   width: 100%;
   justify-content: space-between;
-
-  &:hover {
-    background-color: ${inube.palette.neutral.N30};
-    border-radius: 8px;
-  }
 `;
 
 const StyledContainerOption = styled.div`
@@ -38,10 +36,10 @@ const StyledContainerOption = styled.div`
 
 const StyledImg = styled.img`
   position: relative;
-  width: 75px;
-  height: auto;
-  left: 5px;
-  padding: 12px 12px 12px 8px;
+  max-height: 32px;
+  height: 30px;
+  left: ${spacing.s050};
+  padding: ${spacing.s150} ${spacing.s150} ${spacing.s150} ${spacing.s100};
   object-fit: contain;
 `;
 
