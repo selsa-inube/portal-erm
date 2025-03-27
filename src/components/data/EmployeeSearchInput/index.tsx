@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Input, Icon } from "@inubekit/inubekit";
+import { Input, Icon, Text } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import { MdOutlineCancel } from "react-icons/md";
 import {
@@ -102,7 +102,9 @@ export const SearchInput = <T extends object>({
               onMouseEnter={() => handleMouseEnter(index)}
               $isselected={selectedIndex === index}
             >
-              {renderItemLabel(item)}
+              <Text appearance="gray" as="span">
+                {renderItemLabel(item)}
+              </Text>
             </StyledDropdownItem>
           ))}
         </StyledDropdownMenu>

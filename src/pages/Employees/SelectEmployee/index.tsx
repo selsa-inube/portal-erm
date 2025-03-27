@@ -48,6 +48,7 @@ function SelectEmployeePage() {
                   Digita la cédula y/o nombre del empleado que quieres
                   seleccionar.
                 </Text>
+
                 {loading && (
                   <Text appearance="gray">Cargando empleados...</Text>
                 )}
@@ -58,7 +59,7 @@ function SelectEmployeePage() {
                     gap={spacing.s150}
                     alignItems="start"
                     width={isMobile ? "100%" : "576px"}
-                    direction={"row"}
+                    direction="row"
                   >
                     <SearchInput
                       value={formik.values.keyword}
@@ -66,20 +67,18 @@ function SelectEmployeePage() {
                       formik={formik}
                       filteredItems={filteredEmployees}
                       handleItemSelection={handleEmployeeSelection}
-                      renderItemLabel={(item) => {
-                        return (
-                          <Stack>
-                            <Text
-                              type="body"
-                              size={isMobile ? "small" : "medium"}
-                            >
-                              {item.employeeId === "no-results"
-                                ? "No hay resultados para esta búsqueda."
-                                : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
-                            </Text>
-                          </Stack>
-                        );
-                      }}
+                      renderItemLabel={(item) => (
+                        <Stack>
+                          <Text
+                            type="body"
+                            size={isMobile ? "small" : "medium"}
+                          >
+                            {item.employeeId === "no-results"
+                              ? "No hay resultados para esta búsqueda."
+                              : `${item.identificationDocumentNumber} - ${item.names} ${item.surnames}`}
+                          </Text>
+                        </Stack>
+                      )}
                       placeholder="Palabra clave"
                     />
 
@@ -130,7 +129,7 @@ function SelectEmployeePage() {
               </Stack>
             </StyledQuickAccessContainer>
 
-            <Stack justifyContent={"end"}>
+            <Stack justifyContent="end">
               <Button
                 appearance="primary"
                 iconBefore={<MdOutlineAdd />}
