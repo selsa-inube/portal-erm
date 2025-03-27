@@ -86,13 +86,14 @@ function AppPage(props: AppPageProps) {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={{ items: nav }}
+          navigation={{ items: nav, breakpoint: "800px" }}
           logoURL={renderLogo(selectedClient?.logo || logoUrl)}
           user={{
             username: "Nombre de usuario",
             client: selectedClient
               ? selectedClient.name
               : "Sin unidad seleccionada",
+            breakpoint: "800px",
           }}
           menu={userMenu}
         />
