@@ -54,10 +54,10 @@ const nav: INav = {
           path: "/charges",
         },
         Requests: {
-          id: "Requests",
+          id: "requests",
           label: "Solicitudes en tramite",
           icon: <MdPendingActions />,
-          path: "/Requests",
+          path: "/requests",
         },
       },
     },
