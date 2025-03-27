@@ -9,6 +9,7 @@ interface DetailProps {
   onClickEliminate?: () => void;
   onClickAdd?: () => void;
   onClickRenew?: () => void;
+  onInfoIconClick?: (description: string) => void;
   disableDeleteAction?: boolean;
   disableModifyAction?: boolean;
   disableRenewAction?: boolean;
@@ -21,6 +22,7 @@ export function Detail(props: DetailProps) {
     onClickEliminate,
     onClickAdd,
     onClickRenew,
+    onInfoIconClick,
     disableDeleteAction,
     disableModifyAction,
     disableRenewAction,
@@ -49,6 +51,7 @@ export function Detail(props: DetailProps) {
           onClickAdd={onClickAdd}
           onClickRenew={onClickRenew}
           onClose={() => setModalOpen(false)}
+          onInfoIconClick={onInfoIconClick}
         />
       )}
     </Stack>

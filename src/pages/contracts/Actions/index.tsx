@@ -20,6 +20,7 @@ interface ActionModalProps {
   onClickAdd?: () => void;
   onClickRenew?: () => void;
   onClose?: () => void;
+  onInfoIconClick?: (description: string) => void;
 }
 
 export function ActionModal(props: ActionModalProps) {
@@ -33,6 +34,7 @@ export function ActionModal(props: ActionModalProps) {
     onClickAdd,
     onClickRenew,
     onClose,
+    onInfoIconClick,
   } = props;
 
   const actionsLi = Actions(
@@ -67,6 +69,17 @@ export function ActionModal(props: ActionModalProps) {
     }
   });
 
+  const disableDescriptions: Record<string, string> = {
+    Terminar:
+      "No se pueden terminar los contratos, ya que no hay un contrato vigente.",
+    Renovar:
+      "Solo es posible renovar los contratos a término fijo, en este caso no se encontró ningún contrato que cumpla con los requisitos.",
+    Modificar:
+      "No se pueden modificar los contratos, ya que no hay un contrato vigente.",
+    Agregar:
+      "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción.",
+  };
+
   return (
     <StyledContainer>
       <StyledActions>
@@ -97,12 +110,19 @@ export function ActionModal(props: ActionModalProps) {
                 >
                   {item.label}
                 </Text>
-                {item.isDisabled && (
+                {item.isDisabled && onInfoIconClick && (
                   <Icon
                     icon={<MdOutlineInfo />}
                     appearance="primary"
                     size="16px"
                     cursorHover
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onInfoIconClick(
+                        disableDescriptions[item.label] ||
+                          "Acción inhabilitada.",
+                      );
+                    }}
                   />
                 )}
               </StyledLi>

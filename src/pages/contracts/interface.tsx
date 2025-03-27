@@ -19,6 +19,7 @@ import { IRoute } from "@components/layout/AppMenu/types";
 import { contractCardMock } from "@mocks/contracts/contracts.mock";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { SelectModal } from "@components/modals/SelectModal";
+import { InfoModal } from "@components/modals/InfoModal";
 import { currencyFormat } from "@utils/forms/currency";
 
 import {
@@ -65,6 +66,12 @@ function ContractsUI({
     detail: false,
   });
   const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
+
+  const [infoModal, setInfoModal] = useState<{
+    open: boolean;
+    title: string;
+    description: string;
+  }>({ open: false, title: "Información", description: "" });
 
   const openModal = (modal: ModalType) =>
     setModals((prev) => ({ ...prev, [modal]: true }));
@@ -131,6 +138,10 @@ function ContractsUI({
       closeModal(action);
     };
 
+  const openInfoModal = (description: string) => {
+    setInfoModal({ open: true, title: "Información", description });
+  };
+
   return (
     <>
       <AppMenu
@@ -157,6 +168,7 @@ function ContractsUI({
                 disableRenewAction={!hasFixedEndDate || !hasValidContract}
                 disableDeleteAction={!hasValidContract}
                 disableAddAction={!canCreateRequest}
+                onInfoIconClick={openInfoModal}
               />
             ) : (
               <Stack gap={spacing.s150}>
@@ -177,6 +189,11 @@ function ContractsUI({
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        openInfoModal(
+                          "No se pueden terminar los contratos, ya que no hay un contrato vigente.",
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -200,6 +217,11 @@ function ContractsUI({
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        openInfoModal(
+                          "Solo es posible renovar los contratos a término fijo, en este caso no se encontró ningún contrato que cumpla con los requisitos.",
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -219,6 +241,11 @@ function ContractsUI({
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        openInfoModal(
+                          "No se pueden modificar los contratos, ya que no hay un contrato vigente.",
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -240,6 +267,11 @@ function ContractsUI({
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        openInfoModal(
+                          "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción.",
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -361,6 +393,17 @@ function ContractsUI({
           selectionOptions={modifyOptions}
           onCloseModal={() => closeModal("modify")}
           onSubmit={handleSubmit("modify")}
+        />
+      )}
+
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            setInfoModal({ open: false, title: "", description: "" })
+          }
         />
       )}
     </>
