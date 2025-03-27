@@ -30,6 +30,8 @@ const StyledMain = styled.main`
 `;
 const StyledContentImg = styled(Link)`
   width: 100px;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const StyledLogo = styled.img`

@@ -32,11 +32,13 @@ interface AppPageProps {
   withBanner?: boolean;
 }
 
-const renderLogo = (imgUrl: string) => {
-  return (
+const renderLogo = (imgUrl: string, clientName: string) => {
+  return imgUrl ? (
     <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} />
+      <StyledLogo src={imgUrl} alt={clientName} />
     </StyledContentImg>
+  ) : (
+    <StyledContentImg to="/">{clientName}</StyledContentImg>
   );
 };
 
@@ -87,12 +89,13 @@ function AppPage(props: AppPageProps) {
         <Header
           portalId="portal"
           navigation={{ items: nav, breakpoint: "800px" }}
-          logoURL={renderLogo(selectedClient?.logo || logoUrl)}
+          logoURL={renderLogo(
+            selectedClient?.logo || logoUrl,
+            selectedClient?.name || "Sin unidad seleccionada",
+          )}
           user={{
             username: "Nombre de usuario",
-            client: selectedClient
-              ? selectedClient.name
-              : "Sin unidad seleccionada",
+            client: selectedClient?.name || "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
           menu={userMenu}
