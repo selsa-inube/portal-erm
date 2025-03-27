@@ -99,7 +99,7 @@ function ContractsUI({
     .filter((contract) => contract.isContractValid)
     .map((contract, index) => ({
       id: index.toString(),
-      label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+      label: `${contract.contractNumber} - ${contract.company}`,
       value: index.toString(),
     }));
 
@@ -107,13 +107,13 @@ function ContractsUI({
     .filter((contract) => contract.endDate !== "Indefinido")
     .map((contract, index) => ({
       id: index.toString(),
-      label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+      label: `${contract.contractNumber} - ${contract.company}`,
       value: index.toString(),
     }));
 
   const modifyOptions = contractCardMock.map((contract, index) => ({
     id: index.toString(),
-    label: `${contract.company} - ${contract.workplace} (${contract.startDate})`,
+    label: `${contract.contractNumber} - ${contract.company}`,
     value: index.toString(),
   }));
 
