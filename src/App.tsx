@@ -26,7 +26,7 @@ import { useAppContext } from "./context/AppContext/useAppContext";
 import { AppProvider } from "./context/AppContext";
 import { ProtectedAppPage } from "./ProtectedAppPage";
 import { Contracts } from "./pages/contracts";
-import { Requests } from "./pages/Requests";
+import { Requests } from "./pages/requests";
 
 function LogOut() {
   localStorage.clear();
@@ -89,7 +89,7 @@ const router = createBrowserRouter(
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
         <Route path="contracts/*" element={<Contracts />} />
-        <Route path="Requests/*" element={<Requests />} />
+        <Route path="requests/*" element={<Requests />} />
       </Route>
       <Route
         path="/employees/*"

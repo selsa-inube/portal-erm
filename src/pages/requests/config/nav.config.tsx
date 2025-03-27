@@ -10,9 +10,9 @@ const RequestsNavConfig = [
         isActive: false,
       },
       {
-        path: "/Requests",
+        path: "/requests",
         label: "Solicitudes en trámite",
-        id: "/Requests",
+        id: "/requests",
         isActive: true,
       },
     ],
