@@ -36,7 +36,7 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300);
+    }, 600);
 
     return () => clearTimeout(handler);
   }, [searchTerm]);

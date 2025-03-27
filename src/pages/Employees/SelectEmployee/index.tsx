@@ -57,7 +57,7 @@ function SelectEmployeePage() {
                 <form onSubmit={formik.handleSubmit}>
                   <Stack
                     gap={spacing.s150}
-                    alignItems="center"
+                    alignItems="start"
                     width={isMobile ? "100%" : "576px"}
                     direction="row"
                   >
