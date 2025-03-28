@@ -105,7 +105,7 @@ function ContractsUI(props: ContractsUIProps) {
   };
 
   const handleAddVinculation = () => {
-    console.log("Add Vinculation");
+    console.log("Agregar vinculación");
   };
 
   const handleDetailsClick = (contract: ContractCardProps) => {

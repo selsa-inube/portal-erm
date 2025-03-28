@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
 
 const StyledDropdownMenu = styled.div`
@@ -16,7 +15,6 @@ const StyledDropdownMenu = styled.div`
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding-top: ${spacing.s050};
   padding-bottom: ${spacing.s050};
-
   max-height: 300px;
   overflow-y: auto;
 
@@ -27,7 +25,7 @@ const StyledDropdownMenu = styled.div`
   }
 `;
 
-const StyledDropdownItem = styled.div<{ $isselected: boolean }>`
+const StyledDropdownItem = styled.div<{ $isselected?: boolean }>`
   padding: ${spacing.s050} ${spacing.s200};
   cursor: pointer;
   display: flex;
