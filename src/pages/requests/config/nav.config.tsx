@@ -18,6 +18,25 @@ const RequestsNavConfig = [
     ],
     url: "/",
   },
+  {
+    id: 2,
+    label: "Trámite de solicitud",
+    crumbs: [
+      {
+        path: "/",
+        label: "Inicio",
+        id: "/",
+        isActive: false,
+      },
+      {
+        path: "/requests",
+        label: "...",
+        id: "/requests",
+        isActive: false,
+      },
+    ],
+    url: "/requests",
+  },
 ];
 
 export { RequestsNavConfig };

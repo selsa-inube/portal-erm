@@ -8,60 +8,73 @@ import {
   MdOutlineBadge,
   MdPendingActions,
 } from "react-icons/md";
+import { useLocation } from "react-router-dom";
+import { INavNavigation } from "@inubekit/inubekit";
 
-import { INav } from "@components/layout/AppPage/types";
+const useNavConfig = () => {
+  const location = useLocation();
 
-const nav: INav = {
-  title: "MENU",
-  sections: {
-    administrate: {
-      name: "",
-      links: {
-        holidays: {
-          id: "holidays",
-          label: "Vacaciones",
-          icon: <MdBeachAccess />,
-          path: "/holidays",
-        },
-        disability: {
-          id: "disability",
-          label: "Incapacidades",
-          icon: <MdOutlinePersonalInjury />,
-          path: "/disability",
-        },
-        absences: {
-          id: "absences",
-          label: "Ausencias",
-          icon: <MdOutlinePersonOff />,
-          path: "/absences",
-        },
-        certifications: {
-          id: "certifications",
-          label: "Certificaciones",
-          icon: <MdOutlineFilePresent />,
-          path: "/certifications",
-        },
-        contracts: {
-          id: "contracts",
-          label: "Contratos",
-          icon: <MdOutlineHistoryEdu />,
-          path: "/contracts",
-        },
-        charges: {
-          id: "charges",
-          label: "Cargos",
-          icon: <MdOutlineBadge />,
-          path: "/charges",
-        },
-        Requests: {
-          id: "requests",
-          label: "Solicitudes en tramite",
-          icon: <MdPendingActions />,
-          path: "/requests",
+  const nav: INavNavigation = {
+    title: "MENU",
+    sections: {
+      administrate: {
+        name: "",
+        links: {
+          holidays: {
+            id: "holidays",
+            label: "Vacaciones",
+            icon: <MdBeachAccess />,
+            path: "/holidays",
+            isActive: location.pathname.startsWith("/holidays"),
+          },
+          disability: {
+            id: "disability",
+            label: "Incapacidades",
+            icon: <MdOutlinePersonalInjury />,
+            path: "/disability",
+            isActive: location.pathname.startsWith("/disability"),
+          },
+          absences: {
+            id: "absences",
+            label: "Ausencias",
+            icon: <MdOutlinePersonOff />,
+            path: "/absences",
+            isActive: location.pathname.startsWith("/absences"),
+          },
+          certifications: {
+            id: "certifications",
+            label: "Certificaciones",
+            icon: <MdOutlineFilePresent />,
+            path: "/certifications",
+            isActive: location.pathname.startsWith("/certifications"),
+          },
+          contracts: {
+            id: "contracts",
+            label: "Contratos",
+            icon: <MdOutlineHistoryEdu />,
+            path: "/contracts",
+            isActive: location.pathname.startsWith("/contracts"),
+          },
+          charges: {
+            id: "charges",
+            label: "Cargos",
+            icon: <MdOutlineBadge />,
+            path: "/charges",
+            isActive: location.pathname.startsWith("/charges"),
+          },
+          requests: {
+            id: "requests",
+            label: "Solicitudes en tramite",
+            icon: <MdPendingActions />,
+            path: "/requests",
+            isActive: location.pathname.startsWith("/requests"),
+          },
         },
       },
     },
-  },
+  };
+
+  return nav;
 };
 
 const userMenu = [
@@ -91,4 +104,4 @@ const actions = [
   },
 ];
 
-export { nav, userMenu, actions };
+export { useNavConfig, userMenu, actions };
