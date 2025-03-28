@@ -5,28 +5,30 @@ import { Stack, Icon } from "@inubekit/inubekit";
 import { ActionModal } from "../Actions";
 
 interface DetailProps {
+  disableDeleteAction?: boolean;
+  disableModifyAction?: boolean;
+  disableRenewAction?: boolean;
+  disableAddAction?: boolean;
+  actionDescriptions?: Record<string, string>;
   onClickEdit?: () => void;
   onClickEliminate?: () => void;
   onClickAdd?: () => void;
   onClickRenew?: () => void;
   onInfoIconClick?: (description: string) => void;
-  disableDeleteAction?: boolean;
-  disableModifyAction?: boolean;
-  disableRenewAction?: boolean;
-  disableAddAction?: boolean;
 }
 
 export function Detail(props: DetailProps) {
   const {
+    disableDeleteAction,
+    disableModifyAction,
+    disableRenewAction,
+    disableAddAction,
+    actionDescriptions,
     onClickEdit,
     onClickEliminate,
     onClickAdd,
     onClickRenew,
     onInfoIconClick,
-    disableDeleteAction,
-    disableModifyAction,
-    disableRenewAction,
-    disableAddAction,
   } = props;
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -46,6 +48,7 @@ export function Detail(props: DetailProps) {
           disableModifyAction={disableModifyAction}
           disableRenewAction={disableRenewAction}
           disableAddAction={disableAddAction}
+          actionDescriptions={actionDescriptions}
           onClickEdit={onClickEdit}
           onClickEliminate={onClickEliminate}
           onClickAdd={onClickAdd}

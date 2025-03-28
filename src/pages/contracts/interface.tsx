@@ -31,21 +31,32 @@ import {
 import { Detail } from "./Detail";
 import { ModalType } from "./types";
 
+const assertNever = (value: string): never => {
+  throw new Error(`Unhandled action type: ${value}`);
+};
+
 interface ContractsUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
   hasPendingRequest?: boolean;
   canCreateRequest?: boolean;
+  canTerminate?: boolean;
+  canRenew?: boolean;
+  canModify?: boolean;
 }
 
-function ContractsUI({
-  appName,
-  appRoute,
-  navigatePage,
-  hasPendingRequest = false,
-  canCreateRequest = false,
-}: ContractsUIProps) {
+function ContractsUI(props: ContractsUIProps) {
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    hasPendingRequest = false,
+    canCreateRequest = false,
+    canTerminate = true,
+    canRenew = true,
+    canModify = true,
+  } = props;
   const isTablet = useMediaQuery("(max-width: 1235px)");
   const isMobile = useMediaQuery("(max-width: 550px)");
 
@@ -142,6 +153,36 @@ function ContractsUI({
     setInfoModal({ open: true, title: "Información", description });
   };
 
+  const getActionDescription = (action: string) => {
+    switch (action) {
+      case "terminate":
+        return !canTerminate
+          ? "No tiene privilegios para terminar contratos."
+          : "No hay contrato vigente para terminar.";
+      case "renew":
+        return !canRenew
+          ? "No tiene privilegios para renovar contratos."
+          : !hasFixedEndDate
+            ? "No hay contrato a término fijo."
+            : "No hay contrato vigente para renovar.";
+      case "modify":
+        return !canModify
+          ? "No tiene privilegios para modificar contratos."
+          : "No hay contrato vigente para modificar.";
+      case "add":
+        return "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción.";
+      default:
+        return assertNever(action);
+    }
+  };
+
+  const actionDescriptions = {
+    Terminar: getActionDescription("terminate"),
+    Renovar: getActionDescription("renew"),
+    Modificar: getActionDescription("modify"),
+    Agregar: getActionDescription("add"),
+  };
+
   return (
     <>
       <AppMenu
@@ -164,10 +205,13 @@ function ContractsUI({
                 onClickRenew={
                   hasFixedEndDate && hasValidContract ? handleRenew : undefined
                 }
-                disableModifyAction={!hasValidContract}
-                disableRenewAction={!hasFixedEndDate || !hasValidContract}
-                disableDeleteAction={!hasValidContract}
+                disableModifyAction={!hasValidContract || !canModify}
+                disableRenewAction={
+                  !hasFixedEndDate || !hasValidContract || !canRenew
+                }
+                disableDeleteAction={!hasValidContract || !canTerminate}
                 disableAddAction={!canCreateRequest}
+                actionDescriptions={actionDescriptions}
                 onInfoIconClick={openInfoModal}
               />
             ) : (
@@ -177,50 +221,52 @@ function ContractsUI({
                     appearance="danger"
                     spacing="compact"
                     variant="outlined"
-                    disabled={!hasValidContract}
+                    disabled={!hasValidContract || !canTerminate}
                     cursorHover
-                    onClick={hasValidContract ? handleTerminate : undefined}
+                    onClick={
+                      hasValidContract && canTerminate
+                        ? handleTerminate
+                        : undefined
+                    }
                   >
                     Terminar
                   </Button>
-                  {!hasValidContract && (
+                  {(!hasValidContract || !canTerminate) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
                       onClick={() =>
-                        openInfoModal(
-                          "No se pueden terminar los contratos, ya que no hay un contrato vigente.",
-                        )
+                        openInfoModal(getActionDescription("terminate"))
                       }
                     />
                   )}
                 </Stack>
                 <Stack gap={spacing.s025} alignItems="center">
                   <Button
-                    disabled={!hasFixedEndDate || !hasValidContract}
+                    disabled={
+                      !hasFixedEndDate || !hasValidContract || !canRenew
+                    }
                     variant="outlined"
                     cursorHover
                     spacing="compact"
                     onClick={
-                      hasFixedEndDate && hasValidContract
+                      hasFixedEndDate && hasValidContract && canRenew
                         ? handleRenew
                         : undefined
                     }
                   >
                     Renovar
                   </Button>
-                  {(!hasFixedEndDate || !hasValidContract) && (
+                  {(!hasFixedEndDate || !hasValidContract || !canRenew) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
                       onClick={() =>
-                        openInfoModal(
-                          "Solo es posible renovar los contratos a término fijo, en este caso no se encontró ningún contrato que cumpla con los requisitos.",
-                        )
+                        openInfoModal(getActionDescription("renew"))
                       }
                     />
                   )}
@@ -230,21 +276,21 @@ function ContractsUI({
                   <Button
                     cursorHover
                     spacing="compact"
-                    disabled={!hasValidContract}
-                    onClick={hasValidContract ? handleModify : undefined}
+                    disabled={!hasValidContract || !canModify}
+                    onClick={
+                      hasValidContract && canModify ? handleModify : undefined
+                    }
                   >
                     Modificar
                   </Button>
-                  {!hasValidContract && (
+                  {(!hasValidContract || !canModify) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
                       onClick={() =>
-                        openInfoModal(
-                          "No se pueden modificar los contratos, ya que no hay un contrato vigente.",
-                        )
+                        openInfoModal(getActionDescription("modify"))
                       }
                     />
                   )}
