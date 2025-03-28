@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing";
 
-interface IStyledContainer {
+interface IStyledRequestCard {
   theme: typeof inube;
 }
 
-const StyledRequestCard = styled.div<IStyledContainer>`
+const StyledRequestCard = styled.div<IStyledRequestCard>`
   height: 183px;
   gap: ${spacing.s100};
   border-radius: 8px;
@@ -21,7 +22,7 @@ const StyledTitle = styled.div`
     theme?.palette?.blue?.B50 || inube.palette.blue.B50};
   font-weight: bold;
   text-align: center;
-  border-radius: 8px 8px 8px 8px;
+  border-radius: 8px;
 `;
 
 export { StyledRequestCard, StyledTitle };

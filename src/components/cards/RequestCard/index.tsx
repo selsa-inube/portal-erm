@@ -1,5 +1,6 @@
 import { Stack, Text, Divider } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
+
 import { StyledRequestCard, StyledTitle } from "./styles";
 
 interface RequestCardProps {
@@ -9,17 +10,17 @@ interface RequestCardProps {
   responsible?: string;
 }
 
-function RequestCard({
-  id,
-  title,
-  requestDate,
-  responsible = "Sin responsable",
-}: RequestCardProps) {
+function RequestCard(props: RequestCardProps) {
+  const { id, title, requestDate, responsible = "Sin responsable" } = props;
+
   return (
     <Stack direction="column" width="280px">
       <StyledRequestCard>
         <StyledTitle>
-          <Stack justifyContent="center" margin="0px 0px 10px">
+          <Stack
+            justifyContent="center"
+            margin={`${spacing.s0} ${spacing.s0} ${spacing.s100}`}
+          >
             <Text
               type="label"
               size="small"
