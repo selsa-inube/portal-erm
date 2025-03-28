@@ -72,22 +72,19 @@ function ContractsUI({
     setModals((prev) => ({ ...prev, [modal]: false }));
 
   const handleTerminate = () => {
-    console.log("Terminate contract");
     openModal("terminate");
   };
 
   const handleRenew = () => {
-    console.log("Renew contract");
     openModal("renew");
   };
 
   const handleModify = () => {
-    console.log("Modify contract");
     openModal("modify");
   };
 
   const handleAddVinculation = () => {
-    console.log("Add Vinculation");
+    console.log("Agregar vinculación");
   };
 
   const handleDetailsClick = (contract: ContractCardProps) => {
@@ -125,11 +122,9 @@ function ContractsUI({
     loading: false,
   };
 
-  const handleSubmit =
-    (action: ModalType) => (values: { selection: string }) => {
-      console.log(`Selected option for ${action}:`, values);
-      closeModal(action);
-    };
+  const handleSubmit = (action: ModalType) => () => {
+    closeModal(action);
+  };
 
   return (
     <>
