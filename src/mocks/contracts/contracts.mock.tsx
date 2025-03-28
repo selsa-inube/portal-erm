@@ -2,6 +2,7 @@ import { ContractCardProps } from "@components/cards/ContractCard";
 
 export const contractCardMock: ContractCardProps[] = [
   {
+    contractNumber: 12345,
     isContractValid: true,
     lastSalary: 3290000,
     startDate: "02/Sep/2024",
@@ -15,6 +16,7 @@ export const contractCardMock: ContractCardProps[] = [
     salaryProfile: 3290000,
   },
   {
+    contractNumber: 67895,
     isContractValid: false,
     lastSalary: 2500000,
     startDate: "15/Mar/2022",
@@ -30,6 +32,7 @@ export const contractCardMock: ContractCardProps[] = [
     retirementReason: "Finalización del proyecto",
   },
   {
+    contractNumber: 98762,
     isContractValid: true,
     lastSalary: 4200000,
     startDate: "10/Jun/2023",
