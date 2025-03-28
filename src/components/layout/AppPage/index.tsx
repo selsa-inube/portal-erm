@@ -44,8 +44,13 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true, withBanner = true } = props;
-  const { logoUrl, selectedClient, businessUnits, setSelectedClient } =
-    useAppContext();
+  const {
+    logoUrl,
+    selectedClient,
+    businessUnits,
+    setSelectedClient,
+    selectedEmployee,
+  } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
@@ -127,9 +132,21 @@ function AppPage(props: AppPageProps) {
           {withBanner && (
             <Stack padding={spacing.s075}>
               <VinculationBanner
-                name="José Manuel Hernández Díaz"
-                status="vinculado"
+                key={
+                  selectedEmployee ? selectedEmployee.employeeId : "no-employee"
+                }
+                name={
+                  selectedEmployee
+                    ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+                    : "Empleado no seleccionado"
+                }
+                status={
+                  selectedEmployee
+                    ? selectedEmployee.employeeStatus
+                    : "estado-desconocido"
+                }
                 imageUrl={logoUrl}
+                redirectUrl="/employees/select-employee"
               />
             </Stack>
           )}
