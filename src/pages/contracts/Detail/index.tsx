@@ -5,26 +5,30 @@ import { Stack, Icon } from "@inubekit/inubekit";
 import { ActionModal } from "../Actions";
 
 interface DetailProps {
-  onClickEdit?: () => void;
-  onClickEliminate?: () => void;
-  onClickAdd?: () => void;
-  onClickRenew?: () => void;
   disableDeleteAction?: boolean;
   disableModifyAction?: boolean;
   disableRenewAction?: boolean;
   disableAddAction?: boolean;
+  actionDescriptions?: Record<string, string>;
+  onClickEdit?: () => void;
+  onClickEliminate?: () => void;
+  onClickAdd?: () => void;
+  onClickRenew?: () => void;
+  onInfoIconClick?: (description: string) => void;
 }
 
 export function Detail(props: DetailProps) {
   const {
-    onClickEdit,
-    onClickEliminate,
-    onClickAdd,
-    onClickRenew,
     disableDeleteAction,
     disableModifyAction,
     disableRenewAction,
     disableAddAction,
+    actionDescriptions,
+    onClickEdit,
+    onClickEliminate,
+    onClickAdd,
+    onClickRenew,
+    onInfoIconClick,
   } = props;
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -44,11 +48,13 @@ export function Detail(props: DetailProps) {
           disableModifyAction={disableModifyAction}
           disableRenewAction={disableRenewAction}
           disableAddAction={disableAddAction}
+          actionDescriptions={actionDescriptions}
           onClickEdit={onClickEdit}
           onClickEliminate={onClickEliminate}
           onClickAdd={onClickAdd}
           onClickRenew={onClickRenew}
           onClose={() => setModalOpen(false)}
+          onInfoIconClick={onInfoIconClick}
         />
       )}
     </Stack>

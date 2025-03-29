@@ -15,11 +15,13 @@ interface ActionModalProps {
   disableModifyAction?: boolean;
   disableRenewAction?: boolean;
   disableAddAction?: boolean;
+  actionDescriptions?: Record<string, string>;
   onClickEdit?: () => void;
   onClickEliminate?: () => void;
   onClickAdd?: () => void;
   onClickRenew?: () => void;
   onClose?: () => void;
+  onInfoIconClick?: (description: string) => void;
 }
 
 export function ActionModal(props: ActionModalProps) {
@@ -28,11 +30,13 @@ export function ActionModal(props: ActionModalProps) {
     disableModifyAction,
     disableRenewAction,
     disableAddAction,
+    actionDescriptions,
     onClickEdit,
     onClickEliminate,
     onClickAdd,
     onClickRenew,
     onClose,
+    onInfoIconClick,
   } = props;
 
   const actionsLi = Actions(
@@ -97,12 +101,19 @@ export function ActionModal(props: ActionModalProps) {
                 >
                   {item.label}
                 </Text>
-                {item.isDisabled && (
+                {item.isDisabled && onInfoIconClick && (
                   <Icon
                     icon={<MdOutlineInfo />}
                     appearance="primary"
                     size="16px"
                     cursorHover
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onInfoIconClick(
+                        actionDescriptions?.[item.label] ??
+                          "Acción inhabilitada.",
+                      );
+                    }}
                   />
                 )}
               </StyledLi>
