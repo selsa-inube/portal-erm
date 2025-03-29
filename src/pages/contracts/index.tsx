@@ -59,17 +59,14 @@ function Contracts(props: ContractsProps) {
     setModals((prev) => ({ ...prev, [modal]: false }));
 
   const handleTerminate = () => {
-    console.log("Terminate contract");
     openModal("terminate");
   };
 
   const handleRenew = () => {
-    console.log("Renew contract");
     openModal("renew");
   };
 
   const handleModify = () => {
-    console.log("Modify contract");
     openModal("modify");
   };
 
@@ -104,11 +101,9 @@ function Contracts(props: ContractsProps) {
     value: index.toString(),
   }));
 
-  const handleSubmit =
-    (action: ModalType) => (values: { selection: string }) => {
-      console.log(`Selected option for ${action}:`, values);
-      closeModal(action);
-    };
+  const handleSubmit = (action: ModalType) => () => {
+    closeModal(action);
+  };
 
   const openInfoModal = (description: string) => {
     setInfoModal({ open: true, title: "Información", description });
