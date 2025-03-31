@@ -22,53 +22,45 @@ function RequestCard(props: RequestCardProps) {
   } = props;
 
   return (
-    <Stack direction="column" width="280px">
-      <StyledRequestCard>
-        <StyledTitle>
-          <Stack
-            justifyContent="center"
-            margin={`${spacing.s0} ${spacing.s0} ${spacing.s100}`}
-          >
-            <Text
-              type="label"
-              size="small"
-              appearance="primary"
-              textAlign="center"
-              padding={spacing.s050}
-            >
-              {title}
-            </Text>
-          </Stack>
-        </StyledTitle>
-        <Divider dashed />
-        <Stack direction="column" gap={spacing.s100}>
-          <Stack direction="column" gap={spacing.s050}>
-            <Text type="title" weight="bold" size="small">
-              ID.
-            </Text>
-            <Text size="medium" appearance="gray">
-              {id}
-            </Text>
-          </Stack>
-          <Stack direction="column" gap={spacing.s050}>
-            <Text type="title" weight="bold" size="small">
-              Fecha de solicitud
-            </Text>
-            <Text size="medium" appearance="gray">
-              {requestDate}
-            </Text>
-          </Stack>
-          <Stack direction="column" gap={spacing.s050}>
-            <Text type="title" weight="bold" size="small">
-              Responsable
-            </Text>
-            <Text size="medium" appearance="gray">
-              {hasResponsible ? responsible : "Sin responsable"}
-            </Text>
-          </Stack>
-        </Stack>
-      </StyledRequestCard>
-    </Stack>
+    <StyledRequestCard>
+      <StyledTitle>
+        <Text
+          type="label"
+          size="small"
+          appearance="primary"
+          textAlign="center"
+          weight="bold"
+          padding={spacing.s050}
+        >
+          {title}
+        </Text>
+      </StyledTitle>
+      <Divider dashed />
+      <Stack direction="column" gap={spacing.s050}>
+        <Text type="title" weight="bold" size="small">
+          ID.
+        </Text>
+        <Text size="medium" appearance="gray">
+          {id}
+        </Text>
+      </Stack>
+      <Stack direction="column" gap={spacing.s050}>
+        <Text type="title" weight="bold" size="small">
+          Fecha de solicitud
+        </Text>
+        <Text size="medium" appearance="gray">
+          {requestDate}
+        </Text>
+      </Stack>
+      <Stack direction="column" gap={spacing.s050}>
+        <Text type="title" weight="bold" size="small">
+          Responsable
+        </Text>
+        <Text size="medium" appearance="gray">
+          {hasResponsible ? responsible : "Sin responsable"}
+        </Text>
+      </Stack>
+    </StyledRequestCard>
   );
 }
 
