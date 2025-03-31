@@ -7,6 +7,7 @@ interface RequestCardProps {
   title: string;
   requestDate: string;
   responsible?: string;
+  hasResponsible?: boolean;
 }
 
 function RequestCard({
@@ -14,6 +15,7 @@ function RequestCard({
   title,
   requestDate,
   responsible = "Sin responsable",
+  hasResponsible = false,
 }: RequestCardProps) {
   return (
     <Stack direction="column" width="280px">
@@ -25,6 +27,7 @@ function RequestCard({
               size="small"
               appearance="primary"
               textAlign="center"
+              weight="bold"
               padding={spacing.s050}
             >
               {title}
@@ -54,7 +57,7 @@ function RequestCard({
               Responsable
             </Text>
             <Text size="medium" appearance="gray">
-              {responsible}
+              {hasResponsible ? responsible : "Sin responsable"}
             </Text>
           </Stack>
         </Stack>

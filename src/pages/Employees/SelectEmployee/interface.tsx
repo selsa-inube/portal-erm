@@ -34,6 +34,13 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const storedEmployee = localStorage.getItem("selectedEmployee");
+    if (storedEmployee) {
+      setSelectedEmployee(JSON.parse(storedEmployee));
+    }
+  }, []);
+
+  useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 600);
@@ -79,23 +86,6 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
     return results;
   }, [debouncedSearchTerm, employees]);
 
-  useEffect(() => {
-    const storedEmployee = localStorage.getItem("selectedEmployee");
-    if (storedEmployee) {
-      const existingEmployee = JSON.parse(storedEmployee);
-      setSelectedEmployee(existingEmployee);
-    }
-  }, [employees, setSelectedEmployee]);
-
-  useEffect(() => {
-    if (selectedEmployee) {
-      localStorage.setItem(
-        "selectedEmployee",
-        JSON.stringify(selectedEmployee),
-      );
-    }
-  }, [selectedEmployee]);
-
   const validationSchema = Yup.object({
     keyword: Yup.string()
       .trim()
@@ -128,10 +118,12 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
         `${emp.identificationDocumentNumber} - ${emp.names} ${emp.surnames}`,
       );
       setSelectedEmployee(emp);
+      localStorage.setItem("selectedEmployee", JSON.stringify(emp));
       setSearchTerm("");
       setIsSubmitting(false);
     }, 300);
   };
+
   const handleSubmit = (values: { employee: string }) => {
     setIsSubmitting(true);
     setTimeout(() => {
@@ -141,6 +133,10 @@ export function useSelectEmployee(): UseSelectEmployeeReturn {
 
       if (selectedEmployeeOption) {
         setSelectedEmployee(selectedEmployeeOption);
+        localStorage.setItem(
+          "selectedEmployee",
+          JSON.stringify(selectedEmployeeOption),
+        );
         navigate("/");
       } else {
         console.error("Empleado no encontrado");

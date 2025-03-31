@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   useMediaQuery,
   Stack,
@@ -16,8 +15,9 @@ import {
 import { spacing } from "@design/tokens/spacing";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { contractCardMock } from "@mocks/contracts/contracts.mock";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { SelectModal } from "@components/modals/SelectModal";
+import { InfoModal } from "@components/modals/InfoModal";
 import { currencyFormat } from "@utils/forms/currency";
 
 import {
@@ -27,13 +27,47 @@ import {
   StyledAddVinculationMobile,
 } from "./styles";
 import { Detail } from "./Detail";
+import { ModalType } from "./types";
 
 interface ContractsUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
+  hasValidContract: boolean;
+  hasFixedEndDate: boolean;
+  sortedContracts: ContractCardProps[];
+  modals: Record<ModalType, boolean>;
+  selectedContract?: ContractCardProps;
+  infoModal: {
+    open: boolean;
+    title: string;
+    description: string;
+  };
+  terminationOptions: { id: string; label: string; value: string }[];
+  renewOptions: { id: string; label: string; value: string }[];
+  modifyOptions: { id: string; label: string; value: string }[];
+  actionDescriptions: Record<string, string>;
   hasPendingRequest?: boolean;
   canCreateRequest?: boolean;
+  canTerminate?: boolean;
+  canRenew?: boolean;
+  canModify?: boolean;
+  onTerminate: () => void;
+  onRenew: () => void;
+  onModify: () => void;
+  onAddVinculation: () => void;
+  onDetailsClick: (contract: ContractCardProps) => void;
+  onOpenModal: (modal: ModalType) => void;
+  onCloseModal: (modal: ModalType) => void;
+  onSubmit: (action: ModalType) => (values: { selection: string }) => void;
+  onOpenInfoModal: (description: string) => void;
+  onSetInfoModal: React.Dispatch<
+    React.SetStateAction<{
+      open: boolean;
+      title: string;
+      description: string;
+    }>
+  >;
 }
 
 function ContractsUI(props: ContractsUIProps) {
@@ -41,47 +75,34 @@ function ContractsUI(props: ContractsUIProps) {
     appName,
     appRoute,
     navigatePage,
-    hasPendingRequest = false,
-    canCreateRequest = false,
+    hasValidContract,
+    hasFixedEndDate,
+    sortedContracts,
+    modals,
+    selectedContract,
+    infoModal,
+    terminationOptions,
+    renewOptions,
+    modifyOptions,
+    actionDescriptions,
+    hasPendingRequest,
+    canCreateRequest,
+    canTerminate,
+    canRenew,
+    canModify,
+    onTerminate,
+    onRenew,
+    onModify,
+    onAddVinculation,
+    onDetailsClick,
+    onCloseModal,
+    onSubmit,
+    onOpenInfoModal,
+    onSetInfoModal,
   } = props;
+
   const isTablet = useMediaQuery("(max-width: 1235px)");
   const isMobile = useMediaQuery("(max-width: 550px)");
-
-  const hasFixedEndDate = contractCardMock.some(
-    (contract) => contract.endDate !== "Indefinido",
-  );
-
-  const sortedContracts = [...contractCardMock].sort(
-    (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime(),
-  );
-
-  const hasValidContract = contractCardMock.some(
-    (contract) => contract.isContractValid,
-  );
-
-  const handleTerminate = () => {
-    console.log("Terminate contract");
-  };
-
-  const handleRenew = () => {
-    console.log("Renew contract");
-  };
-
-  const handleModify = () => {
-    console.log("Modify contract");
-  };
-
-  const handleAddVinculation = () => {
-    console.log("Add Vinculation");
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedContract, setSelectedContract] = useState<ContractCardProps>();
-
-  const handleDetailsClick = (contract: ContractCardProps) => {
-    setSelectedContract(contract);
-    setIsModalOpen(true);
-  };
 
   return (
     <>
@@ -95,64 +116,75 @@ function ContractsUI(props: ContractsUIProps) {
             <Text type="title" size="medium">
               Consulta histórica de contratos
             </Text>
-            {isTablet && (
+            {isTablet ? (
               <Detail
-                onClickEdit={hasValidContract ? handleModify : undefined}
-                onClickEliminate={
-                  hasValidContract ? handleTerminate : undefined
-                }
-                onClickAdd={canCreateRequest ? handleAddVinculation : undefined}
+                onClickEdit={hasValidContract ? onModify : undefined}
+                onClickEliminate={hasValidContract ? onTerminate : undefined}
+                onClickAdd={canCreateRequest ? onAddVinculation : undefined}
                 onClickRenew={
-                  hasFixedEndDate && hasValidContract ? handleRenew : undefined
+                  hasFixedEndDate && hasValidContract ? onRenew : undefined
                 }
-                disableModifyAction={!hasValidContract}
-                disableRenewAction={!hasFixedEndDate || !hasValidContract}
-                disableDeleteAction={!hasValidContract}
+                disableModifyAction={!hasValidContract || !canModify}
+                disableRenewAction={
+                  !hasFixedEndDate || !hasValidContract || !canRenew
+                }
+                disableDeleteAction={!hasValidContract || !canTerminate}
                 disableAddAction={!canCreateRequest}
+                actionDescriptions={actionDescriptions}
+                onInfoIconClick={onOpenInfoModal}
               />
-            )}
-            {!isTablet && (
+            ) : (
               <Stack gap={spacing.s150}>
                 <Stack gap={spacing.s025} alignItems="center">
                   <Button
                     appearance="danger"
                     spacing="compact"
                     variant="outlined"
-                    disabled={!hasValidContract}
+                    disabled={!hasValidContract || !canTerminate}
                     cursorHover
-                    onClick={hasValidContract ? handleTerminate : undefined}
+                    onClick={
+                      hasValidContract && canTerminate ? onTerminate : undefined
+                    }
                   >
                     Terminar
                   </Button>
-                  {!hasValidContract && (
+                  {(!hasValidContract || !canTerminate) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        onOpenInfoModal(actionDescriptions.Terminar)
+                      }
                     />
                   )}
                 </Stack>
                 <Stack gap={spacing.s025} alignItems="center">
                   <Button
-                    disabled={!hasFixedEndDate || !hasValidContract}
+                    disabled={
+                      !hasFixedEndDate || !hasValidContract || !canRenew
+                    }
                     variant="outlined"
                     cursorHover
                     spacing="compact"
                     onClick={
-                      hasFixedEndDate && hasValidContract
-                        ? handleRenew
+                      hasFixedEndDate && hasValidContract && canRenew
+                        ? onRenew
                         : undefined
                     }
                   >
                     Renovar
                   </Button>
-                  {(!hasFixedEndDate || !hasValidContract) && (
+                  {(!hasFixedEndDate || !hasValidContract || !canRenew) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        onOpenInfoModal(actionDescriptions.Renovar)
+                      }
                     />
                   )}
                 </Stack>
@@ -161,17 +193,22 @@ function ContractsUI(props: ContractsUIProps) {
                   <Button
                     cursorHover
                     spacing="compact"
-                    disabled={!hasValidContract}
-                    onClick={hasValidContract ? handleModify : undefined}
+                    disabled={!hasValidContract || !canModify}
+                    onClick={
+                      hasValidContract && canModify ? onModify : undefined
+                    }
                   >
                     Modificar
                   </Button>
-                  {!hasValidContract && (
+                  {(!hasValidContract || !canModify) && (
                     <Icon
                       icon={<MdOutlineInfo />}
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        onOpenInfoModal(actionDescriptions.Modificar)
+                      }
                     />
                   )}
                 </Stack>
@@ -181,9 +218,7 @@ function ContractsUI(props: ContractsUIProps) {
                     iconBefore={<MdOutlineAdd />}
                     cursorHover
                     spacing="compact"
-                    onClick={
-                      canCreateRequest ? handleAddVinculation : undefined
-                    }
+                    onClick={canCreateRequest ? onAddVinculation : undefined}
                   >
                     Agregar vinculación
                   </Button>
@@ -193,6 +228,11 @@ function ContractsUI(props: ContractsUIProps) {
                       appearance="primary"
                       size="16px"
                       cursorHover
+                      onClick={() =>
+                        onOpenInfoModal(
+                          "No se puede agregar vinculación, ya que no tiene privilegios para ejecutar esta acción.",
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -223,7 +263,7 @@ function ContractsUI(props: ContractsUIProps) {
               <ContractCard
                 key={index}
                 {...contract}
-                onDetailsClick={() => handleDetailsClick(contract)}
+                onDetailsClick={() => onDetailsClick(contract)}
               />
             ))}
             {canCreateRequest && !isTablet && (
@@ -232,7 +272,7 @@ function ContractsUI(props: ContractsUIProps) {
                   appearance="gray"
                   icon={<MdOutlineAdd />}
                   size="45px"
-                  onClick={canCreateRequest ? handleAddVinculation : undefined}
+                  onClick={canCreateRequest ? onAddVinculation : undefined}
                   cursorHover={canCreateRequest}
                 />
                 <Text appearance="gray">Agregar vinculación</Text>
@@ -241,6 +281,7 @@ function ContractsUI(props: ContractsUIProps) {
           </Stack>
         </StyledContractsContainer>
       </AppMenu>
+
       {isTablet && canCreateRequest && (
         <StyledAddVinculationMobile>
           <Icon
@@ -251,12 +292,12 @@ function ContractsUI(props: ContractsUIProps) {
             icon={<MdOutlineAdd />}
             size="50px"
             cursorHover={canCreateRequest}
-            onClick={canCreateRequest ? handleAddVinculation : undefined}
+            onClick={canCreateRequest ? onAddVinculation : undefined}
           />
         </StyledAddVinculationMobile>
       )}
 
-      {isModalOpen && selectedContract && (
+      {modals.detail && selectedContract && (
         <RequestComponentDetail
           title="Detalles"
           buttonLabel="Cerrar"
@@ -271,9 +312,8 @@ function ContractsUI(props: ContractsUIProps) {
               label: "Perfil salarial",
               value: currencyFormat(selectedContract.lastSalary),
             },
-            ...(selectedContract.isContractValid
-              ? []
-              : [
+            ...(!selectedContract.isContractValid
+              ? [
                   {
                     label: "Fecha de retiro",
                     value: selectedContract.retirementDate || "",
@@ -282,10 +322,58 @@ function ContractsUI(props: ContractsUIProps) {
                     label: "Causal de retiro",
                     value: selectedContract.retirementReason || "",
                   },
-                ]),
+                ]
+              : []),
           ]}
-          handleClose={() => setIsModalOpen(false)}
+          handleClose={() => onCloseModal("detail")}
           stackDirection="column"
+        />
+      )}
+
+      {modals.terminate && (
+        <SelectModal
+          title="Selecciona un contrato"
+          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          portalId="portal"
+          loading={false}
+          selectionOptions={terminationOptions}
+          onCloseModal={() => onCloseModal("terminate")}
+          onSubmit={onSubmit("terminate")}
+        />
+      )}
+
+      {modals.renew && (
+        <SelectModal
+          title="Selecciona un contrato"
+          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          portalId="portal"
+          loading={false}
+          selectionOptions={renewOptions}
+          onCloseModal={() => onCloseModal("renew")}
+          onSubmit={onSubmit("renew")}
+        />
+      )}
+
+      {modals.modify && (
+        <SelectModal
+          title="Selecciona un contrato"
+          description="Selecciona el contrato sobre el que vas a ejecutar la acción seleccionada."
+          portalId="portal"
+          loading={false}
+          selectionOptions={modifyOptions}
+          onCloseModal={() => onCloseModal("modify")}
+          onSubmit={onSubmit("modify")}
+        />
+      )}
+
+      {infoModal.open && (
+        <InfoModal
+          title={infoModal.title}
+          titleDescription="¿Por qué está inhabilitado?"
+          description={infoModal.description}
+          onCloseModal={() =>
+            onSetInfoModal({ open: false, title: "", description: "" })
+          }
         />
       )}
     </>

@@ -7,6 +7,7 @@ import { currencyFormat } from "@utils/forms/currency";
 import { StyledContractCard, StyledSeparatorLine } from "./styles";
 
 interface ContractCardProps {
+  contractNumber: number;
   isContractValid: boolean;
   startDate: string;
   endDate: string;

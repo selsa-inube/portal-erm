@@ -10,7 +10,7 @@ import {
 } from "@inubekit/inubekit";
 import { MdOutlineChevronRight } from "react-icons/md";
 
-import { nav, userMenu, actions } from "@config/nav.config";
+import { useNavConfig, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { VinculationBanner } from "@components/layout/Banner";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
@@ -44,10 +44,17 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 
 function AppPage(props: AppPageProps) {
   const { withNav = true, withBanner = true } = props;
-  const { logoUrl, selectedClient, businessUnits, setSelectedClient } =
-    useAppContext();
+  const {
+    logoUrl,
+    selectedClient,
+    businessUnits,
+    setSelectedClient,
+    selectedEmployee,
+  } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
+
+  const navConfig = useNavConfig();
 
   const [collapse, setCollapse] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
@@ -88,7 +95,7 @@ function AppPage(props: AppPageProps) {
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
           portalId="portal"
-          navigation={{ items: nav, breakpoint: "800px" }}
+          navigation={{ items: navConfig, breakpoint: "800px" }}
           logoURL={renderLogo(
             selectedClient?.logo || logoUrl,
             selectedClient?.name || "Sin unidad seleccionada",
@@ -127,9 +134,21 @@ function AppPage(props: AppPageProps) {
           {withBanner && (
             <Stack padding={spacing.s075}>
               <VinculationBanner
-                name="José Manuel Hernández Díaz"
-                status="vinculado"
+                key={
+                  selectedEmployee ? selectedEmployee.employeeId : "no-employee"
+                }
+                name={
+                  selectedEmployee
+                    ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+                    : "Empleado no seleccionado"
+                }
+                status={
+                  selectedEmployee
+                    ? selectedEmployee.employeeStatus
+                    : "estado-desconocido"
+                }
                 imageUrl={logoUrl}
+                redirectUrl="/employees/select-employee"
               />
             </Stack>
           )}
@@ -139,7 +158,7 @@ function AppPage(props: AppPageProps) {
             height="95vh"
           >
             {withNav && !isTablet && (
-              <Nav navigation={nav} actions={actions} collapse={true} />
+              <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMain>
               <Outlet />
