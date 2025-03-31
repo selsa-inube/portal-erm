@@ -99,7 +99,7 @@ function BoardSection(props: BoardSectionProps) {
           </Text>
         </Stack>
         <Text type="title" size="medium">
-          {sectionInformation.length}
+          {sectionInformation.length}/{sectionInformation.length || 0}
         </Text>
       </Stack>
       {(collapse || orientation === "vertical") && (
@@ -115,7 +115,13 @@ function BoardSection(props: BoardSectionProps) {
               <CardComponent key={index} request={request} />
             ))
           ) : (
-            <Stack gap="24px" alignItems="center" height="533px" width="100%">
+            <Stack
+              gap="24px"
+              alignItems="center"
+              justifyContent="center"
+              height="533px"
+              width="100%"
+            >
               <Text type="title" size="small" appearance="gray">
                 {getNoDataMessage()}
               </Text>
