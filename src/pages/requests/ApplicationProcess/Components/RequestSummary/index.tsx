@@ -137,7 +137,7 @@ function RequestSummary(props: RequestSumaryProps) {
           )}
         </Stack>
         <Divider dashed />
-        <Stack direction="column">
+        <Stack direction="column" gap={spacing.s050}>
           <Stack gap={spacing.s050}>
             <Text type="label" size="medium">
               No. de solicitud:
