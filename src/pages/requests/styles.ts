@@ -18,10 +18,10 @@ interface IStyledContainer {
 }
 
 const StyledBoardContainer = styled.div<IStyledContainer>`
+  flex-direction: ${({ $isMobile }) => ($isMobile ? "row" : "column")};
   display: grid;
   grid-template-columns: ${({ $isMobile }) =>
     $isMobile ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))"};
-  gap: 16px;
   width: 100%;
   border-top: 1px solid
     ${({ theme }) =>
