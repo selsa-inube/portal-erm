@@ -17,11 +17,8 @@ import * as Yup from "yup";
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
 
-import {
-  StyledModal,
-  StyledContainerFilters,
-  StyledContainerClose,
-} from "./styles";
+import { SelectedFilters } from "../SelectedFilters.tsx";
+import { StyledModal, StyledContainerClose } from "./styles";
 import { FormValues } from "./types";
 
 export interface FilterRequestModalProps {
@@ -93,19 +90,18 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
         <Divider />
         {isMobile && (
           <>
-            <StyledContainerFilters>
+            <Stack alignItems="center" gap={spacing.s100}>
               <Icon
                 icon={<MdOutlineFilterAlt />}
                 size="20px"
                 appearance="gray"
               />
-              <Text type="body" size="small">
-                Sin filtros aún.
-              </Text>
-            </StyledContainerFilters>
+              <SelectedFilters filters={[]} />
+            </Stack>
             <Divider dashed />
           </>
         )}
+
         <form onSubmit={formik.handleSubmit}>
           <Stack direction="column" gap={spacing.s250}>
             <Stack alignItems="center" gap={spacing.s100}>

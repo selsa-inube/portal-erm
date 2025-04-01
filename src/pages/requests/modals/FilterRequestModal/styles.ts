@@ -15,7 +15,7 @@ const StyledModal = styled.div<IStyledModal>`
   white-space: nowrap;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
-  height: ${({ $smallScreen }) => ($smallScreen ? "264px" : "280px")};
+  height: ${({ $smallScreen }) => ($smallScreen ? "328px" : "280px")};
   width: ${({ $smallScreen }) => ($smallScreen ? "311px" : "402px")};
   padding: ${({ $smallScreen }) =>
     $smallScreen ? spacing.s150 : `${spacing.s200} ${spacing.s300}`};
@@ -23,22 +23,8 @@ const StyledModal = styled.div<IStyledModal>`
   border-radius: ${spacing.s100};
 `;
 
-const StyledContainerFilters = styled.div`
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-  gap: ${spacing.s050};
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N20 || inube.palette.neutral.N20};
-  border-radius: ${spacing.s075};
-  height: 20px;
-  padding: ${spacing.s100};
-  border: 1px solid
-    ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
-`;
-
 const StyledContainerClose = styled.div`
   cursor: pointer;
 `;
 
-export { StyledModal, StyledContainerFilters, StyledContainerClose };
+export { StyledModal, StyledContainerClose };

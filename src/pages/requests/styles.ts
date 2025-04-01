@@ -35,20 +35,6 @@ const StyledRequestsContainer = styled.div`
   }
 `;
 
-const StyledContainerFilters = styled.div`
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-  gap: ${spacing.s050};
-  background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N20 || inube.palette.neutral.N20};
-  border-radius: ${spacing.s075};
-  height: 20px;
-  padding: ${spacing.s100};
-  border: 1px solid
-    ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
-`;
-
 const StyledTextfieldContainer = styled.div`
   position: relative;
   width: 100%;
@@ -61,31 +47,38 @@ const SearchContainer = styled.div`
 
 const StyledMenuContainer = styled.div`
   position: absolute;
-  top: 30px;
-  right: 0;
+  top: -29px;
+  right: 10px;
   background: white;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   padding: 8px;
   z-index: 1000;
+  width: 162px;
 `;
 
 const StyledMenuButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 8px;
+`;
+
+const StyledMenuIconContainer = styled.div`
+  position: absolute;
+  top: -55px;
+  right: 0;
+  z-index: 1100;
 `;
 
 export {
   StyledTextfieldContainer,
   StyledRequestsContainer,
-  StyledContainerFilters,
   StyledBoardContainer,
   SearchContainer,
   StyledMenuContainer,
   StyledMenuButton,
+  StyledMenuIconContainer,
 };

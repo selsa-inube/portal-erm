@@ -19,17 +19,18 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { BoardSection } from "@components/layout/BoardSection";
-import { FilterRequestModal } from "./modals/FilterRequestModal";
 
+import { FilterRequestModal } from "./modals/FilterRequestModal";
+import { SelectedFilters } from "./modals/SelectedFilters.tsx";
 import { assignmentOptions, statusOptions } from "./config";
 import {
   StyledTextfieldContainer,
   StyledRequestsContainer,
-  StyledContainerFilters,
   StyledBoardContainer,
   SearchContainer,
   StyledMenuContainer,
   StyledMenuButton,
+  StyledMenuIconContainer,
 } from "./styles";
 
 interface RequestsUIProps {
@@ -88,20 +89,22 @@ function RequestsUI(props: RequestsUIProps) {
               />
               {isMobile && (
                 <Stack>
-                  <Icon
-                    appearance="dark"
-                    icon={<MdMoreVert />}
-                    cursorHover={true}
-                    parentHover={false}
-                    disabled={false}
-                    spacing="narrow"
-                    variant="empty"
-                    size="24px"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsMenuOpen(!isMenuOpen);
-                    }}
-                  />
+                  <StyledMenuIconContainer>
+                    <Icon
+                      appearance="dark"
+                      icon={<MdMoreVert />}
+                      cursorHover={true}
+                      parentHover={false}
+                      disabled={false}
+                      spacing="narrow"
+                      variant="empty"
+                      size="24px"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMenuOpen(!isMenuOpen);
+                      }}
+                    />
+                  </StyledMenuIconContainer>
                   {isMenuOpen && (
                     <StyledMenuContainer ref={menuRef}>
                       <StyledMenuButton onClick={openFilterModal}>
@@ -113,17 +116,19 @@ function RequestsUI(props: RequestsUIProps) {
                           size="24px"
                         />
                         <Text size="medium">Filtrar (0)</Text>
-                        <Icon
-                          icon={<MdClear />}
-                          size="18px"
-                          cursorHover
-                          appearance="dark"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            closeFilterModal();
-                            setIsMenuOpen(false);
-                          }}
-                        />
+                        <Stack margin="0px 0px 0px 25px">
+                          <Icon
+                            icon={<MdClear />}
+                            size="18px"
+                            cursorHover
+                            appearance="dark"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              closeFilterModal();
+                              setIsMenuOpen(false);
+                            }}
+                          />
+                        </Stack>
                       </StyledMenuButton>
                     </StyledMenuContainer>
                   )}
@@ -133,11 +138,7 @@ function RequestsUI(props: RequestsUIProps) {
 
             {!isMobile && (
               <StyledRequestsContainer>
-                <StyledContainerFilters>
-                  <Text type="label" size="small" appearance="gray">
-                    Sin filtros aún.
-                  </Text>
-                </StyledContainerFilters>
+                <SelectedFilters filters={[]} />
                 <Button
                   appearance="gray"
                   iconBefore={<MdOutlineFilterAltOff />}
