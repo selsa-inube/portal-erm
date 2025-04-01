@@ -14,7 +14,7 @@ interface PageTitleProps {
 function PageTitle(props: PageTitleProps) {
   const { title, description, navigatePage } = props;
 
-  const smallScreen = useMediaQuery("(max-width:880px)");
+  const smallScreen = useMediaQuery("(max-width:490px)");
   const navigate = useNavigate();
 
   return (
@@ -30,7 +30,7 @@ function PageTitle(props: PageTitleProps) {
               navigatePage ? navigate(navigatePage) : navigate(-1)
             }
           />
-          <Text as="h1" type="title">
+          <Text as="h1" type="title" size={smallScreen ? "medium" : "large"}>
             {title}
           </Text>
         </Stack>
