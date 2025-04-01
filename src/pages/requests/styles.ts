@@ -3,9 +3,25 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-const StyledBoardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+interface ThemeType {
+  palette: {
+    neutral: {
+      N900: string;
+      N30: string;
+    };
+  };
+}
+
+interface IStyledContainer {
+  $isMobile: boolean;
+  theme: ThemeType;
+}
+
+const StyledBoardContainer = styled.div<IStyledContainer>`
+  display: grid;
+  grid-template-columns: ${({ $isMobile }) =>
+    $isMobile ? "1fr" : "repeat(auto-fit, minmax(200px, 1fr))"};
+  gap: 16px;
   width: 100%;
   border-top: 1px solid
     ${({ theme }) =>
@@ -13,62 +29,58 @@ const StyledBoardContainer = styled.div`
   border-bottom: 1px solid
     ${({ theme }) =>
       theme?.palette?.neutral?.N900 || inube.palette.neutral.N900};
-
-  @media (min-width: 800px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
 `;
 
-const StyledRequestsContainer = styled.div`
+const StyledRequestsContainer = styled.div<IStyledContainer>`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  @media (min-width: 769px) {
-    padding: ${spacing.s250};
-    gap: ${spacing.s250};
-    border-radius: ${spacing.s100};
-    border: 1px solid
-      ${({ theme }) =>
-        theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  }
+  ${({ $isMobile, theme }) =>
+    !$isMobile &&
+    `padding: ${spacing.s250};
+     gap: ${spacing.s250};
+     border-radius: ${spacing.s100};
+     border: 1px solid ${theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};`}
 `;
 
-const StyledTextfieldContainer = styled.div`
+const StyledTextfieldContainer = styled.div<IStyledContainer>`
   position: relative;
   width: 100%;
-`;
-const SearchContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-bottom: 16px;
+  padding: ${({ $isMobile }) => ($isMobile ? spacing.s100 : spacing.s150)};
 `;
 
-const StyledMenuContainer = styled.div`
+const SearchContainer = styled.div<IStyledContainer>`
+  display: flex;
+  justify-content: center;
+  margin-bottom: ${({ $isMobile }) =>
+    $isMobile ? spacing.s150 : spacing.s200};
+`;
+
+const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
-  top: -29px;
-  right: 10px;
+  top: ${({ $isMobile }) =>
+    $isMobile ? `-${spacing.s150}` : `-${spacing.s200}`};
+  right: ${spacing.s100};
   background: white;
-  border-radius: 8px;
+  border-radius: ${spacing.s100};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 8px;
+  padding: ${spacing.s100};
   z-index: 1000;
-  width: 162px;
+  width: ${({ $isMobile }) => ($isMobile ? "162px" : "120px")};
 `;
 
 const StyledMenuButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: ${spacing.s100};
   background: transparent;
   border: none;
   cursor: pointer;
 `;
 
-const StyledMenuIconContainer = styled.div`
+const StyledMenuIconContainer = styled.div<IStyledContainer>`
   position: absolute;
-  top: -55px;
+  top: -57px;
   right: 0;
   z-index: 1100;
 `;

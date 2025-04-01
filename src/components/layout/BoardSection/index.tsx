@@ -1,61 +1,22 @@
-import { useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
-import { Stack, Icon, Text, useMediaQueries } from "@inubekit/inubekit";
-
+import { Stack, Icon, Text } from "@inubekit/inubekit";
 import { StyledBoardSection, StyledCollapseIcon } from "./styles";
-import { SectionBackground, SectionOrientation } from "./types";
-import { configOption } from "./config";
+import { useBoardSectionLogic } from "./interface";
+import { ICreditRequest, IBoardSectionProps } from "./types";
 
-interface CreditRequest {
-  creditRequestCode?: string;
-  clientName?: string;
-  creditRequestDateOfCreation?: string;
-  userWhoPinnnedId?: string;
-  title: string;
-  count: string;
-  message: string;
-}
-
-interface BoardSectionProps {
-  sectionTitle: string;
-  sectionBackground: SectionBackground;
-  orientation: SectionOrientation;
-  sectionInformation: CreditRequest[];
-  errorLoadingPins: boolean;
-  searchRequestValue: string;
-  CardComponent: React.FC<{ request: CreditRequest }>;
-}
-
-function BoardSection(props: BoardSectionProps) {
+function BoardSection(props: IBoardSectionProps) {
   const {
     sectionTitle,
     sectionBackground = "light",
     orientation = "vertical",
     sectionInformation,
-    searchRequestValue,
     CardComponent,
   } = props;
+
+  const { collapse, handleCollapse, getNoDataMessage, isTablet, isMobile } =
+    useBoardSectionLogic(props);
+
   const disabledCollapse = sectionInformation.length === 0;
-
-  const { "(max-width: 1024px)": isTablet, "(max-width: 595px)": isMobile } =
-    useMediaQueries(["(max-width: 1024px)", "(max-width: 595px)"]);
-
-  const [collapse, setCollapse] = useState(false);
-
-  const handleCollapse = () => {
-    if (!disabledCollapse) {
-      setCollapse(!collapse);
-    }
-  };
-
-  const getNoDataMessage = () => {
-    if (!sectionInformation || sectionInformation.length === 0) {
-      return searchRequestValue
-        ? `${configOption.noMatches} "${searchRequestValue}"`
-        : `${configOption.textNodata}`;
-    }
-    return "";
-  };
 
   return (
     <StyledBoardSection
@@ -134,4 +95,4 @@ function BoardSection(props: BoardSectionProps) {
 }
 
 export { BoardSection };
-export type { BoardSectionProps, CreditRequest };
+export type { IBoardSectionProps, ICreditRequest };

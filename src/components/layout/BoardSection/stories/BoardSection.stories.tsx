@@ -1,9 +1,12 @@
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryObj } from "@storybook/react";
-import { BoardSection } from "..";
-import { props } from "./props";
+
 import { RequestCard } from "@components/cards/RequestCard";
-import { boardSectionConfig } from "./config";
+import { boardSectionConfig } from "@mocks/BoardSection/boardSection.mock";
+
+import { Request } from "./types";
+import { props } from "./props";
+import { BoardSection } from "..";
 
 type Story = StoryObj<typeof BoardSection>;
 
@@ -19,13 +22,6 @@ const boardSection: Meta<typeof BoardSection> = {
     ),
   ],
 };
-
-interface Request {
-  creditRequestCode?: string;
-  title: string;
-  creditRequestDateOfCreation?: string;
-  userWhoPinnnedId?: string;
-}
 
 const generateStory = (config: typeof boardSectionConfig.Default): Story => ({
   args: {

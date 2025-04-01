@@ -1,4 +1,5 @@
 import { Stack, Text, Tag } from "@inubekit/inubekit";
+
 import { StyledContainerFilters } from "./styles";
 
 interface SelectedFiltersProps {

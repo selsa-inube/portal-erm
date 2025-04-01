@@ -1,5 +1,4 @@
 import styled from "styled-components";
-
 import { inube } from "@inubekit/inubekit";
 
 import { SectionBackground, SectionOrientation } from "./types";
@@ -24,11 +23,11 @@ const StyledBoardSection = styled.div<IStyledBoardSection>`
   border-bottom: ${({ $orientation }) =>
     $orientation !== "horizontal" ? "1px solid" : "none"};
   border-color: ${({ theme }) =>
-    theme?.color?.stroke?.divider?.dark || inube.palette.neutral.N40};
+    theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
   background-color: ${({ theme, $sectionBackground }) =>
     $sectionBackground === "gray"
-      ? theme?.color?.surface?.gray?.regular || inube.palette.neutral.N30
-      : theme?.color?.surface?.light?.regular || inube.palette.neutral.N10};
+      ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
+      : theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
 
   & > div:nth-child(1) {
     justify-content: space-between;

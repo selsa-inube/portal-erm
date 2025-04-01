@@ -17,7 +17,7 @@ import * as Yup from "yup";
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
 
-import { SelectedFilters } from "../SelectedFilters.tsx";
+import { SelectedFilters } from "../SelectedFilters/index.tsx";
 import { StyledModal, StyledContainerClose } from "./styles";
 import { FormValues } from "./types";
 
@@ -61,6 +61,14 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
       }
     },
   });
+
+  // Asegúrate de que las opciones estén ordenadas por tipo (o cualquier propiedad relevante)
+  const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
+    a.label.localeCompare(b.label),
+  );
+  const sortedStatusOptions = [...statusOptions].sort((a, b) =>
+    a.label.localeCompare(b.label),
+  );
 
   if (!portalNode) {
     throw new Error(
@@ -126,7 +134,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 onChange={(name, value) =>
                   void formik.setFieldValue(name, value)
                 }
-                options={assignmentOptions}
+                options={sortedAssignmentOptions}
               />
             </Stack>
             <Stack alignItems="center" gap={spacing.s100}>
@@ -149,7 +157,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 onChange={(name, value) =>
                   void formik.setFieldValue(name, value)
                 }
-                options={statusOptions}
+                options={sortedStatusOptions}
               />
             </Stack>
             <Stack justifyContent="flex-end" gap={spacing.s250}>

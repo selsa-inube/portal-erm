@@ -1,12 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import {
-  Input,
-  Stack,
-  Text,
-  Icon,
-  Button,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
 import {
   MdSearch,
   MdOutlineFilterAltOff,
@@ -17,12 +9,12 @@ import {
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
-import { IRoute } from "@components/layout/AppMenu/types";
 import { BoardSection } from "@components/layout/BoardSection";
 
+import { IRoute, IOption } from "./types";
+import { boardSections } from "./config";
 import { FilterRequestModal } from "./modals/FilterRequestModal";
-import { SelectedFilters } from "./modals/SelectedFilters.tsx";
-import { assignmentOptions, statusOptions } from "./config";
+import { SelectedFilters } from "./modals/SelectedFilters";
 import {
   StyledTextfieldContainer,
   StyledRequestsContainer,
@@ -37,47 +29,37 @@ interface RequestsUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
+  isFilterModalOpen: boolean;
+  isMenuOpen: boolean;
+  menuRef: React.RefObject<HTMLDivElement>;
+  isMobile: boolean;
+  openFilterModal: () => void;
+  closeFilterModal: () => void;
+  setIsMenuOpen: (isOpen: boolean) => void;
+  assignmentOptions: IOption[];
+  statusOptions: IOption[];
 }
 
-const mockRequests = {
-  pending: [],
-  inProgress: [],
-  completed: [],
-};
-
 function RequestsUI(props: RequestsUIProps) {
-  const { appName, appRoute, navigatePage } = props;
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  const openFilterModal = () => {
-    setIsFilterModalOpen(true);
-    setIsMenuOpen(false);
-  };
-
-  const closeFilterModal = () => setIsFilterModalOpen(false);
-  const isMobile = useMediaQuery("(max-width: 800px)");
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isMenuOpen]);
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    isFilterModalOpen,
+    isMenuOpen,
+    menuRef,
+    isMobile,
+    openFilterModal,
+    closeFilterModal,
+    setIsMenuOpen,
+    assignmentOptions,
+    statusOptions,
+  } = props;
 
   return (
     <AppMenu appName={appName} appRoute={appRoute} navigatePage={navigatePage}>
-      <SearchContainer>
-        <StyledTextfieldContainer>
+      <SearchContainer $isMobile={isMobile}>
+        <StyledTextfieldContainer $isMobile={isMobile}>
           <Stack gap={spacing.s150} direction="column">
             <Stack direction="row" width="100%" alignItems="center">
               <Input
@@ -89,7 +71,7 @@ function RequestsUI(props: RequestsUIProps) {
               />
               {isMobile && (
                 <Stack>
-                  <StyledMenuIconContainer>
+                  <StyledMenuIconContainer $isMobile={isMobile}>
                     <Icon
                       appearance="dark"
                       icon={<MdMoreVert />}
@@ -106,7 +88,7 @@ function RequestsUI(props: RequestsUIProps) {
                     />
                   </StyledMenuIconContainer>
                   {isMenuOpen && (
-                    <StyledMenuContainer ref={menuRef}>
+                    <StyledMenuContainer $isMobile={isMobile} ref={menuRef}>
                       <StyledMenuButton onClick={openFilterModal}>
                         <Icon
                           appearance="primary"
@@ -137,7 +119,7 @@ function RequestsUI(props: RequestsUIProps) {
             </Stack>
 
             {!isMobile && (
-              <StyledRequestsContainer>
+              <StyledRequestsContainer $isMobile={isMobile}>
                 <SelectedFilters filters={[]} />
                 <Button
                   appearance="gray"
@@ -177,34 +159,21 @@ function RequestsUI(props: RequestsUIProps) {
         />
       )}
 
-      <StyledBoardContainer>
-        <BoardSection
-          sectionTitle="Por evaluar"
-          sectionBackground="gray"
-          orientation={isMobile ? "horizontal" : "vertical"}
-          sectionInformation={mockRequests.pending}
-          errorLoadingPins={false}
-          searchRequestValue=""
-          CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
-        />
-        <BoardSection
-          sectionTitle="En progreso"
-          sectionBackground="light"
-          orientation={isMobile ? "horizontal" : "vertical"}
-          sectionInformation={mockRequests.inProgress}
-          errorLoadingPins={false}
-          searchRequestValue=""
-          CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
-        />
-        <BoardSection
-          sectionTitle="Terminada"
-          sectionBackground="gray"
-          orientation={isMobile ? "horizontal" : "vertical"}
-          sectionInformation={mockRequests.completed}
-          errorLoadingPins={false}
-          searchRequestValue=""
-          CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
-        />
+      <StyledBoardContainer $isMobile={isMobile}>
+        {boardSections.map(
+          ({ sectionTitle, sectionBackground, sectionInformation }) => (
+            <BoardSection
+              key={sectionTitle}
+              sectionTitle={sectionTitle}
+              sectionBackground={sectionBackground}
+              orientation={isMobile ? "horizontal" : "vertical"}
+              sectionInformation={sectionInformation}
+              errorLoadingPins={false}
+              searchRequestValue=""
+              CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
+            />
+          ),
+        )}
       </StyledBoardContainer>
     </AppMenu>
   );

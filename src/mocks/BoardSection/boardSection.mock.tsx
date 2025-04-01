@@ -1,7 +1,7 @@
-type SectionBackground = "gray" | "light";
-type SectionOrientation = "horizontal" | "vertical";
-
-export type { SectionBackground, SectionOrientation };
+import {
+  SectionBackground,
+  SectionOrientation,
+} from "@components/layout/BoardSection/types";
 
 interface BoardSectionProps {
   sectionTitle: string;

@@ -1,7 +1,8 @@
 import { ArgTypes } from "@storybook/react";
-import { BoardSectionProps } from "..";
 
-const props: Partial<ArgTypes<BoardSectionProps>> = {
+import { IBoardSectionProps } from "..";
+
+const props: Partial<ArgTypes<IBoardSectionProps>> = {
   sectionTitle: {
     control: "text",
     description: "Section title",

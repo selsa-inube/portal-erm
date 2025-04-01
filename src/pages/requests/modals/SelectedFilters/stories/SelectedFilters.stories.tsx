@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from "@storybook/react";
 import { useState } from "react";
+
 import { SelectedFilters } from "..";
 
 const story: Meta<typeof SelectedFilters> = {
