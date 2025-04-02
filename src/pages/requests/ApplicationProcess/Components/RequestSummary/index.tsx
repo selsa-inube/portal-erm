@@ -20,7 +20,7 @@ import { spacing } from "@design/tokens/spacing";
 import { Detail } from "../Detail";
 import { StyledRequestSummaryContainer } from "./styles";
 
-export interface RequestSumaryProps {
+export interface RequestSummaryProps {
   canDiscard?: boolean;
   canSeeRequirements?: boolean;
   isLoading?: boolean;
@@ -31,7 +31,7 @@ export interface RequestSumaryProps {
   onSeeRequirements?: () => void;
 }
 
-function RequestSummary(props: RequestSumaryProps) {
+function RequestSummary(props: RequestSummaryProps) {
   const {
     canDiscard = true,
     canSeeRequirements = true,

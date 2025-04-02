@@ -1,7 +1,7 @@
 import { Meta } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
-import { RequestSummary, RequestSumaryProps } from ".";
+import { RequestSummary, RequestSummaryProps } from ".";
 
 const meta: Meta<typeof RequestSummary> = {
   title: "components/RequestSummary",
@@ -18,7 +18,7 @@ const meta: Meta<typeof RequestSummary> = {
   },
 };
 
-export const Default = (args: RequestSumaryProps) => (
+export const Default = (args: RequestSummaryProps) => (
   <RequestSummary {...args} />
 );
 
