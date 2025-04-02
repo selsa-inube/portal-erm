@@ -31,12 +31,7 @@ function BoardSection(props: IBoardSectionProps) {
         alignItems="end"
         gap="24px"
       >
-        <Stack
-          alignItems="end"
-          gap="8px"
-          width={orientation === "vertical" ? "180px" : "auto"}
-          height={orientation === "vertical" ? "56px" : "auto"}
-        >
+        <Stack alignItems="end" gap="8px">
           {orientation !== "vertical" && (
             <StyledCollapseIcon
               $collapse={collapse}

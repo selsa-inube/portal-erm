@@ -8,17 +8,25 @@ interface AppMenuProps {
   appName: string;
   appRoute: IRoute[];
   children: React.ReactNode;
+  isMobile?: boolean;
   navigatePage: string;
   appDescription?: string;
 }
 
 function AppMenu(props: AppMenuProps) {
-  const { appName, appRoute, children, navigatePage, appDescription } = props;
+  const {
+    appName,
+    appRoute,
+    children,
+    navigatePage,
+    appDescription,
+    isMobile = false,
+  } = props;
 
   return (
     <StyledAppMenu>
       <Breadcrumbs crumbs={appRoute} />
-      <Stack margin="24px 0px 24px 0px">
+      <Stack margin={isMobile ? "24px 0px 18px 0px" : "24px 0px 0px 0px"}>
         <PageTitle
           title={appName}
           description={appDescription}

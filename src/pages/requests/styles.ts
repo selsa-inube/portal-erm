@@ -43,12 +43,6 @@ const StyledRequestsContainer = styled.div<IStyledContainer>`
      border: 1px solid ${theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};`}
 `;
 
-const StyledTextfieldContainer = styled.div<IStyledContainer>`
-  position: relative;
-  width: 100%;
-  padding: ${({ $isMobile }) => ($isMobile ? spacing.s100 : spacing.s150)};
-`;
-
 const SearchContainer = styled.div<IStyledContainer>`
   display: flex;
   justify-content: center;
@@ -58,9 +52,8 @@ const SearchContainer = styled.div<IStyledContainer>`
 
 const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
-  top: ${({ $isMobile }) =>
-    $isMobile ? `-${spacing.s400}` : `-${spacing.s200}`};
-  right: ${spacing.s100};
+  top: 191px;
+  right: 11px;
   background: white;
   border-radius: ${spacing.s100};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -80,13 +73,12 @@ const StyledMenuButton = styled.button`
 
 const StyledMenuIconContainer = styled.div<IStyledContainer>`
   position: absolute;
-  top: -57px;
-  right: 0;
+  top: 167px;
+  right: 16px;
   z-index: 1;
 `;
 
 export {
-  StyledTextfieldContainer,
   StyledRequestsContainer,
   StyledBoardContainer,
   SearchContainer,
