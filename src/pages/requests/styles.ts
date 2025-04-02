@@ -59,7 +59,7 @@ const SearchContainer = styled.div<IStyledContainer>`
 const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
   top: ${({ $isMobile }) =>
-    $isMobile ? `-${spacing.s150}` : `-${spacing.s200}`};
+    $isMobile ? `-${spacing.s400}` : `-${spacing.s200}`};
   right: ${spacing.s100};
   background: white;
   border-radius: ${spacing.s100};

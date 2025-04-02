@@ -17,7 +17,7 @@ const StyledBoardSection = styled.div<IStyledBoardSection>`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 24px 12px 12px;
+  padding: 10px 12px 12px;
   width: calc(100% - 24px);
   border-top: 1px solid;
   border-bottom: ${({ $orientation }) =>
