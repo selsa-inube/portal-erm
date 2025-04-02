@@ -82,7 +82,7 @@ const StyledMenuIconContainer = styled.div<IStyledContainer>`
   position: absolute;
   top: -57px;
   right: 0;
-  z-index: 1100;
+  z-index: 1;
 `;
 
 export {
