@@ -1,8 +1,12 @@
 import { useParams } from "react-router-dom";
+import { Stack } from "@inubekit/inubekit";
+
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
+import { mockPendingTasks, mockCompletedTasks } from "@config/TaskBoard.config";
 
 import { RequestSummary } from "./Components/RequestSummary";
+import { TaskBoard } from "./Components/TaskBoard";
 
 interface ApplicationProcessUIProps {
   appName: string;
@@ -16,7 +20,14 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
 
   return (
     <AppMenu appName={appName} appRoute={appRoute} navigatePage={navigatePage}>
-      <RequestSummary requestNumber={id} />
+      <Stack direction="column">
+        <RequestSummary requestNumber={id} />
+        <TaskBoard
+          pendingTasks={mockPendingTasks}
+          completedTasks={mockCompletedTasks}
+          isResponsible={true}
+        />
+      </Stack>
     </AppMenu>
   );
 }

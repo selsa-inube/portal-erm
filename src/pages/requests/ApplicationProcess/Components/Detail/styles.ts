@@ -8,10 +8,10 @@ interface IStyledActions {
 
 const StyledDetail = styled.div<IStyledActions>`
   border-radius: 8px;
-  position: absolute;
+  position: relative;
+  height: 0px;
   z-index: 1;
-  top: ${({ $isMobile }) => ($isMobile ? "170px" : "190px")};
-  right: ${({ $isMobile }) => ($isMobile ? "20px" : "65px")};
+  top: -55px;
 `;
 
 export { StyledDetail };
