@@ -48,11 +48,13 @@ function TaskBoard(props: TaskBoardProps) {
               />
             ))
           ) : (
-            <Text size="small" appearance="gray">
-              {title === "Tareas por hacer"
-                ? "No hay ninguna tarea pendiente por ahora."
-                : "Ninguna tarea está hecha por ahora."}
-            </Text>
+            <Stack width={isMobile ? "auto" : "100%"}>
+              <Text size="small" appearance="gray">
+                {title === "Tareas por hacer"
+                  ? "No hay ninguna tarea pendiente por ahora."
+                  : "Ninguna tarea está hecha por ahora."}
+              </Text>
+            </Stack>
           )}
         </StyledTaskContent>
       </StyledTaskSection>
