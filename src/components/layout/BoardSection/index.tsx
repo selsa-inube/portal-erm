@@ -63,7 +63,7 @@ function BoardSection(props: IBoardSectionProps) {
           wrap="wrap"
           alignItems="center"
           direction={orientation === "vertical" ? "column" : "row"}
-          justifyContent={isMobile ? "center" : "flex-start"}
+          justifyContent="center"
           gap="20px"
         >
           {sectionInformation.length > 0 ? (

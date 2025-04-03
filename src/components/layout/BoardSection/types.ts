@@ -8,8 +8,8 @@ interface ICreditRequest {
   creditRequestDateOfCreation?: string;
   userWhoPinnnedId?: string;
   title: string;
-  count: string;
-  message: string;
+  count?: string;
+  message?: string;
 }
 
 interface IBoardSectionProps {

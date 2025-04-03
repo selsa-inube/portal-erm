@@ -43,6 +43,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
 
   const validationSchema = Yup.object({
     assignment: Yup.string().required(validationMessages.required),
+    status: Yup.string().required(validationMessages.required),
     value: Yup.number()
       .required(validationMessages.required)
       .min(1, "El valor debe ser mayor a 0"),
@@ -52,7 +53,7 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     initialValues: {
       assignment: "",
       status: "",
-      value: 0,
+      value: 1,
     },
     validationSchema,
     onSubmit: (values) => {
@@ -62,7 +63,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     },
   });
 
-  // Asegúrate de que las opciones estén ordenadas por tipo (o cualquier propiedad relevante)
   const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
     a.label.localeCompare(b.label),
   );
@@ -131,12 +131,13 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 }
                 size="compact"
                 fullwidth
-                onChange={(name, value) =>
-                  void formik.setFieldValue(name, value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                }}
                 options={sortedAssignmentOptions}
               />
             </Stack>
+
             <Stack alignItems="center" gap={spacing.s100}>
               <Stack
                 margin={`${spacing.s250} ${spacing.s0} ${spacing.s0} ${spacing.s0}`}
@@ -154,12 +155,13 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 }
                 size="compact"
                 fullwidth
-                onChange={(name, value) =>
-                  void formik.setFieldValue(name, value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                }}
                 options={sortedStatusOptions}
               />
             </Stack>
+
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
                 type="button"

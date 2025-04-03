@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
 import {
   MdSearch,
@@ -10,6 +11,7 @@ import {
 import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { BoardSection } from "@components/layout/BoardSection";
+import { RequestCard } from "@components/cards/RequestCard";
 
 import { IRoute, IOption } from "./types";
 import { boardSections } from "./config";
@@ -37,6 +39,9 @@ interface RequestsUIProps {
   setIsMenuOpen: (isOpen: boolean) => void;
   assignmentOptions: IOption[];
   statusOptions: IOption[];
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  debouncedSearchTerm: string;
 }
 
 function RequestsUI(props: RequestsUIProps) {
@@ -53,7 +58,22 @@ function RequestsUI(props: RequestsUIProps) {
     setIsMenuOpen,
     assignmentOptions,
     statusOptions,
+    setSearchTerm,
+    debouncedSearchTerm,
   } = props;
+
+  const [selectedFilters, setSelectedFilters] = useState<IOption[]>(
+    JSON.parse(localStorage.getItem("selectedFilters") ?? "[]"),
+  );
+
+  useEffect(() => {
+    localStorage.setItem("selectedFilters", JSON.stringify(selectedFilters));
+  }, [selectedFilters]);
+
+  const handleApplyFilters = (values: { filters?: IOption[] }) => {
+    setSelectedFilters(values.filters ?? []);
+    closeFilterModal();
+  };
 
   return (
     <AppMenu
@@ -79,6 +99,7 @@ function RequestsUI(props: RequestsUIProps) {
               iconAfter={<MdSearch size={20} />}
               size="compact"
               fullwidth={isMobile}
+              onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
             />
             {isMobile && (
               <>
@@ -108,7 +129,9 @@ function RequestsUI(props: RequestsUIProps) {
                         variant="empty"
                         size="24px"
                       />
-                      <Text size="medium">Filtrar (0)</Text>
+                      <Text size="medium">
+                        Filtrar ({selectedFilters.length})
+                      </Text>
                       <Stack margin="0px 0px 0px 25px">
                         <Icon
                           icon={<MdClear />}
@@ -131,13 +154,16 @@ function RequestsUI(props: RequestsUIProps) {
 
           {!isMobile && (
             <StyledRequestsContainer $isMobile={isMobile}>
-              <SelectedFilters filters={[]} />
+              <SelectedFilters
+                filters={selectedFilters.map((filter) => filter.value)}
+              />
               <Button
                 appearance="gray"
                 iconBefore={<MdOutlineFilterAltOff />}
                 type="button"
                 spacing="wide"
                 variant="outlined"
+                onClick={() => setSelectedFilters([])}
               >
                 Quitar
               </Button>
@@ -162,27 +188,57 @@ function RequestsUI(props: RequestsUIProps) {
           assignmentOptions={assignmentOptions}
           statusOptions={statusOptions}
           onCloseModal={closeFilterModal}
-          onSubmit={(values) => {
-            console.log("Filtro aplicado:", values);
-            closeFilterModal();
-          }}
+          onSubmit={handleApplyFilters}
         />
       )}
 
       <StyledBoardContainer $isMobile={isMobile}>
         {boardSections.map(
-          ({ sectionTitle, sectionBackground, sectionInformation }) => (
-            <BoardSection
-              key={sectionTitle}
-              sectionTitle={sectionTitle}
-              sectionBackground={sectionBackground}
-              orientation={isMobile ? "horizontal" : "vertical"}
-              sectionInformation={sectionInformation}
-              errorLoadingPins={false}
-              searchRequestValue=""
-              CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
-            />
-          ),
+          ({ sectionTitle, sectionBackground, sectionInformation }) => {
+            const filteredRequests = sectionInformation.filter(
+              ({ id, title, requestDate, responsible }) =>
+                [id, title, requestDate, responsible].some((field) =>
+                  field?.toString().toLowerCase().includes(debouncedSearchTerm),
+                ),
+            );
+            return (
+              <BoardSection
+                key={sectionTitle}
+                sectionTitle={sectionTitle}
+                sectionBackground={sectionBackground}
+                orientation={isMobile ? "horizontal" : "vertical"}
+                sectionInformation={filteredRequests}
+                errorLoadingPins={false}
+                searchRequestValue={debouncedSearchTerm}
+                CardComponent={() =>
+                  filteredRequests.length > 0 ? (
+                    filteredRequests.map(
+                      ({
+                        id,
+                        title,
+                        requestDate,
+                        responsible,
+                        hasResponsible,
+                      }) => (
+                        <RequestCard
+                          key={id}
+                          id={id}
+                          title={title}
+                          requestDate={requestDate}
+                          responsible={responsible}
+                          hasResponsible={hasResponsible}
+                        />
+                      ),
+                    )
+                  ) : (
+                    <Text>
+                      No hay solicitudes que coincidan con la búsqueda.
+                    </Text>
+                  )
+                }
+              />
+            );
+          },
         )}
       </StyledBoardContainer>
     </AppMenu>

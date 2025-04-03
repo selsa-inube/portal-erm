@@ -12,7 +12,7 @@ interface BoardSectionLogic {
 }
 
 function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
-  const { sectionInformation, searchRequestValue } = props;
+  const { sectionInformation } = props;
 
   const disabledCollapse = sectionInformation.length === 0;
   const { "(max-width: 1024px)": isTablet, "(max-width: 595px)": isMobile } =
@@ -27,12 +27,7 @@ function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
   };
 
   const getNoDataMessage = () => {
-    if (!sectionInformation || sectionInformation.length === 0) {
-      return searchRequestValue
-        ? `${configOption.noMatches} "${searchRequestValue}"`
-        : `${configOption.textNodata}`;
-    }
-    return "";
+    return sectionInformation.length === 0 ? configOption.textNodata : "";
   };
 
   return {

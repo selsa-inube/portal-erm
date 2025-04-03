@@ -7,8 +7,20 @@ import { assignmentOptions, statusOptions } from "./config";
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const menuRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 800px)");
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
 
   const openFilterModal = () => {
     setIsFilterModalOpen(true);
@@ -46,6 +58,9 @@ function Requests() {
       setIsMenuOpen={setIsMenuOpen}
       assignmentOptions={assignmentOptions}
       statusOptions={statusOptions}
+      searchTerm={searchTerm}
+      setSearchTerm={setSearchTerm}
+      debouncedSearchTerm={debouncedSearchTerm}
     />
   );
 }
