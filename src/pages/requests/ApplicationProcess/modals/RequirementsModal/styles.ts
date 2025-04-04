@@ -14,7 +14,7 @@ interface IStyledContainerContent {
 }
 
 export const StyledModal = styled.div<IStyledModal>`
-  overflow: auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   height: ${({ $smallScreen }) => ($smallScreen ? "558px" : "515px")};
@@ -27,6 +27,7 @@ export const StyledModal = styled.div<IStyledModal>`
 `;
 
 export const StyledContainerContent = styled.div<IStyledContainerContent>`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -47,6 +48,7 @@ export const StyledContainerTitle = styled.div`
 `;
 
 export const StyledTableContainer = styled.div`
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 2px solid
