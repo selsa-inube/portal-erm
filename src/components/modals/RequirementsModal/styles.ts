@@ -17,7 +17,7 @@ export const StyledModal = styled.div<IStyledModal>`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: ${({ $smallScreen }) => ($smallScreen ? "inherit" : "inherit")};
+  height: inherit;
   width: ${({ $smallScreen }) => ($smallScreen ? "302px" : "652px")};
   background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>
