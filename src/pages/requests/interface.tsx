@@ -69,6 +69,20 @@ function RequestsUI(props: RequestsUIProps) {
     closeFilterModal();
   };
 
+  const handleRemove = (filterValueToRemove: string) => {
+    setSelectedFilters((prevFilters) =>
+      prevFilters.filter((filter) => filter.value !== filterValueToRemove),
+    );
+  };
+
+  const selectedStatusFilters = selectedFilters.filter((filter) =>
+    statusOptions.some((status) => status.value === filter.value),
+  );
+
+  const selectedAssignmentFilters = selectedFilters.filter((filter) =>
+    assignmentOptions.some((assignment) => assignment.value === filter.value),
+  );
+
   return (
     <AppMenu
       appName={appName}
@@ -101,7 +115,7 @@ function RequestsUI(props: RequestsUIProps) {
                   <Icon
                     appearance="dark"
                     icon={<MdMoreVert />}
-                    cursorHover={true}
+                    cursorHover
                     parentHover={false}
                     disabled={false}
                     spacing="narrow"
@@ -149,6 +163,7 @@ function RequestsUI(props: RequestsUIProps) {
           {!isMobile && (
             <StyledRequestsContainer $isMobile={isMobile}>
               <SelectedFilters
+                onRemove={handleRemove}
                 filters={selectedFilters.map((filter) => filter.value)}
               />
               <Button
@@ -187,14 +202,37 @@ function RequestsUI(props: RequestsUIProps) {
       )}
 
       <StyledBoardContainer $isMobile={isMobile}>
-        {boardSections.map(
-          ({ sectionTitle, sectionBackground, sectionInformation }) => {
-            const filteredRequests = sectionInformation.filter(
-              ({ id, title, requestDate, responsible }) =>
-                [id, title, requestDate, responsible].some((field) =>
-                  field?.toString().toLowerCase().includes(debouncedSearchTerm),
-                ),
+        {boardSections
+          .filter(({ value }) => {
+            return (
+              selectedStatusFilters.length === 0 ||
+              selectedStatusFilters.some((filter) => filter.value === value)
             );
+          })
+          .map(({ sectionTitle, sectionBackground, sectionInformation }) => {
+            const filteredRequests = sectionInformation.filter(
+              ({ id, title, requestDate, responsible }) => {
+                const matchesSearch = [
+                  id,
+                  title,
+                  requestDate,
+                  responsible,
+                ].some((field) =>
+                  field?.toString().toLowerCase().includes(debouncedSearchTerm),
+                );
+
+                const matchesAssignment =
+                  selectedAssignmentFilters.length === 0 ||
+                  selectedAssignmentFilters.some((assignment) =>
+                    title
+                      .toLowerCase()
+                      .includes(assignment.label.toLowerCase()),
+                  );
+
+                return matchesSearch && matchesAssignment;
+              },
+            );
+
             return (
               <BoardSection
                 key={sectionTitle}
@@ -226,14 +264,14 @@ function RequestsUI(props: RequestsUIProps) {
                     )
                   ) : (
                     <Text>
-                      No hay solicitudes que coincidan con la búsqueda.
+                      No hay solicitudes que coincidan con los filtros
+                      seleccionados.
                     </Text>
                   )
                 }
               />
             );
-          },
-        )}
+          })}
       </StyledBoardContainer>
     </AppMenu>
   );

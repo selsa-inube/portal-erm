@@ -39,10 +39,10 @@ const mockRequests = {
 };
 
 export const assignmentOptions: IOption[] = [
-  { id: "1", label: "Ascenso salarial", value: "ascenso_salarial" },
-  { id: "2", label: "Certificación", value: "certificacion" },
+  { id: "1", label: "Ascenso salarial", value: "Ascenso Salarial" },
+  { id: "2", label: "Certificación", value: "Solicitud de Certificación" },
   { id: "3", label: "Incapacidad", value: "incapacidad" },
-  { id: "4", label: "Licencia no remunerada", value: "licencia_no_remunerada" },
+  { id: "4", label: "Licencia no remunerada", value: "Licencia No Remunerada" },
   { id: "5", label: "Permiso", value: "permiso" },
 ];
 
@@ -55,16 +55,19 @@ export const statusOptions: IOption[] = [
 export const boardSections = [
   {
     sectionTitle: "Por evaluar",
+    value: "por_evaluar",
     sectionBackground: "gray" as SectionBackground,
     sectionInformation: mockRequests.pending,
   },
   {
     sectionTitle: "En progreso",
+    value: "en_progreso",
     sectionBackground: "light" as SectionBackground,
     sectionInformation: mockRequests.inProgress,
   },
   {
     sectionTitle: "Terminada",
+    value: "terminada",
     sectionBackground: "gray" as SectionBackground,
     sectionInformation: mockRequests.completed,
   },
