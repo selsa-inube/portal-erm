@@ -1,14 +1,18 @@
+// index.tsx
 import { useState, useEffect, useRef } from "react";
 import { RequestsNavConfig } from "./config/nav.config";
 import { RequestsUI } from "./interface";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { assignmentOptions, statusOptions } from "./config";
+import { IOption } from "./types";
 
 function Requests() {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
+
   const menuRef = useRef<HTMLDivElement | null>(null);
   const isMobile = useMediaQuery("(max-width: 800px)");
 
@@ -16,10 +20,7 @@ function Requests() {
     const handler = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
     }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [searchTerm]);
 
   const openFilterModal = () => {
@@ -35,7 +36,6 @@ function Requests() {
         setIsMenuOpen(false);
       }
     };
-
     if (isMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
@@ -61,6 +61,8 @@ function Requests() {
       searchTerm={searchTerm}
       setSearchTerm={setSearchTerm}
       debouncedSearchTerm={debouncedSearchTerm}
+      selectedFilters={selectedFilters}
+      setSelectedFilters={setSelectedFilters}
     />
   );
 }

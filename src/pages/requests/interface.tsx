@@ -1,4 +1,4 @@
-import { useState } from "react";
+// interface.tsx
 import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
 import {
   MdSearch,
@@ -42,36 +42,31 @@ interface RequestsUIProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
   debouncedSearchTerm: string;
+  selectedFilters: IOption[];
+  setSelectedFilters: (filters: IOption[]) => void;
 }
 
-function RequestsUI(props: RequestsUIProps) {
-  const {
-    appName,
-    appRoute,
-    navigatePage,
-    isFilterModalOpen,
-    isMenuOpen,
-    menuRef,
-    isMobile,
-    openFilterModal,
-    closeFilterModal,
-    setIsMenuOpen,
-    assignmentOptions,
-    statusOptions,
-    setSearchTerm,
-    debouncedSearchTerm,
-  } = props;
-
-  const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
-
-  const handleApplyFilters = (values: { filters?: IOption[] }) => {
-    setSelectedFilters(values.filters ?? []);
-    closeFilterModal();
-  };
-
+function RequestsUI({
+  appName,
+  appRoute,
+  navigatePage,
+  isFilterModalOpen,
+  isMenuOpen,
+  menuRef,
+  isMobile,
+  openFilterModal,
+  closeFilterModal,
+  setIsMenuOpen,
+  assignmentOptions,
+  statusOptions,
+  setSearchTerm,
+  debouncedSearchTerm,
+  selectedFilters,
+  setSelectedFilters,
+}: RequestsUIProps) {
   const handleRemove = (filterValueToRemove: string) => {
-    setSelectedFilters((prevFilters) =>
-      prevFilters.filter((filter) => filter.value !== filterValueToRemove),
+    setSelectedFilters(
+      selectedFilters.filter((filter) => filter.value !== filterValueToRemove),
     );
   };
 
@@ -82,6 +77,11 @@ function RequestsUI(props: RequestsUIProps) {
   const selectedAssignmentFilters = selectedFilters.filter((filter) =>
     assignmentOptions.some((assignment) => assignment.value === filter.value),
   );
+
+  const handleApplyFilters = (values: { filters?: IOption[] }) => {
+    setSelectedFilters(values.filters ?? []);
+    closeFilterModal();
+  };
 
   return (
     <AppMenu
