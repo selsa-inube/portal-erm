@@ -15,6 +15,8 @@ const StyledContainerFilters = styled.div`
   padding: ${spacing.s100};
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
+  overflow-x: auto;
+  white-space: nowrap;
 `;
 
 export { StyledContainerFilters };
