@@ -30,13 +30,15 @@ export interface IClient {
   logo: string;
 }
 
+export interface IUser {
+  username: string;
+  id: string;
+  company: string;
+  urlImgPerfil: string;
+}
+
 export interface IAppContextType {
-  user: {
-    username: string;
-    id: string;
-    company: string;
-    urlImgPerfil: string;
-  } | null;
+  user: IUser | null;
   setUser: React.Dispatch<React.SetStateAction<IAppContextType["user"]>>;
   preferences: IPreferences;
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;

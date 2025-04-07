@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
-import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { IUser } from "@context/AppContext/types";
 
 import { StyledModal, StyledContainerClose } from "./styles";
 
@@ -28,7 +28,7 @@ export interface SelectStaffModalProps {
   loading?: boolean;
   selectionOptions?: IOption[];
   initialSelection?: string;
-  selectedEmployee?: Employee;
+  selectedEmployee?: IUser;
   onCloseModal?: () => void;
   onSubmit?: (values: { selection: string }) => void;
 }
@@ -46,7 +46,9 @@ export function SelectStaffModal(props: SelectStaffModalProps) {
   } = props;
 
   const [isToggleActive, setIsToggleActive] = useState(false);
-  const [isSelectionChanged, setIsSelectionChanged] = useState(false);
+  const [toggleInitiallyDisabled, setToggleInitiallyDisabled] = useState(
+    initialSelection === selectedEmployee?.username,
+  );
   const isMobile = useMediaQuery("(max-width: 700px)");
 
   const validationSchema = Yup.object({
@@ -63,29 +65,23 @@ export function SelectStaffModal(props: SelectStaffModalProps) {
   });
 
   useEffect(() => {
-    setIsToggleActive(initialSelection === selectedEmployee?.employeeId);
+    setIsToggleActive(initialSelection === selectedEmployee?.id);
   }, [initialSelection, selectedEmployee]);
 
   useEffect(() => {
     if (isToggleActive && selectedEmployee) {
-      formik.setFieldValue(
-        "selection",
-        `${selectedEmployee.names} ${selectedEmployee.surnames}`,
-      );
+      formik.setFieldValue("selection", `${selectedEmployee.username}`);
     }
   }, [selectedEmployee, isToggleActive]);
 
-  useEffect(() => {
-    setIsSelectionChanged(formik.values.selection !== initialSelection);
-  }, [formik.values.selection, initialSelection]);
-
   const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setToggleInitiallyDisabled(false);
     const isActive = event.target.checked;
     setIsToggleActive(isActive);
 
     formik.setFieldValue(
       "selection",
-      isActive ? selectedEmployee?.employeeId || "" : "",
+      isActive ? selectedEmployee?.id || "" : "",
     );
   };
 
@@ -147,7 +143,6 @@ export function SelectStaffModal(props: SelectStaffModalProps) {
               }
               size="compact"
               fullwidth
-              disabled={isToggleActive}
               onChange={(name, value) => {
                 formik.setFieldValue(name, value);
               }}
@@ -159,21 +154,13 @@ export function SelectStaffModal(props: SelectStaffModalProps) {
                 checked={isToggleActive}
                 onChange={handleToggleChange}
                 size={isMobile ? "small" : "large"}
-                disabled={
-                  !selectedEmployee ||
-                  (!!initialSelection && !isSelectionChanged)
-                }
+                disabled={toggleInitiallyDisabled}
               />
               <Text
                 type="label"
                 weight="bold"
                 size="medium"
-                appearance={
-                  !selectedEmployee ||
-                  (!!initialSelection && !isSelectionChanged)
-                    ? "gray"
-                    : "dark"
-                }
+                appearance={toggleInitiallyDisabled ? "gray" : "dark"}
               >
                 Asignarme a mí como responsable.
               </Text>

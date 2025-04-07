@@ -45,6 +45,7 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 function AppPage(props: AppPageProps) {
   const { withNav = true, withBanner = true } = props;
   const {
+    user,
     logoUrl,
     selectedClient,
     businessUnits,
@@ -101,7 +102,7 @@ function AppPage(props: AppPageProps) {
             selectedClient?.name || "Sin unidad seleccionada",
           )}
           user={{
-            username: "Nombre de usuario",
+            username: user?.username || "Nombre de usuario",
             client: selectedClient?.name || "Sin unidad seleccionada",
             breakpoint: "800px",
           }}

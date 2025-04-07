@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Stack } from "@inubekit/inubekit";
-import { useState } from "react";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
@@ -8,6 +8,7 @@ import { mockPendingTasks, mockCompletedTasks } from "@config/TaskBoard.config";
 import { FormValues } from "@components/modals/SelectModal/types";
 import { mockStaffMembers } from "@mocks/staff/staff.mock";
 import { useAppContext } from "@context/AppContext";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { RequestSummary } from "./Components/RequestSummary";
 import { TaskBoard } from "./Components/TaskBoard";
@@ -24,10 +25,20 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
   const { appName, appRoute, navigatePage } = props;
 
   const { id } = useParams<{ id: string }>();
-  const { selectedEmployee } = useAppContext();
+  const { user } = useAppContext();
 
   const [staffInfo, setStaffInfo] = useState<IStaffInfo>({ id: "", name: "" });
   const [showStaffModal, setShowStaffModal] = useState(false);
+
+  const [showSuccessFlag, setShowSuccessFlag] = useState(false);
+
+  useErrorFlag(
+    showSuccessFlag,
+    "El nuevo responsable se asignó con éxito.",
+    "Responsable asignado.",
+    true,
+    5000,
+  );
 
   const handleEditStaff = () => setShowStaffModal(true);
   const handleCloseModal = () => setShowStaffModal(false);
@@ -47,13 +58,17 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
     } else {
       setStaffInfo({
         id: selectedStaffId,
-        name: selectedEmployee
-          ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-          : "",
+        name: user?.username || "",
       });
     }
 
     setShowStaffModal(false);
+
+    setShowSuccessFlag(true);
+
+    setTimeout(() => {
+      setShowSuccessFlag(false);
+    }, 300);
   };
 
   const onSubmit = (modalType: string) => (values: FormValues) => {
@@ -91,7 +106,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
             portalId="portal"
             loading={false}
             selectionOptions={mockStaffMembers}
-            selectedEmployee={selectedEmployee}
+            selectedEmployee={user || undefined}
             initialSelection={staffInfo.id}
             onCloseModal={handleCloseModal}
             onSubmit={onSubmit("staffSelect")}
