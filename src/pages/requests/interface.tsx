@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
 import {
   MdSearch,
@@ -62,13 +62,7 @@ function RequestsUI(props: RequestsUIProps) {
     debouncedSearchTerm,
   } = props;
 
-  const [selectedFilters, setSelectedFilters] = useState<IOption[]>(
-    JSON.parse(localStorage.getItem("selectedFilters") ?? "[]"),
-  );
-
-  useEffect(() => {
-    localStorage.setItem("selectedFilters", JSON.stringify(selectedFilters));
-  }, [selectedFilters]);
+  const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
 
   const handleApplyFilters = (values: { filters?: IOption[] }) => {
     setSelectedFilters(values.filters ?? []);

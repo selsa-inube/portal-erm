@@ -54,14 +54,19 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
       assignment: "",
       status: "",
       value: 1,
+      filters: [],
     },
     validationSchema,
-    onSubmit: (values) => {
-      if (onSubmit) {
-        onSubmit(values);
-      }
+    onSubmit: () => {
+      console.log("Form submitted");
     },
   });
+
+  const handleSubmit = () => {
+    if (onSubmit) {
+      onSubmit(formik.values);
+    }
+  };
 
   const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
     a.label.localeCompare(b.label),
@@ -133,6 +138,10 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 fullwidth
                 onChange={(name, value) => {
                   void formik.setFieldValue(name, value);
+                  void formik.setFieldValue("filters", [
+                    ...(formik.values.filters ?? []),
+                    { id: name, label: value, value: value, color: "primary" },
+                  ]);
                 }}
                 options={sortedAssignmentOptions}
               />
@@ -157,6 +166,10 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 fullwidth
                 onChange={(name, value) => {
                   void formik.setFieldValue(name, value);
+                  void formik.setFieldValue("filters", [
+                    ...(formik.values.filters ?? []),
+                    { id: name, label: value, value: value, color: "dark" },
+                  ]);
                 }}
                 options={sortedStatusOptions}
               />
@@ -164,14 +177,13 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
 
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
-                type="button"
                 onClick={onCloseModal}
                 appearance="gray"
                 variant="outlined"
               >
                 Cancelar
               </Button>
-              <Button type="submit">Filtrar</Button>
+              <Button onClick={handleSubmit}>Filtrar</Button>
             </Stack>
           </Stack>
         </form>
