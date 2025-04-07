@@ -52,16 +52,23 @@ const SearchContainer = styled.div<IStyledContainer>`
 
 const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
-  top: 191px;
-  right: 43px;
   background: white;
   border-radius: ${spacing.s100};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   padding: ${spacing.s100};
   z-index: 1000;
   width: ${({ $isMobile }) => ($isMobile ? "162px" : "120px")};
-`;
 
+  @media (max-width: 800px) {
+    top: 211px;
+    right: 65px;
+  }
+
+  @media (max-width: 490px) {
+    top: 191px;
+    right: 15px;
+  }
+`;
 const StyledMenuButton = styled.button`
   display: flex;
   align-items: center;
@@ -76,6 +83,7 @@ const StyledMenuIconContainer = styled.div<IStyledContainer>`
   top: -50px;
   right: 16px;
   z-index: 1;
+  width: 0px;
 `;
 
 export {

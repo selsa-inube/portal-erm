@@ -197,6 +197,7 @@ function RequestsUI({
           statusOptions={statusOptions}
           onCloseModal={closeFilterModal}
           onSubmit={handleApplyFilters}
+          selectedFilters={selectedFilters.map((filter) => filter.value)}
         />
       )}
 

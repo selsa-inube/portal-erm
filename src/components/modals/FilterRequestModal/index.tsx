@@ -16,8 +16,8 @@ import * as Yup from "yup";
 
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
+import { SelectedFilters } from "@components/cards/SelectedFilters/index.tsx";
 
-import { SelectedFilters } from "../../cards/SelectedFilters/index.tsx";
 import { StyledModal, StyledContainerClose } from "./styles.ts";
 import { FormValues } from "./types.ts";
 
@@ -27,6 +27,7 @@ export interface FilterRequestModalProps {
   statusOptions?: IOption[];
   onCloseModal?: () => void;
   onSubmit?: (values: FormValues) => void;
+  selectedFilters?: string[];
 }
 
 export function FilterRequestModal(props: FilterRequestModalProps) {
