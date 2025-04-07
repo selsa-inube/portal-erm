@@ -1,8 +1,8 @@
-// index.tsx
 import { useState, useEffect, useRef } from "react";
+import { useMediaQuery } from "@inubekit/inubekit";
+
 import { RequestsNavConfig } from "./config/nav.config";
 import { RequestsUI } from "./interface";
-import { useMediaQuery } from "@inubekit/inubekit";
 import { assignmentOptions, statusOptions } from "./config";
 import { IOption } from "./types";
 
@@ -14,7 +14,7 @@ function Requests() {
   const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
-  const isMobile = useMediaQuery("(max-width: 800px)");
+  const isMobile = useMediaQuery("(max-width: 1280px)");
 
   useEffect(() => {
     const handler = setTimeout(() => {

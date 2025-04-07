@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { StoryFn, Meta } from "@storybook/react";
 import { Button, IOption } from "@inubekit/inubekit";
-import { FormValues } from "../types";
 
+import { FormValues } from "../types";
 import { FilterRequestModal, FilterRequestModalProps } from "..";
 
 const assignmentOptions: IOption[] = [

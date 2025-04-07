@@ -27,7 +27,9 @@ export interface FilterRequestModalProps {
   statusOptions?: IOption[];
   onCloseModal?: () => void;
   onSubmit?: (values: FormValues) => void;
-  selectedFilters?: string[];
+  onClearFilters?: () => void;
+  selectedFilters?: IOption[];
+  onRemoveFilter?: (filterValue: string) => void;
 }
 
 export function FilterRequestModal(props: FilterRequestModalProps) {
@@ -35,11 +37,12 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     portalId = "portal",
     onCloseModal,
     onSubmit,
+    onClearFilters,
     assignmentOptions = [],
     statusOptions = [],
   } = props;
 
-  const isMobile = useMediaQuery("(max-width: 700px)");
+  const isMobile = useMediaQuery("(max-width: 1280px)");
   const portalNode = document.getElementById(portalId);
 
   const validationSchema = Yup.object({
@@ -110,7 +113,12 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 size="20px"
                 appearance="gray"
               />
-              <SelectedFilters filters={[]} />
+              <SelectedFilters
+                filters={
+                  props.selectedFilters?.map((filter) => filter.value) ?? []
+                }
+                onRemove={props.onRemoveFilter}
+              />
             </Stack>
             <Divider dashed />
           </>
@@ -178,11 +186,11 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
 
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
-                onClick={onCloseModal}
+                onClick={onClearFilters}
                 appearance="gray"
                 variant="outlined"
               >
-                Cancelar
+                Quitar
               </Button>
               <Button onClick={handleSubmit}>Filtrar</Button>
             </Stack>

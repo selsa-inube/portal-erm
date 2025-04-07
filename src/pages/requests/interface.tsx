@@ -196,8 +196,10 @@ function RequestsUI({
           assignmentOptions={assignmentOptions}
           statusOptions={statusOptions}
           onCloseModal={closeFilterModal}
+          onClearFilters={() => setSelectedFilters([])}
           onSubmit={handleApplyFilters}
-          selectedFilters={selectedFilters.map((filter) => filter.value)}
+          selectedFilters={selectedFilters}
+          onRemoveFilter={handleRemove}
         />
       )}
 

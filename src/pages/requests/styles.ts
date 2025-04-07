@@ -59,6 +59,11 @@ const StyledMenuContainer = styled.div<IStyledContainer>`
   z-index: 1000;
   width: ${({ $isMobile }) => ($isMobile ? "162px" : "120px")};
 
+  @media (max-width: 1280px) {
+    top: 216px;
+    right: 60px;
+  }
+
   @media (max-width: 800px) {
     top: 211px;
     right: 65px;
