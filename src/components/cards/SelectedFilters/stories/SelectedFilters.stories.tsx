@@ -5,7 +5,7 @@ import { SelectedFilters } from "..";
 
 const story: Meta<typeof SelectedFilters> = {
   component: SelectedFilters,
-  title: "cards/SelectedFilters",
+  title: "components/cards/SelectedFilters",
 };
 
 const Template: StoryFn<typeof SelectedFilters> = (args) => {

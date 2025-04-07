@@ -53,7 +53,7 @@ const SearchContainer = styled.div<IStyledContainer>`
 const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
   top: 191px;
-  right: 11px;
+  right: 43px;
   background: white;
   border-radius: ${spacing.s100};
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -65,15 +65,15 @@ const StyledMenuContainer = styled.div<IStyledContainer>`
 const StyledMenuButton = styled.button`
   display: flex;
   align-items: center;
-  gap: ${spacing.s100};
+  gap: 11px;
   background: transparent;
   border: none;
   cursor: pointer;
 `;
 
 const StyledMenuIconContainer = styled.div<IStyledContainer>`
-  position: absolute;
-  top: 167px;
+  position: relative;
+  top: -50px;
   right: 16px;
   z-index: 1;
 `;

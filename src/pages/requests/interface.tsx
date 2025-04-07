@@ -1,4 +1,3 @@
-// interface.tsx
 import { Input, Stack, Text, Icon, Button } from "@inubekit/inubekit";
 import {
   MdSearch,
@@ -12,11 +11,11 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { BoardSection } from "@components/layout/BoardSection";
 import { RequestCard } from "@components/cards/RequestCard";
+import { FilterRequestModal } from "@components/modals/FilterRequestModal";
+import { SelectedFilters } from "@components/cards/SelectedFilters";
 
 import { IRoute, IOption } from "./types";
 import { boardSections } from "./config";
-import { FilterRequestModal } from "./modals/FilterRequestModal";
-import { SelectedFilters } from "./modals/SelectedFilters";
 import {
   StyledRequestsContainer,
   StyledBoardContainer,

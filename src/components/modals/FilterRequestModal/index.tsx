@@ -17,9 +17,9 @@ import * as Yup from "yup";
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
 
-import { SelectedFilters } from "../SelectedFilters/index.tsx";
-import { StyledModal, StyledContainerClose } from "./styles";
-import { FormValues } from "./types";
+import { SelectedFilters } from "../../cards/SelectedFilters/index.tsx";
+import { StyledModal, StyledContainerClose } from "./styles.ts";
+import { FormValues } from "./types.ts";
 
 export interface FilterRequestModalProps {
   portalId?: string;

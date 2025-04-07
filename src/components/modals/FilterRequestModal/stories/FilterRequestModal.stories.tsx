@@ -21,7 +21,7 @@ const statusOptions: IOption[] = [
 
 const story: Meta<typeof FilterRequestModal> = {
   component: FilterRequestModal,
-  title: "modals/FilterRequestModal",
+  title: "components/modals/FilterRequestModal",
 };
 
 const DefaultTemplate: StoryFn<FilterRequestModalProps> = (args) => {
