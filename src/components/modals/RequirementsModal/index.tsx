@@ -70,7 +70,7 @@ function RequirementsModal(props: RequirementsModalProps) {
           onClick={() => console.log("Add clicked", entry)}
           spacing="compact"
           variant="empty"
-          size="32px"
+          size="24px"
           cursorHover
         />
       </Stack>
@@ -88,7 +88,7 @@ function RequirementsModal(props: RequirementsModalProps) {
           appearance="primary"
           spacing="compact"
           cursorHover
-          size="32px"
+          size="24px"
           onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
         />
@@ -119,14 +119,16 @@ function RequirementsModal(props: RequirementsModalProps) {
         content: (entry: IEntries) => {
           const tagElement = entry.tag as React.ReactElement;
           return (
-            <Icon
-              icon={getIconByTagStatus(tagElement)}
-              appearance={tagElement.props.appearance}
-              cursorHover
-              variant="filled"
-              shape="circle"
-              size="17px"
-            />
+            <Stack alignItems="center" padding="4px">
+              <Icon
+                icon={getIconByTagStatus(tagElement)}
+                appearance={tagElement.props.appearance}
+                cursorHover
+                variant="filled"
+                shape="circle"
+                size="19px"
+              />
+            </Stack>
           );
         },
       },

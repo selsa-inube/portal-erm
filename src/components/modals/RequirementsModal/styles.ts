@@ -17,7 +17,7 @@ export const StyledModal = styled.div<IStyledModal>`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: ${({ $smallScreen }) => ($smallScreen ? "558px" : "515px")};
+  height: ${({ $smallScreen }) => ($smallScreen ? "inherit" : "inherit")};
   width: ${({ $smallScreen }) => ($smallScreen ? "302px" : "652px")};
   background-color: ${inube.palette.neutral.N0};
   padding: ${({ $smallScreen }) =>
@@ -31,8 +31,7 @@ export const StyledContainerContent = styled.div<IStyledContainerContent>`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  gap: ${({ $smallScreen }) => ($smallScreen ? spacing.s200 : spacing.s100)};
-  padding: 4px;
+  gap: ${spacing.s200};
 `;
 
 export const StyledContainerClose = styled.div`
@@ -53,6 +52,6 @@ export const StyledTableContainer = styled.div`
   flex-direction: column;
   border: 2px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  padding: ${spacing.s050};
+  padding: ${spacing.s050} ${spacing.s0};
   border-radius: 8px;
 `;

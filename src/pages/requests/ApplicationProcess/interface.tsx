@@ -6,10 +6,10 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { mockPendingTasks, mockCompletedTasks } from "@config/TaskBoard.config";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { RequirementsModal } from "@components/modals/RequirementsModal";
 
 import { RequestSummary } from "./Components/RequestSummary";
 import { TaskBoard } from "./Components/TaskBoard";
-import { RequirementsModal } from "./modals/RequirementsModal";
 
 interface ApplicationProcessUIProps {
   appName: string;

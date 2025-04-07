@@ -47,7 +47,7 @@ export const StyledThactions = styled.th<IStyledThactions>`
     $isTablet &&
     `position: sticky; background-color: white; text-align: end; ${
       $isFirst &&
-      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%;  box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N200 || inube.palette.neutral.N200}; }`
+      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%;  box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N100 || inube.palette.neutral.N100}; }`
     }`}
 `;
 
@@ -57,7 +57,7 @@ export const StyledTdactions = styled.td<IStyledTdactions>`
     $isTablet &&
     `position: sticky; ${
       $isFirst &&
-      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%; box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N200 || inube.palette.neutral.N200}; }`
+      `&::before { content: ""; position: absolute; top: 0; left: -2px; width: 2px; height: 100%; box-shadow: 0px 1px 3px 1px #DFE1E6; background-color: ${theme?.palette?.neutral?.N100 || inube.palette.neutral.N100}; }`
     }`}
 `;
 
@@ -118,6 +118,10 @@ export const StyledTr = styled.tr<IStyledTdbodyContainer>`
   border-bottom: ${({ theme, $borderTable }) =>
     $borderTable &&
     `1px solid ${theme?.palette?.neutral?.N40 || inube.palette.neutral.N40}`};
+
+  & svg {
+    padding: 0px;
+  }
 `;
 
 export const StyledTd = styled.td<IStyledTd>`
