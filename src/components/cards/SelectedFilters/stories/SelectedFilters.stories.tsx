@@ -11,8 +11,10 @@ const story: Meta<typeof SelectedFilters> = {
 const Template: StoryFn<typeof SelectedFilters> = (args) => {
   const [filters, setFilters] = useState(args.filters);
 
-  const handleRemove = (filterToRemove: string) => {
-    setFilters(filters.filter((filter) => filter !== filterToRemove));
+  const handleRemove = (filterLabelToRemove: string) => {
+    setFilters(
+      filters.filter((filter) => filter.label !== filterLabelToRemove),
+    );
   };
 
   return <SelectedFilters filters={filters} onRemove={handleRemove} />;
@@ -20,7 +22,10 @@ const Template: StoryFn<typeof SelectedFilters> = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  filters: ["Incapacidad (2)", "Vacaciones (1)"],
+  filters: [
+    { label: "Incapacidad", count: 2, type: "status" },
+    { label: "Vacaciones", count: 1, type: "assignment" },
+  ],
 };
 
 export const Empty = Template.bind({});
