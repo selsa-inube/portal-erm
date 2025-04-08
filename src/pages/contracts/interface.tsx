@@ -25,6 +25,7 @@ import {
   StyledSeparatorLine,
   StyledAddVinculation,
   StyledAddVinculationMobile,
+  StyledLink,
 } from "./styles";
 import { Detail } from "./Detail";
 import { ModalType } from "./types";
@@ -213,15 +214,21 @@ function ContractsUI(props: ContractsUIProps) {
                   )}
                 </Stack>
                 <Stack gap={spacing.s025} alignItems="center">
-                  <Button
-                    disabled={!canCreateRequest}
-                    iconBefore={<MdOutlineAdd />}
-                    cursorHover
-                    spacing="compact"
-                    onClick={canCreateRequest ? onAddVinculation : undefined}
+                  <StyledLink
+                    to="/employees/new-employee"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Agregar vinculación
-                  </Button>
+                    <Button
+                      disabled={!canCreateRequest}
+                      iconBefore={<MdOutlineAdd />}
+                      cursorHover
+                      spacing="compact"
+                      onClick={canCreateRequest ? onAddVinculation : undefined}
+                    >
+                      Agregar vinculación
+                    </Button>
+                  </StyledLink>
                   {!canCreateRequest && (
                     <Icon
                       icon={<MdOutlineInfo />}
@@ -267,34 +274,46 @@ function ContractsUI(props: ContractsUIProps) {
               />
             ))}
             {canCreateRequest && !isTablet && (
-              <StyledAddVinculation>
-                <Icon
-                  appearance="gray"
-                  icon={<MdOutlineAdd />}
-                  size="45px"
-                  onClick={canCreateRequest ? onAddVinculation : undefined}
-                  cursorHover={canCreateRequest}
-                />
-                <Text appearance="gray">Agregar vinculación</Text>
-              </StyledAddVinculation>
+              <StyledLink
+                to="/employees/new-employee"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <StyledAddVinculation>
+                  <Icon
+                    appearance="gray"
+                    icon={<MdOutlineAdd />}
+                    size="45px"
+                    onClick={canCreateRequest ? onAddVinculation : undefined}
+                    cursorHover={canCreateRequest}
+                  />
+                  <Text appearance="gray">Agregar vinculación</Text>
+                </StyledAddVinculation>
+              </StyledLink>
             )}
           </Stack>
         </StyledContractsContainer>
       </AppMenu>
 
       {isTablet && canCreateRequest && (
-        <StyledAddVinculationMobile>
-          <Icon
-            appearance="primary"
-            variant="filled"
-            spacing="wide"
-            shape="circle"
-            icon={<MdOutlineAdd />}
-            size="50px"
-            cursorHover={canCreateRequest}
-            onClick={canCreateRequest ? onAddVinculation : undefined}
-          />
-        </StyledAddVinculationMobile>
+        <StyledLink
+          to="/employees/new-employee"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <StyledAddVinculationMobile>
+            <Icon
+              appearance="primary"
+              variant="filled"
+              spacing="wide"
+              shape="circle"
+              icon={<MdOutlineAdd />}
+              size="50px"
+              cursorHover={canCreateRequest}
+              onClick={canCreateRequest ? onAddVinculation : undefined}
+            />
+          </StyledAddVinculationMobile>
+        </StyledLink>
       )}
 
       {modals.detail && selectedContract && (
