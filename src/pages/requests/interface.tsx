@@ -25,23 +25,24 @@ import {
   StyledMenuIconContainer,
 } from "./styles";
 
-interface RequestsUIProps {
+export interface RequestsUIProps {
   appName: string;
   appRoute: IRoute[];
   navigatePage: string;
   isFilterModalOpen: boolean;
   isMenuOpen: boolean;
-  menuRef: React.RefObject<HTMLDivElement>;
   isMobile: boolean;
-  openFilterModal: () => void;
-  closeFilterModal: () => void;
-  setIsMenuOpen: (isOpen: boolean) => void;
+  isSmallMobile: boolean;
+  menuRef: React.RefObject<HTMLDivElement>;
   assignmentOptions: IOption[];
   statusOptions: IOption[];
   searchTerm: string;
-  setSearchTerm: (term: string) => void;
   debouncedSearchTerm: string;
   selectedFilters: IOption[];
+  openFilterModal: () => void;
+  closeFilterModal: () => void;
+  setIsMenuOpen: (isOpen: boolean) => void;
+  setSearchTerm: (term: string) => void;
   setSelectedFilters: (filters: IOption[]) => void;
 }
 
@@ -51,16 +52,17 @@ function RequestsUI({
   navigatePage,
   isFilterModalOpen,
   isMenuOpen,
-  menuRef,
   isMobile,
+  isSmallMobile,
+  menuRef,
+  assignmentOptions,
+  statusOptions,
+  debouncedSearchTerm,
+  selectedFilters,
   openFilterModal,
   closeFilterModal,
   setIsMenuOpen,
-  assignmentOptions,
-  statusOptions,
   setSearchTerm,
-  debouncedSearchTerm,
-  selectedFilters,
   setSelectedFilters,
 }: RequestsUIProps) {
   const handleRemove = (filterValueToRemove: string) => {
@@ -80,6 +82,34 @@ function RequestsUI({
   const handleApplyFilters = (values: { filters?: IOption[] }) => {
     setSelectedFilters(values.filters ?? []);
     closeFilterModal();
+  };
+
+  const getFilterCount = (filter: IOption) => {
+    const isStatusFilter = statusOptions.some(
+      (status) => status.value === filter.value,
+    );
+    const isAssignmentFilter = assignmentOptions.some(
+      (assignment) => assignment.value === filter.value,
+    );
+
+    return boardSections
+      .flatMap(({ value: sectionStatus, sectionInformation }) =>
+        sectionInformation.map((info) => ({
+          ...info,
+          status: sectionStatus,
+        })),
+      )
+      .filter((info) => {
+        if (isStatusFilter) {
+          return info.status.toLowerCase() === filter.value.toLowerCase();
+        }
+
+        if (isAssignmentFilter) {
+          return info.title.toLowerCase().includes(filter.value.toLowerCase());
+        }
+
+        return false;
+      }).length;
   };
 
   return (
@@ -127,7 +157,11 @@ function RequestsUI({
                   />
                 </StyledMenuIconContainer>
                 {isMenuOpen && (
-                  <StyledMenuContainer $isMobile={isMobile} ref={menuRef}>
+                  <StyledMenuContainer
+                    $isSmallMobile={isSmallMobile}
+                    $isMobile={isMobile}
+                    ref={menuRef}
+                  >
                     <StyledMenuButton onClick={openFilterModal}>
                       <Icon
                         appearance="primary"
@@ -139,7 +173,9 @@ function RequestsUI({
                       <Text size="medium">
                         Filtrar ({selectedFilters.length})
                       </Text>
-                      <Stack margin="0px 0px 0px 25px">
+                      <Stack
+                        margin={`${spacing.s0} ${spacing.s0} ${spacing.s0} ${spacing.s300}`}
+                      >
                         <Icon
                           icon={<MdClear />}
                           size="18px"
@@ -163,7 +199,15 @@ function RequestsUI({
             <StyledRequestsContainer $isMobile={isMobile}>
               <SelectedFilters
                 onRemove={handleRemove}
-                filters={selectedFilters.map((filter) => filter.value)}
+                filters={selectedFilters.map((filter) => ({
+                  label: filter.label,
+                  type: statusOptions.some(
+                    (status) => status.value === filter.value,
+                  )
+                    ? "status"
+                    : "assignment",
+                  count: getFilterCount(filter),
+                }))}
               />
               <Button
                 appearance="gray"
@@ -171,6 +215,7 @@ function RequestsUI({
                 type="button"
                 spacing="wide"
                 variant="outlined"
+                disabled={selectedFilters.length === 0}
                 onClick={() => setSelectedFilters([])}
               >
                 Quitar
@@ -198,20 +243,17 @@ function RequestsUI({
           onCloseModal={closeFilterModal}
           onClearFilters={() => setSelectedFilters([])}
           onSubmit={handleApplyFilters}
-          selectedFilters={selectedFilters}
+          selectedFilters={selectedFilters.map((filter) => ({
+            ...filter,
+            count: getFilterCount(filter),
+          }))}
           onRemoveFilter={handleRemove}
         />
       )}
 
       <StyledBoardContainer $isMobile={isMobile}>
-        {boardSections
-          .filter(({ value }) => {
-            return (
-              selectedStatusFilters.length === 0 ||
-              selectedStatusFilters.some((filter) => filter.value === value)
-            );
-          })
-          .map(({ sectionTitle, sectionBackground, sectionInformation }) => {
+        {boardSections.map(
+          ({ value, sectionTitle, sectionBackground, sectionInformation }) => {
             const filteredRequests = sectionInformation.filter(
               ({ id, title, requestDate, responsible }) => {
                 const matchesSearch = [
@@ -231,7 +273,14 @@ function RequestsUI({
                       .includes(assignment.label.toLowerCase()),
                   );
 
-                return matchesSearch && matchesAssignment;
+                const matchesStatus =
+                  selectedStatusFilters.length === 0 ||
+                  selectedStatusFilters.some(
+                    (filter) =>
+                      filter.value.toLowerCase() === value.toLowerCase(),
+                  );
+
+                return matchesSearch && matchesAssignment && matchesStatus;
               },
             );
 
@@ -273,7 +322,8 @@ function RequestsUI({
                 }
               />
             );
-          })}
+          },
+        )}
       </StyledBoardContainer>
     </AppMenu>
   );

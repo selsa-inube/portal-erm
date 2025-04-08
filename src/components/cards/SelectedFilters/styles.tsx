@@ -3,6 +3,10 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
+interface IHiddenFiltersMenu {
+  $isMobile: boolean;
+}
+
 const StyledContainerFilters = styled.div`
   display: flex;
   width: 100%;
@@ -15,8 +19,41 @@ const StyledContainerFilters = styled.div`
   padding: ${spacing.s100};
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
-  overflow-x: auto;
-  white-space: nowrap;
+  position: relative;
 `;
 
-export { StyledContainerFilters };
+const MoreFiltersWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const HiddenFiltersMenu = styled.div<IHiddenFiltersMenu>`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: ${({ $isMobile }) => ($isMobile ? "-75px" : "0px")};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px 1px
+    ${({ theme }) => theme?.palette?.neutral?.N50 || inube.palette.neutral.N50};
+  padding: ${spacing.s100};
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: ${spacing.s100};
+  min-width: 175px;
+`;
+
+const HiddenFilterItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+`;
+
+export {
+  StyledContainerFilters,
+  MoreFiltersWrapper,
+  HiddenFiltersMenu,
+  HiddenFilterItem,
+};

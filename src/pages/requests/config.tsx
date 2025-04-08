@@ -1,7 +1,7 @@
 import { SectionBackground } from "@components/layout/BoardSection/types";
-import { IOption } from "./types";
+import { IMockRequests, IOption } from "./types";
 
-const mockRequests = {
+const mockRequests: IMockRequests = {
   pending: [
     {
       id: "112312",
@@ -47,21 +47,21 @@ export const assignmentOptions: IOption[] = [
 ];
 
 export const statusOptions: IOption[] = [
-  { id: "1", label: "Por evaluar", value: "por_evaluar" },
-  { id: "2", label: "En progreso", value: "en_progreso" },
+  { id: "1", label: "Por evaluar", value: "Por evaluar" },
+  { id: "2", label: "En progreso", value: "En progreso" },
   { id: "3", label: "Terminada", value: "terminada" },
 ];
 
 export const boardSections = [
   {
     sectionTitle: "Por evaluar",
-    value: "por_evaluar",
+    value: "Por evaluar",
     sectionBackground: "gray" as SectionBackground,
     sectionInformation: mockRequests.pending,
   },
   {
     sectionTitle: "En progreso",
-    value: "en_progreso",
+    value: "En progreso",
     sectionBackground: "light" as SectionBackground,
     sectionInformation: mockRequests.inProgress,
   },

@@ -1,5 +1,6 @@
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Stack, Icon, Text } from "@inubekit/inubekit";
+
 import { StyledBoardSection, StyledCollapseIcon } from "./styles";
 import { useBoardSectionLogic } from "./interface";
 import { ICreditRequest, IBoardSectionProps } from "./types";
@@ -58,6 +59,7 @@ function BoardSection(props: IBoardSectionProps) {
           {sectionInformation.length}/{sectionInformation.length || 0}
         </Text>
       </Stack>
+
       {(collapse || orientation === "vertical") && (
         <Stack
           wrap="wrap"

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMediaQueries } from "@inubekit/inubekit";
+
 import { configOption } from "./config";
 import { IBoardSectionProps } from "./types";
 
@@ -12,7 +13,7 @@ interface BoardSectionLogic {
 }
 
 function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
-  const { sectionInformation } = props;
+  const { sectionInformation, searchRequestValue } = props;
 
   const disabledCollapse = sectionInformation.length === 0;
   const { "(max-width: 1024px)": isTablet, "(max-width: 595px)": isMobile } =
@@ -27,7 +28,12 @@ function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
   };
 
   const getNoDataMessage = () => {
-    return sectionInformation.length === 0 ? configOption.textNodata : "";
+    if (sectionInformation.length === 0) {
+      return searchRequestValue
+        ? configOption.noMatches
+        : configOption.textNodata;
+    }
+    return "";
   };
 
   return {

@@ -14,7 +14,10 @@ function Requests() {
   const [selectedFilters, setSelectedFilters] = useState<IOption[]>([]);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
+
   const isMobile = useMediaQuery("(max-width: 1280px)");
+
+  const isSmallMobile = useMediaQuery("(max-width: 490px)");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -53,6 +56,7 @@ function Requests() {
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
       isMobile={isMobile}
+      isSmallMobile={isSmallMobile}
       openFilterModal={openFilterModal}
       closeFilterModal={closeFilterModal}
       setIsMenuOpen={setIsMenuOpen}

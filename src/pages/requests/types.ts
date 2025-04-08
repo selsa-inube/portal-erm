@@ -12,4 +12,18 @@ interface IRoute {
   size?: "large" | "small";
 }
 
-export type { IOption, IRoute };
+interface IRequest {
+  id: string;
+  title: string;
+  requestDate: string;
+  responsible: string;
+  hasResponsible: boolean;
+}
+
+interface IMockRequests {
+  pending: IRequest[];
+  inProgress: IRequest[];
+  completed: IRequest[];
+}
+
+export type { IOption, IRoute, IRequest, IMockRequests };

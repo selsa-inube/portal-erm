@@ -14,6 +14,7 @@ interface ThemeType {
 
 interface IStyledContainer {
   $isMobile: boolean;
+  $isSmallMobile?: boolean;
   theme: ThemeType;
 }
 
@@ -35,49 +36,48 @@ const StyledRequestsContainer = styled.div<IStyledContainer>`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   ${({ $isMobile, theme }) =>
     !$isMobile &&
-    `padding: ${spacing.s250};
-     gap: ${spacing.s250};
-     border-radius: ${spacing.s100};
-     border: 1px solid ${theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};`}
+    `
+      padding: ${spacing.s250};
+      gap: ${spacing.s250};
+      border-radius: ${spacing.s100};
+      border: 1px solid ${theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    `}
 `;
 
 const SearchContainer = styled.div<IStyledContainer>`
   display: flex;
   justify-content: center;
   margin-bottom: ${({ $isMobile }) =>
-    $isMobile ? spacing.s150 : spacing.s200};
+    $isMobile ? spacing.s150 : spacing.s100};
 `;
 
 const StyledMenuContainer = styled.div<IStyledContainer>`
   position: absolute;
   background: white;
   border-radius: ${spacing.s100};
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 6px 1px
+    ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   padding: ${spacing.s100};
   z-index: 1000;
   width: ${({ $isMobile }) => ($isMobile ? "162px" : "120px")};
+  top: ${({ $isMobile }) => ($isMobile ? "210px" : "216px")};
+  right: ${({ $isMobile }) => ($isMobile ? "65px" : "60px")};
 
-  @media (max-width: 1280px) {
-    top: 216px;
-    right: 60px;
-  }
-
-  @media (max-width: 800px) {
-    top: 211px;
-    right: 65px;
-  }
-
-  @media (max-width: 490px) {
-    top: 191px;
-    right: 15px;
-  }
+  ${({ $isSmallMobile }) =>
+    $isSmallMobile &&
+    `
+      top: 190px;
+      right: 15px;
+    `}
 `;
+
 const StyledMenuButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: ${spacing.s100};
   background: transparent;
   border: none;
   cursor: pointer;

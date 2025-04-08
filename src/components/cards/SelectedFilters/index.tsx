@@ -1,27 +1,79 @@
-import { Stack, Text, Tag } from "@inubekit/inubekit";
+import { Stack, Text, Tag, Icon } from "@inubekit/inubekit";
+import { MdApps, MdClose } from "react-icons/md";
 
-import { StyledContainerFilters } from "./styles";
+import { spacing } from "@design/tokens/spacing";
 
-interface SelectedFiltersProps {
-  filters: string[];
-  onRemove?: (filter: string) => void;
-}
+import {
+  StyledContainerFilters,
+  MoreFiltersWrapper,
+  HiddenFiltersMenu,
+  HiddenFilterItem,
+} from "./styles";
+import { useSelectedFilters, SelectedFiltersProps } from "./interface";
 
 function SelectedFilters({ filters, onRemove }: SelectedFiltersProps) {
+  const {
+    containerRef,
+    visibleFilters,
+    hiddenFilters,
+    isMobile,
+    showHiddenFilters,
+    setShowHiddenFilters,
+    handleRemoveFilter,
+  } = useSelectedFilters(filters, onRemove);
+
   return (
-    <StyledContainerFilters>
+    <StyledContainerFilters ref={containerRef}>
       {filters.length > 0 ? (
-        <Stack direction="row" gap="8px">
-          {filters.map((filter, index) => (
+        <Stack direction="row" gap={spacing.s100}>
+          {visibleFilters.map((filter, index) => (
             <Tag
               key={index}
-              appearance="primary"
-              label={filter}
+              appearance={filter.type === "status" ? "dark" : "primary"}
+              label={`${filter.label} (${filter.count})`}
               weight="strong"
               removable={!!onRemove}
-              onClose={onRemove ? () => onRemove(filter) : undefined}
+              onClose={() => handleRemoveFilter(filter.label)}
             />
           ))}
+
+          {hiddenFilters.length > 0 && (
+            <MoreFiltersWrapper
+              onClick={() => setShowHiddenFilters((prev) => !prev)}
+            >
+              <Tag
+                appearance="primary"
+                label="..."
+                weight="strong"
+                removable={false}
+              />
+              {showHiddenFilters && (
+                <HiddenFiltersMenu $isMobile={isMobile}>
+                  {hiddenFilters.map((filter, index) => (
+                    <HiddenFilterItem key={index}>
+                      <Stack gap={spacing.s050} alignItems="center">
+                        <Icon
+                          appearance="primary"
+                          icon={<MdApps />}
+                          size="14px"
+                        />
+                        <Text size="small">
+                          {`${filter.label} (${filter.count})`}
+                        </Text>
+                      </Stack>
+                      <Icon
+                        appearance="dark"
+                        icon={<MdClose />}
+                        cursorHover={true}
+                        size="16px"
+                        onClick={() => handleRemoveFilter(filter.label)}
+                      />
+                    </HiddenFilterItem>
+                  ))}
+                </HiddenFiltersMenu>
+              )}
+            </MoreFiltersWrapper>
+          )}
         </Stack>
       ) : (
         <Text type="label" size="small" appearance="gray">
