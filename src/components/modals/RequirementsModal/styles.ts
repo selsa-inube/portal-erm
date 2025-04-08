@@ -13,6 +13,11 @@ interface IStyledContainerContent {
   theme: typeof inube;
 }
 
+interface IStyledTableContainer {
+  $smallScreen: boolean;
+  theme: typeof inube;
+}
+
 export const StyledModal = styled.div<IStyledModal>`
   overflow: hidden;
   display: flex;
@@ -46,12 +51,13 @@ export const StyledContainerTitle = styled.div`
   align-items: center;
 `;
 
-export const StyledTableContainer = styled.div`
+export const StyledTableContainer = styled.div<IStyledTableContainer>`
   overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 2px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
-  padding: ${spacing.s050} ${spacing.s0};
+  padding: ${({ $smallScreen }) =>
+    $smallScreen ? `${spacing.s050} ${spacing.s0}` : `${spacing.s050}`};
   border-radius: 8px;
 `;

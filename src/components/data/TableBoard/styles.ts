@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 interface IStyledContainer {
   $borderTable: boolean;
   $isTablet: boolean;
@@ -109,6 +111,7 @@ export const StyledThead = styled.thead`
 export const StyledTh = styled.th`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  padding: ${spacing.s050};
 `;
 
 export const StyledTr = styled.tr<IStyledTdbodyContainer>`
@@ -127,4 +130,5 @@ export const StyledTr = styled.tr<IStyledTdbodyContainer>`
 export const StyledTd = styled.td<IStyledTd>`
   width: ${({ $widthTd }) => $widthTd};
   height: 24px;
+  padding: ${spacing.s050};
 `;

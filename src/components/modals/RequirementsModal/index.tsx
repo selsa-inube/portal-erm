@@ -70,7 +70,7 @@ function RequirementsModal(props: RequirementsModalProps) {
           onClick={() => console.log("Add clicked", entry)}
           spacing="compact"
           variant="empty"
-          size="24px"
+          size="26px"
           cursorHover
         />
       </Stack>
@@ -88,7 +88,7 @@ function RequirementsModal(props: RequirementsModalProps) {
           appearance="primary"
           spacing="compact"
           cursorHover
-          size="24px"
+          size="26px"
           onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
         />
@@ -126,7 +126,7 @@ function RequirementsModal(props: RequirementsModalProps) {
                 cursorHover
                 variant="filled"
                 shape="circle"
-                size="19px"
+                size="20px"
               />
             </Stack>
           );
@@ -174,32 +174,34 @@ function RequirementsModal(props: RequirementsModalProps) {
 
         <Divider />
         <StyledContainerContent $smallScreen={isMobile}>
-          <Stack width="100%" justifyContent="flex-end">
-            <Button spacing="compact" iconBefore={<MdAdd />}>
-              Agregar Requisito
-            </Button>
-          </Stack>
+          <Stack direction="column" gap={spacing.s100}>
+            <Stack width="100%" justifyContent="flex-end">
+              <Button spacing="compact" iconBefore={<MdAdd />}>
+                Agregar Requisito
+              </Button>
+            </Stack>
 
-          <StyledTableContainer>
-            {requirements.map((requirement, index) => (
-              <TableBoard
-                key={requirement.id}
-                id={requirement.id}
-                titles={requirement.titles}
-                entries={requirement.entries}
-                actions={actionsRequirements}
-                actionMobile={getActionsMobile()}
-                appearanceTable={{
-                  widthTd: "75%",
-                  efectzebra: true,
-                  title: "primary",
-                  isStyleMobile: true,
-                }}
-                isFirstTable={index === 0}
-                infoItems={infoItems}
-              />
-            ))}
-          </StyledTableContainer>
+            <StyledTableContainer $smallScreen={isMobile}>
+              {requirements.map((requirement, index) => (
+                <TableBoard
+                  key={requirement.id}
+                  id={requirement.id}
+                  titles={requirement.titles}
+                  entries={requirement.entries}
+                  actions={actionsRequirements}
+                  actionMobile={getActionsMobile()}
+                  appearanceTable={{
+                    widthTd: "75%",
+                    efectzebra: true,
+                    title: "primary",
+                    isStyleMobile: true,
+                  }}
+                  isFirstTable={index === 0}
+                  infoItems={infoItems}
+                />
+              ))}
+            </StyledTableContainer>
+          </Stack>
           <Stack justifyContent="flex-end" gap={spacing.s100}>
             <Button onClick={handleClose}>{buttonLabel}</Button>
           </Stack>
