@@ -9,6 +9,8 @@ import { FormValues } from "@components/modals/SelectModal/types";
 import { mockStaffMembers } from "@mocks/staff/staff.mock";
 import { useAppContext } from "@context/AppContext";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { RequirementsModal } from "@components/modals/RequirementsModal";
 
 import { RequestSummary } from "./Components/RequestSummary";
 import { TaskBoard } from "./Components/TaskBoard";
@@ -29,7 +31,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
 
   const [staffInfo, setStaffInfo] = useState<IStaffInfo>({ id: "", name: "" });
   const [showStaffModal, setShowStaffModal] = useState(false);
-
+  const [isRequirementsModalOpen, setIsRequirementsModalOpen] = useState(false);
   const [showSuccessFlag, setShowSuccessFlag] = useState(false);
 
   useErrorFlag(
@@ -82,7 +84,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
   };
 
   const handleSeeRequirements = () => {
-    console.log("See requirements");
+    setIsRequirementsModalOpen(true);
   };
 
   return (
@@ -100,6 +102,7 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
           completedTasks={mockCompletedTasks}
           isResponsible={true}
         />
+
         {showStaffModal && (
           <SelectStaffModal
             title="Cambiar responsable"
@@ -110,6 +113,15 @@ function ApplicationProcessUI(props: ApplicationProcessUIProps) {
             initialSelection={staffInfo.id}
             onCloseModal={handleCloseModal}
             onSubmit={onSubmit("staffSelect")}
+          />
+        )}
+
+        {isRequirementsModalOpen && (
+          <RequirementsModal
+            title="Requisitos"
+            buttonLabel="Cerrar"
+            requirements={mockRequirements}
+            handleClose={() => setIsRequirementsModalOpen(false)}
           />
         )}
       </Stack>

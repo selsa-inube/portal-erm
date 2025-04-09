@@ -25,7 +25,6 @@ export const StyledContainerContent = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 4px;
 `;
 
 export const StyledContainerClose = styled.div`
