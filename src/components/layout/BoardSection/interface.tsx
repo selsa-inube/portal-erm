@@ -13,7 +13,7 @@ interface BoardSectionLogic {
 }
 
 function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
-  const { sectionInformation, searchRequestValue } = props;
+  const { sectionInformation, searchRequestValue, selectedFilters } = props;
 
   const isEmpty = sectionInformation.length === 0;
 
@@ -26,12 +26,12 @@ function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
     if (!isEmpty) setCollapse((prev) => !prev);
   };
 
-  const getNoDataMessage = () =>
-    isEmpty
-      ? searchRequestValue
-        ? configOption.noMatches
-        : configOption.textNodata
-      : "";
+  const getNoDataMessage = () => {
+    if (searchRequestValue || selectedFilters.length > 0) {
+      return isEmpty ? configOption.noMatches : "";
+    }
+    return isEmpty ? configOption.textNodata : "";
+  };
 
   return {
     collapse,

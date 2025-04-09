@@ -1,4 +1,5 @@
 import { SectionBackground } from "@components/layout/BoardSection/types";
+
 import { IMockRequests, IOption } from "./types";
 
 const mockRequests: IMockRequests = {
@@ -9,6 +10,7 @@ const mockRequests: IMockRequests = {
       requestDate: "2024-04-02",
       responsible: "Juan Pérez",
       hasResponsible: true,
+      status: "pending",
     },
     {
       id: "56645655642",
@@ -16,6 +18,7 @@ const mockRequests: IMockRequests = {
       requestDate: "2025-04-01",
       responsible: "María Gómez",
       hasResponsible: false,
+      status: "pending",
     },
   ],
   inProgress: [
@@ -25,6 +28,7 @@ const mockRequests: IMockRequests = {
       requestDate: "2024-03-28",
       responsible: "Carlos Ramírez",
       hasResponsible: true,
+      status: "inProgress",
     },
   ],
   completed: [
@@ -34,6 +38,7 @@ const mockRequests: IMockRequests = {
       requestDate: "2024-03-15",
       responsible: "Ana Torres",
       hasResponsible: true,
+      status: "completed",
     },
   ],
 };
@@ -57,18 +62,24 @@ export const boardSections = [
     sectionTitle: "Por evaluar",
     value: "Por evaluar",
     sectionBackground: "gray" as SectionBackground,
-    sectionInformation: mockRequests.pending,
+    sectionInformation: mockRequests.pending.filter(
+      (request) => request.status === "pending",
+    ),
   },
   {
     sectionTitle: "En progreso",
     value: "En progreso",
     sectionBackground: "light" as SectionBackground,
-    sectionInformation: mockRequests.inProgress,
+    sectionInformation: mockRequests.inProgress.filter(
+      (request) => request.status === "inProgress",
+    ),
   },
   {
     sectionTitle: "Terminada",
-    value: "terminada",
+    value: "Terminada",
     sectionBackground: "gray" as SectionBackground,
-    sectionInformation: mockRequests.completed,
+    sectionInformation: mockRequests.completed.filter(
+      (request) => request.status === "completed",
+    ),
   },
 ];

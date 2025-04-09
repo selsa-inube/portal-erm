@@ -32,7 +32,7 @@ export interface RequestsUIProps {
   isFilterModalOpen: boolean;
   isMenuOpen: boolean;
   isMobile: boolean;
-  isSmallMobile: boolean;
+  isTablet: boolean;
   menuRef: React.RefObject<HTMLDivElement>;
   assignmentOptions: IOption[];
   statusOptions: IOption[];
@@ -46,31 +46,32 @@ export interface RequestsUIProps {
   setSelectedFilters: (filters: IOption[]) => void;
 }
 
-function RequestsUI({
-  appName,
-  appRoute,
-  navigatePage,
-  isFilterModalOpen,
-  isMenuOpen,
-  isMobile,
-  isSmallMobile,
-  menuRef,
-  assignmentOptions,
-  statusOptions,
-  debouncedSearchTerm,
-  selectedFilters,
-  openFilterModal,
-  closeFilterModal,
-  setIsMenuOpen,
-  setSearchTerm,
-  setSelectedFilters,
-}: RequestsUIProps) {
+function RequestsUI(props: RequestsUIProps) {
+  const {
+    appName,
+    appRoute,
+    navigatePage,
+    isFilterModalOpen,
+    isMenuOpen,
+    menuRef,
+    isMobile,
+    isTablet,
+    openFilterModal,
+    closeFilterModal,
+    setIsMenuOpen,
+    assignmentOptions,
+    statusOptions,
+    debouncedSearchTerm,
+    selectedFilters,
+    setSearchTerm,
+    setSelectedFilters,
+  } = props;
+
   const handleRemove = (filterValueToRemove: string) => {
     setSelectedFilters(
       selectedFilters.filter((filter) => filter.value !== filterValueToRemove),
     );
   };
-
   const selectedStatusFilters = selectedFilters.filter((filter) =>
     statusOptions.some((status) => status.value === filter.value),
   );
@@ -119,13 +120,13 @@ function RequestsUI({
       navigatePage={navigatePage}
       isMobile={isMobile}
     >
-      <SearchContainer $isMobile={isMobile}>
+      <SearchContainer $isTablet={isTablet}>
         <Stack gap={spacing.s150} direction="column" width="100%">
           <Stack
             direction="row"
             gap={spacing.s150}
             padding={
-              isMobile
+              isTablet
                 ? `${spacing.s0} ${spacing.s0} ${spacing.s150} ${spacing.s0}`
                 : spacing.s0
             }
@@ -135,12 +136,12 @@ function RequestsUI({
               placeholder="Palabra clave"
               iconAfter={<MdSearch size={20} />}
               size="compact"
-              fullwidth={isMobile}
+              fullwidth={isTablet}
               onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
             />
-            {isMobile && (
+            {isTablet && (
               <>
-                <StyledMenuIconContainer $isMobile={isMobile}>
+                <StyledMenuIconContainer>
                   <Icon
                     appearance="dark"
                     icon={<MdMoreVert />}
@@ -158,7 +159,7 @@ function RequestsUI({
                 </StyledMenuIconContainer>
                 {isMenuOpen && (
                   <StyledMenuContainer
-                    $isSmallMobile={isSmallMobile}
+                    $isTablet={isTablet}
                     $isMobile={isMobile}
                     ref={menuRef}
                   >
@@ -195,8 +196,8 @@ function RequestsUI({
             )}
           </Stack>
 
-          {!isMobile && (
-            <StyledRequestsContainer $isMobile={isMobile}>
+          {!isTablet && (
+            <StyledRequestsContainer $isTablet={isTablet}>
               <SelectedFilters
                 onRemove={handleRemove}
                 filters={selectedFilters.map((filter) => ({
@@ -251,7 +252,7 @@ function RequestsUI({
         />
       )}
 
-      <StyledBoardContainer $isMobile={isMobile}>
+      <StyledBoardContainer $isTablet={isTablet}>
         {boardSections.map(
           ({ value, sectionTitle, sectionBackground, sectionInformation }) => {
             const filteredRequests = sectionInformation.filter(
@@ -289,10 +290,11 @@ function RequestsUI({
                 key={sectionTitle}
                 sectionTitle={sectionTitle}
                 sectionBackground={sectionBackground}
-                orientation={isMobile ? "horizontal" : "vertical"}
+                orientation={isTablet ? "horizontal" : "vertical"}
                 sectionInformation={filteredRequests}
                 errorLoadingPins={false}
                 searchRequestValue={debouncedSearchTerm}
+                selectedFilters={selectedFilters}
               >
                 {filteredRequests.length > 0 ? (
                   filteredRequests.map(

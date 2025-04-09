@@ -18,6 +18,7 @@ interface IRequest {
   requestDate: string;
   responsible: string;
   hasResponsible: boolean;
+  status: "pending" | "inProgress" | "completed";
 }
 
 interface IMockRequests {

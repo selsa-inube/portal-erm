@@ -15,9 +15,8 @@ function Requests() {
 
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const isMobile = useMediaQuery("(max-width: 1280px)");
-
-  const isSmallMobile = useMediaQuery("(max-width: 490px)");
+  const isTablet = useMediaQuery("(max-width: 1280px)");
+  const isMobile = useMediaQuery("(max-width: 490px)");
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -25,13 +24,6 @@ function Requests() {
     }, 500);
     return () => clearTimeout(handler);
   }, [searchTerm]);
-
-  const openFilterModal = () => {
-    setIsFilterModalOpen(true);
-    setIsMenuOpen(false);
-  };
-
-  const closeFilterModal = () => setIsFilterModalOpen(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,6 +39,13 @@ function Requests() {
     };
   }, [isMenuOpen]);
 
+  const openFilterModal = () => {
+    setIsFilterModalOpen(true);
+    setIsMenuOpen(false);
+  };
+
+  const closeFilterModal = () => setIsFilterModalOpen(false);
+
   return (
     <RequestsUI
       appName={RequestsNavConfig[0].label}
@@ -56,17 +55,17 @@ function Requests() {
       isMenuOpen={isMenuOpen}
       menuRef={menuRef}
       isMobile={isMobile}
-      isSmallMobile={isSmallMobile}
-      openFilterModal={openFilterModal}
-      closeFilterModal={closeFilterModal}
-      setIsMenuOpen={setIsMenuOpen}
+      isTablet={isTablet}
       assignmentOptions={assignmentOptions}
       statusOptions={statusOptions}
       searchTerm={searchTerm}
-      setSearchTerm={setSearchTerm}
       debouncedSearchTerm={debouncedSearchTerm}
       selectedFilters={selectedFilters}
+      setSearchTerm={setSearchTerm}
       setSelectedFilters={setSelectedFilters}
+      openFilterModal={openFilterModal}
+      closeFilterModal={closeFilterModal}
+      setIsMenuOpen={setIsMenuOpen}
     />
   );
 }

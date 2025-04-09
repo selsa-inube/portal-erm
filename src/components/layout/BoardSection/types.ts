@@ -1,3 +1,5 @@
+import { IOption } from "@inubekit/inubekit";
+
 type SectionBackground = "gray" | "light";
 
 type SectionOrientation = "horizontal" | "vertical";
@@ -19,6 +21,7 @@ interface IBoardSectionProps {
   sectionInformation: ICreditRequest[];
   errorLoadingPins: boolean;
   searchRequestValue: string;
+  selectedFilters: IOption[];
   children?: React.ReactNode;
 }
 export type {
