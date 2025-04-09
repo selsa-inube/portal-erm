@@ -11,7 +11,7 @@ function BoardSection(props: IBoardSectionProps) {
     sectionBackground = "light",
     orientation = "vertical",
     sectionInformation,
-    children, // contenido viene desde el padre
+    children,
   } = props;
 
   const { collapse, handleCollapse, getNoDataMessage, isTablet, isMobile } =
