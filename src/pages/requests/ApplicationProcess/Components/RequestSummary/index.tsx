@@ -29,6 +29,7 @@ export interface RequestSummaryProps {
   requestDate?: string;
   onDiscard?: () => void;
   onSeeRequirements?: () => void;
+  onEditStaff?: () => void;
 }
 
 function RequestSummary(props: RequestSummaryProps) {
@@ -41,6 +42,7 @@ function RequestSummary(props: RequestSummaryProps) {
     requestDate,
     onDiscard,
     onSeeRequirements,
+    onEditStaff,
   } = props;
   const isMobile = useMediaQuery("(max-width: 710px)");
   return (
@@ -81,6 +83,7 @@ function RequestSummary(props: RequestSummaryProps) {
                 appearance="primary"
                 size="16px"
                 cursorHover
+                onClick={onEditStaff}
               />
             </Stack>
           </Stack>
