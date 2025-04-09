@@ -59,8 +59,11 @@ export function TakeRequestModal(props: TakeRequestModalProps) {
         </Stack>
         <Divider />
         <Text>
-          Acabas de seleccionar la solicitud <b>No. {requestId}</b>, puedes ser
-          responsable para su gestión. ¿Estás de acuerdo?
+          Acabas de seleccionar la solicitud{" "}
+          <Text as="span" weight="bold">
+            No. {requestId}
+          </Text>
+          , puedes ser responsable para su gestión. ¿Estás de acuerdo?
         </Text>
         <Stack justifyContent="flex-end" gap={spacing.s250}>
           <Button
