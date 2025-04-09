@@ -293,34 +293,33 @@ function RequestsUI({
                 sectionInformation={filteredRequests}
                 errorLoadingPins={false}
                 searchRequestValue={debouncedSearchTerm}
-                CardComponent={() =>
-                  filteredRequests.length > 0 ? (
-                    filteredRequests.map(
-                      ({
-                        id,
-                        title,
-                        requestDate,
-                        responsible,
-                        hasResponsible,
-                      }) => (
-                        <RequestCard
-                          key={id}
-                          id={id}
-                          title={title}
-                          requestDate={requestDate}
-                          responsible={responsible}
-                          hasResponsible={hasResponsible}
-                        />
-                      ),
-                    )
-                  ) : (
-                    <Text>
-                      No hay solicitudes que coincidan con los filtros
-                      seleccionados.
-                    </Text>
+              >
+                {filteredRequests.length > 0 ? (
+                  filteredRequests.map(
+                    ({
+                      id,
+                      title,
+                      requestDate,
+                      responsible,
+                      hasResponsible,
+                    }) => (
+                      <RequestCard
+                        key={id}
+                        id={id}
+                        title={title}
+                        requestDate={requestDate}
+                        responsible={responsible}
+                        hasResponsible={hasResponsible}
+                      />
+                    ),
                   )
-                }
-              />
+                ) : (
+                  <Text>
+                    No hay solicitudes que coincidan con los filtros
+                    seleccionados.
+                  </Text>
+                )}
+              </BoardSection>
             );
           },
         )}

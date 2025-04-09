@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useMediaQueries } from "@inubekit/inubekit";
-
 import { configOption } from "./config";
 import { IBoardSectionProps } from "./types";
 
@@ -15,26 +14,23 @@ interface BoardSectionLogic {
 function useBoardSectionLogic(props: IBoardSectionProps): BoardSectionLogic {
   const { sectionInformation, searchRequestValue } = props;
 
-  const disabledCollapse = sectionInformation.length === 0;
+  const isEmpty = sectionInformation.length === 0;
+
   const { "(max-width: 1024px)": isTablet, "(max-width: 595px)": isMobile } =
     useMediaQueries(["(max-width: 1024px)", "(max-width: 595px)"]);
 
   const [collapse, setCollapse] = useState(false);
 
   const handleCollapse = () => {
-    if (!disabledCollapse) {
-      setCollapse(!collapse);
-    }
+    if (!isEmpty) setCollapse((prev) => !prev);
   };
 
-  const getNoDataMessage = () => {
-    if (sectionInformation.length === 0) {
-      return searchRequestValue
+  const getNoDataMessage = () =>
+    isEmpty
+      ? searchRequestValue
         ? configOption.noMatches
-        : configOption.textNodata;
-    }
-    return "";
-  };
+        : configOption.textNodata
+      : "";
 
   return {
     collapse,

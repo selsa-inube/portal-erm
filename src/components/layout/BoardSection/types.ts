@@ -19,9 +19,8 @@ interface IBoardSectionProps {
   sectionInformation: ICreditRequest[];
   errorLoadingPins: boolean;
   searchRequestValue: string;
-  CardComponent: React.FC<{ request: ICreditRequest }>;
+  children?: React.ReactNode;
 }
-
 export type {
   SectionBackground,
   SectionOrientation,
