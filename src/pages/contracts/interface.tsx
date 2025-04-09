@@ -25,7 +25,6 @@ import {
   StyledSeparatorLine,
   StyledAddVinculation,
   StyledAddVinculationMobile,
-  StyledLink,
 } from "./styles";
 import { Detail } from "./Detail";
 import { ModalType } from "./types";
@@ -214,21 +213,15 @@ function ContractsUI(props: ContractsUIProps) {
                   )}
                 </Stack>
                 <Stack gap={spacing.s025} alignItems="center">
-                  <StyledLink
-                    to="/employees/new-employee"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Button
+                    disabled={!canCreateRequest}
+                    iconBefore={<MdOutlineAdd />}
+                    cursorHover
+                    spacing="compact"
+                    onClick={canCreateRequest ? onAddVinculation : undefined}
                   >
-                    <Button
-                      disabled={!canCreateRequest}
-                      iconBefore={<MdOutlineAdd />}
-                      cursorHover
-                      spacing="compact"
-                      onClick={canCreateRequest ? onAddVinculation : undefined}
-                    >
-                      Agregar vinculación
-                    </Button>
-                  </StyledLink>
+                    Agregar vinculación
+                  </Button>
                   {!canCreateRequest && (
                     <Icon
                       icon={<MdOutlineInfo />}
@@ -274,33 +267,24 @@ function ContractsUI(props: ContractsUIProps) {
               />
             ))}
             {canCreateRequest && !isTablet && (
-              <StyledLink
-                to="/employees/new-employee"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <div onClick={canCreateRequest ? onAddVinculation : undefined}>
                 <StyledAddVinculation>
                   <Icon
                     appearance="gray"
                     icon={<MdOutlineAdd />}
                     size="45px"
-                    onClick={canCreateRequest ? onAddVinculation : undefined}
                     cursorHover={canCreateRequest}
                   />
                   <Text appearance="gray">Agregar vinculación</Text>
                 </StyledAddVinculation>
-              </StyledLink>
+              </div>
             )}
           </Stack>
         </StyledContractsContainer>
       </AppMenu>
 
       {isTablet && canCreateRequest && (
-        <StyledLink
-          to="/employees/new-employee"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <div onClick={canCreateRequest ? onAddVinculation : undefined}>
           <StyledAddVinculationMobile>
             <Icon
               appearance="primary"
@@ -310,10 +294,9 @@ function ContractsUI(props: ContractsUIProps) {
               icon={<MdOutlineAdd />}
               size="50px"
               cursorHover={canCreateRequest}
-              onClick={canCreateRequest ? onAddVinculation : undefined}
             />
           </StyledAddVinculationMobile>
-        </StyledLink>
+        </div>
       )}
 
       {modals.detail && selectedContract && (

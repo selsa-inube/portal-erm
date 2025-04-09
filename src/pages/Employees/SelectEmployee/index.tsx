@@ -7,7 +7,6 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 import { Formik, FormikProps } from "formik";
-import { Link } from "react-router-dom";
 import { MdOutlineAdd, MdOutlineArrowForward } from "react-icons/md";
 
 import { spacing } from "@design/tokens/spacing";
@@ -30,6 +29,11 @@ function SelectEmployeePage() {
   } = useSelectEmployee();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const handleOpenNewEmployeePage = () => {
+    window.open("/employees/new-employee", "_blank");
+    window.close();
+  };
 
   return (
     <Formik
@@ -133,20 +137,15 @@ function SelectEmployeePage() {
             </StyledQuickAccessContainer>
 
             <Stack justifyContent="end">
-              <Link
-                to="/employees/new-employee"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Button
+                appearance="primary"
+                iconBefore={<MdOutlineAdd />}
+                variant="none"
+                spacing="wide"
+                onClick={handleOpenNewEmployeePage}
               >
-                <Button
-                  appearance="primary"
-                  iconBefore={<MdOutlineAdd />}
-                  variant="none"
-                  spacing="wide"
-                >
-                  Vincular nuevo empleado
-                </Button>
-              </Link>
+                Vincular nuevo empleado
+              </Button>
             </Stack>
           </Stack>
         </StyledAppPage>

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
-import { Link as RouterLink } from "react-router-dom";
 
 import { spacing } from "@design/tokens/spacing";
 
@@ -57,14 +56,9 @@ const StyledAddVinculationMobile = styled.div`
   bottom: ${spacing.s500};
 `;
 
-const StyledLink = styled(RouterLink)`
-  text-decoration: none;
-`;
-
 export {
   StyledContractsContainer,
   StyledSeparatorLine,
   StyledAddVinculation,
   StyledAddVinculationMobile,
-  StyledLink,
 };
