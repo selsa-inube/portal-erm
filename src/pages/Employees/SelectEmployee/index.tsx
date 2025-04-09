@@ -1,4 +1,3 @@
-import { Formik, FormikProps } from "formik";
 import {
   Text,
   Button,
@@ -7,15 +6,16 @@ import {
   Spinner,
   useMediaQuery,
 } from "@inubekit/inubekit";
+import { Formik, FormikProps } from "formik";
 import { MdOutlineAdd, MdOutlineArrowForward } from "react-icons/md";
+
 import { spacing } from "@design/tokens/spacing";
-import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
-import { useSelectEmployee } from "./interface";
 import { SearchInput } from "@components/data/EmployeeSearchInput";
 
-function SelectEmployeePage() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+import { StyledAppPage, StyledQuickAccessContainer } from "./styles";
+import { useSelectEmployee } from "./interface";
 
+function SelectEmployeePage() {
   const {
     filteredEmployees,
     loading,
@@ -27,6 +27,12 @@ function SelectEmployeePage() {
     selectedEmployee,
     handleSubmit,
   } = useSelectEmployee();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const handleOpenNewEmployeePage = () => {
+    window.open("/employees/new-employee", "_blank");
+  };
 
   return (
     <Formik
@@ -135,10 +141,7 @@ function SelectEmployeePage() {
                 iconBefore={<MdOutlineAdd />}
                 variant="none"
                 spacing="wide"
-                type="button"
-                onClick={() => {
-                  console.log("Redirigir a vincular nuevo empleado");
-                }}
+                onClick={handleOpenNewEmployeePage}
               >
                 Vincular nuevo empleado
               </Button>
