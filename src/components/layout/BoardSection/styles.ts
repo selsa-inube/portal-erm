@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 import { SectionBackground, SectionOrientation } from "./types";
 interface IStyledBoardSection {
   theme?: typeof inube;
@@ -15,8 +17,8 @@ interface IStyledCollapseIcon {
 
 const StyledBoardSection = styled.div<IStyledBoardSection>`
   display: flex;
+  gap: ${spacing.s150};
   flex-direction: column;
-  gap: 12px;
   padding: 10px 12px 12px;
   width: calc(100% - 24px);
   border-top: 1px solid;
