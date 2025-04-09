@@ -32,7 +32,6 @@ function SelectEmployeePage() {
 
   const handleOpenNewEmployeePage = () => {
     window.open("/employees/new-employee", "_blank");
-    window.close();
   };
 
   return (

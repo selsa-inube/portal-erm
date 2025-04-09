@@ -72,7 +72,6 @@ function Contracts(props: ContractsProps) {
 
   const handleAddVinculation = () => {
     window.open("/employees/new-employee", "_blank");
-    window.close();
   };
 
   const handleDetailsClick = (contract: ContractCardProps) => {
