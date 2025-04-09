@@ -62,7 +62,6 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     },
   });
 
-  // Asegúrate de que las opciones estén ordenadas por tipo (o cualquier propiedad relevante)
   const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
     a.label.localeCompare(b.label),
   );
