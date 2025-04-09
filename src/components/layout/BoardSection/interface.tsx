@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMediaQueries } from "@inubekit/inubekit";
+
 import { configOption } from "./config";
 import { IBoardSectionProps } from "./types";
 
