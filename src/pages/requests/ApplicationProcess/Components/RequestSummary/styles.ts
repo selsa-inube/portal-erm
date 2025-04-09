@@ -19,6 +19,7 @@ const StyledRequestSummaryContainer = styled.div<StyledRequestSummaryContainerPr
         ? theme.palette.neutral.N30
         : inube.palette.neutral.N30};
   padding: ${spacing.s100};
+  margin-bottom: ${spacing.s300};
 `;
 
 export { StyledRequestSummaryContainer };

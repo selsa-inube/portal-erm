@@ -102,7 +102,7 @@ function AppPage(props: AppPageProps) {
             selectedClient?.name || "Sin unidad seleccionada",
           )}
           user={{
-            username: user?.username || "Nombre de Usuario",
+            username: user?.username || "Nombre de usuario",
             client: selectedClient?.name || "Sin unidad seleccionada",
             breakpoint: "800px",
           }}

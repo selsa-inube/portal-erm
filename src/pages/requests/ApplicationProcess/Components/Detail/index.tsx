@@ -20,7 +20,7 @@ export function Detail(props: DetailProps) {
 
   return (
     <StyledDetail $isMobile={isMobile}>
-      <Stack justifyContent="center">
+      <Stack justifyContent="flex-end">
         <Icon
           icon={<MdOutlineMoreVert />}
           appearance="dark"

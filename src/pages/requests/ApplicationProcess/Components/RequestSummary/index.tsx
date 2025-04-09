@@ -20,7 +20,7 @@ import { spacing } from "@design/tokens/spacing";
 import { Detail } from "../Detail";
 import { StyledRequestSummaryContainer } from "./styles";
 
-export interface RequestSumaryProps {
+export interface RequestSummaryProps {
   canDiscard?: boolean;
   canSeeRequirements?: boolean;
   isLoading?: boolean;
@@ -29,9 +29,10 @@ export interface RequestSumaryProps {
   requestDate?: string;
   onDiscard?: () => void;
   onSeeRequirements?: () => void;
+  onEditStaff?: () => void;
 }
 
-function RequestSummary(props: RequestSumaryProps) {
+function RequestSummary(props: RequestSummaryProps) {
   const {
     canDiscard = true,
     canSeeRequirements = true,
@@ -41,6 +42,7 @@ function RequestSummary(props: RequestSumaryProps) {
     requestDate,
     onDiscard,
     onSeeRequirements,
+    onEditStaff,
   } = props;
   const isMobile = useMediaQuery("(max-width: 710px)");
   return (
@@ -81,6 +83,7 @@ function RequestSummary(props: RequestSumaryProps) {
                 appearance="primary"
                 size="16px"
                 cursorHover
+                onClick={onEditStaff}
               />
             </Stack>
           </Stack>
