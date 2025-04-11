@@ -18,6 +18,7 @@ interface HolidaysOptionsUIProps {
   isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
+  handleDeleteRequest: (requestId: string) => void;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -30,6 +31,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     isMobile,
     appDescription,
     hasActiveContract = true,
+    handleDeleteRequest,
   } = props;
 
   return (
@@ -80,7 +82,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               Solicitar pago
             </Button>
           </Stack>
-          <HolidaysTable data={tableData} loading={isLoading} />
+          <HolidaysTable
+            data={tableData}
+            loading={isLoading}
+            handleDeleteRequest={handleDeleteRequest}
+          />
         </StyledHolidaysContainer>
       </AppMenu>
     </>

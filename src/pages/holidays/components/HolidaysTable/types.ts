@@ -1,4 +1,5 @@
 export interface IHolidaysTable {
+  requestId?: string;
   description: HolidayTableField<string>;
   date: HolidayTableField<string>;
   days: HolidayTableField<number>;

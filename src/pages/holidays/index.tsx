@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlinePayments } from "react-icons/md";
@@ -9,6 +9,7 @@ import {
   RequestStatus,
   RequestStatusLabel,
 } from "@services/holidays/postHumanResourceRequest/types";
+import { deleteHumanResourceRequest } from "@services/holidays/deleteHumanResourceRequest";
 
 import { HolidaysOptionsUI } from "./interface";
 import { holidaysNavConfig } from "./config/nav.config";
@@ -18,9 +19,18 @@ function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const { requestsHolidays } = useAppContext();
+  const { requestsHolidays, setRequestsHolidays } = useAppContext();
+  const [showFlag, setShowFlag] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const isLoading = false;
   const hasActiveContract = true;
+
+  useErrorFlag(
+    showFlag,
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
+    true,
+  );
 
   useErrorFlag(
     location.state?.showFlag,
@@ -35,11 +45,36 @@ function HolidaysOptions() {
     }
   }, [location, navigate]);
 
+  const handleDeleteRequest = async (requestToDelete: string) => {
+    setIsDeleting(true);
+    try {
+      await deleteHumanResourceRequest(requestToDelete);
+      setRequestsHolidays((prevRequests) =>
+        prevRequests.filter((request) => request.requestId !== requestToDelete),
+      );
+      setShowFlag(false);
+      setTimeout(() => setShowFlag(true), 0);
+    } catch {
+      navigate(location.pathname, {
+        state: {
+          showFlag: true,
+          flagTitle: "Error",
+          flagMessage: "No se pudo eliminar la solicitud",
+          isSuccess: false,
+        },
+        replace: true,
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const holidaysTableData: IHolidaysTable[] = requestsHolidays.map(
     (request) => {
       const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
 
       return {
+        requestId: request.requestId,
         description: { value: request.humanResourceRequestDescription },
         date: { value: requestData.startDate },
         days: { value: Number(requestData.daysOff) },
@@ -70,6 +105,7 @@ function HolidaysOptions() {
         },
         delete: {
           type: "icon",
+          disabled: isDeleting,
           value: (
             <Icon
               appearance="danger"
@@ -93,6 +129,7 @@ function HolidaysOptions() {
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
+      handleDeleteRequest={(requestId) => void handleDeleteRequest(requestId)}
     />
   );
 }

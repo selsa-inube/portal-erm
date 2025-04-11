@@ -113,7 +113,14 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
 
       if (response?.data?.requestId) {
         setRequestId(response.data.requestId);
-        setRequestsHolidays([...requestsHolidays, requestBody]);
+
+        setRequestsHolidays([
+          ...requestsHolidays,
+          {
+            ...requestBody,
+            requestId: response.data.requestId,
+          },
+        ]);
         return true;
       }
       return false;

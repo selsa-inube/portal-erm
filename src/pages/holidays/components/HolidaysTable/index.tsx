@@ -18,7 +18,6 @@ import {
 } from "@inubekit/inubekit";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
@@ -31,19 +30,24 @@ interface HolidaysTableProps {
   data: IHolidaysTable[];
   loading?: boolean;
   disableDeleteAction?: boolean;
+  handleDeleteRequest: (requestId: string) => void;
 }
 
-function HolidaysTable({
-  data,
-  loading = false,
-  disableDeleteAction = false,
-}: HolidaysTableProps) {
-  const [showFlag, setShowFlag] = useState(false);
+function HolidaysTable(props: HolidaysTableProps) {
+  const {
+    data,
+    loading = false,
+    disableDeleteAction = false,
+    handleDeleteRequest,
+  } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
   >(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
+    null,
+  );
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -60,12 +64,6 @@ function HolidaysTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
-
-  useErrorFlag(
-    showFlag,
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-  );
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -98,18 +96,20 @@ function HolidaysTable({
       ? columns.slice(0, 3)
       : columns;
 
-  const handleOpenModal = () => setIsSecondModalOpen(true);
-  const handleCloseModal = () => setIsSecondModalOpen(false);
+  const handleOpenModal = (requestId: string) => {
+    setSelectedRequestId(requestId);
+    setIsSecondModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsSecondModalOpen(false);
+    setSelectedRequestId(null);
+  };
 
   const handleClose = () => {
     setIsSecondModalOpen(false);
     setSelectedRecord(null);
-  };
-
-  const handleDelete = () => {
-    handleCloseModal();
-    setShowFlag(false);
-    setTimeout(() => setShowFlag(true), 0);
+    setSelectedRequestId(null);
   };
 
   const handleOpenDetailsModal = (rowIndex: number) => {
@@ -157,10 +157,14 @@ function HolidaysTable({
 
       if (headerKey === "delete") {
         const hasPrivilege = !disableDeleteAction;
+        const requestId = currentData[rowIndex!]?.requestId;
+
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege ? handleOpenModal : undefined,
+          onClick: hasPrivilege
+            ? () => requestId && handleOpenModal(requestId)
+            : undefined,
           cursorHover: hasPrivilege,
           icon: <MdOutlineHighlightOff />,
         };
@@ -200,7 +204,9 @@ function HolidaysTable({
               onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
               onClickEliminate={
-                !disableDeleteAction ? handleOpenModal : undefined
+                !disableDeleteAction
+                  ? () => handleOpenModal(currentData[rowIndex].requestId!)
+                  : undefined
               }
               disableDeleteAction={disableDeleteAction}
             />
@@ -356,7 +362,12 @@ function HolidaysTable({
           buttonText="Cancelar"
           inputLabel="Justificación"
           inputPlaceholder="¿Por qué eliminarás el registro?"
-          onSubmit={handleDelete}
+          onSubmit={() => {
+            if (selectedRequestId) {
+              handleDeleteRequest(selectedRequestId);
+              handleCloseModal();
+            }
+          }}
           onCloseModal={handleClose}
         />
       )}
