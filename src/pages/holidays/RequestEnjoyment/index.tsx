@@ -2,8 +2,13 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
+import { postHumanResourceRequest } from "@services/holidays/postHumanResourceRequest";
+import { IRequestBody } from "@services/holidays/postHumanResourceRequest/types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { formatDate } from "@utils/date";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
 import { RequestEnjoymentUI } from "./interface";
@@ -11,10 +16,7 @@ import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
 import { ModalState } from "./types";
 
-function RequestEnjoyment() {
-  const navigate = useNavigate();
-
-  const [currentStep, setCurrentStep] = useState(1);
+function useFormManagement() {
   const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
     id: "",
     daysOff: "",
@@ -22,14 +24,7 @@ function RequestEnjoyment() {
     observations: "",
     contract: "",
   });
-
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
-  const [modalState, setModalState] = useState<ModalState>({
-    isSendModalVisible: false,
-    isRequestInfoModalVisible: false,
-  });
-
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
 
@@ -39,6 +34,148 @@ function RequestEnjoyment() {
       setIsCurrentFormValid(generalInformationRef.current.isValid);
     }
   };
+
+  return {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  };
+}
+
+function useModalManagement() {
+  const [modalState, setModalState] = useState<ModalState>({
+    isSendModalVisible: false,
+    isRequestInfoModalVisible: false,
+  });
+
+  const openSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+  const closeSendModal = () =>
+    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
+  const openInfoModal = () =>
+    setModalState({
+      isSendModalVisible: false,
+      isRequestInfoModalVisible: true,
+    });
+  const closeInfoModal = () =>
+    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
+
+  return {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  };
+}
+
+function useRequestSubmission(formValues: IGeneralInformationEntry) {
+  const [requestId, setRequestId] = useState("45678822");
+  const [staffName, setStaffName] = useState<string | null>(null);
+  const { selectedEmployee, requestsHolidays, setRequestsHolidays } =
+    useAppContext();
+  const navigate = useNavigate();
+
+  const [showErrorFlag, setShowErrorFlag] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const submitRequest = async () => {
+    try {
+      const humanResourceRequestData = JSON.stringify({
+        daysOff: formValues.daysOff,
+        startDate: formatDate(formValues.startDate),
+        contract: formValues.contract,
+      });
+
+      const userCodeInCharge = "User 1";
+      const userNameInCharge = "Johan Daniel Garcia Nova";
+
+      const requestBody: IRequestBody = {
+        employeeId: selectedEmployee.employeeId,
+        humanResourceRequestData: humanResourceRequestData,
+        humanResourceRequestDate: new Date().toISOString(),
+        humanResourceRequestDescription: formValues.observations || "",
+        humanResourceRequestStatus: "in_progress",
+        humanResourceRequestType: "vacations",
+        userCodeInCharge,
+        userNameInCharge,
+      };
+
+      if (userCodeInCharge && userNameInCharge) {
+        setStaffName(userNameInCharge);
+      } else {
+        setStaffName(null);
+      }
+
+      const response = await postHumanResourceRequest(requestBody);
+
+      if (response?.data?.requestId) {
+        setRequestId(response.data.requestId);
+        setRequestsHolidays([...requestsHolidays, requestBody]);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error sending request:", error);
+      setErrorMessage(
+        "Error al enviar la solicitud de vacaciones. Intente nuevamente.",
+      );
+      setShowErrorFlag(true);
+      return false;
+    }
+  };
+
+  const navigateAfterSubmission = () => {
+    navigate("/holidays", {
+      state: {
+        showFlag: true,
+        flagTitle: "Solicitud enviada",
+        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
+        isSuccess: true,
+      },
+    });
+  };
+
+  return {
+    requestId,
+    staffName,
+    submitRequest,
+    navigateAfterSubmission,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  };
+}
+
+function RequestEnjoyment() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const {
+    formValues,
+    isCurrentFormValid,
+    setIsCurrentFormValid,
+    generalInformationRef,
+    updateFormValues,
+  } = useFormManagement();
+  const {
+    modalState,
+    openSendModal,
+    closeSendModal,
+    openInfoModal,
+    closeInfoModal,
+  } = useModalManagement();
+  const {
+    requestId,
+    submitRequest,
+    navigateAfterSubmission,
+    staffName,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  } = useRequestSubmission(formValues);
+
+  useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
   const handleNextStep = () => {
     if (currentStep < holidaysNavConfig.length) {
@@ -54,30 +191,23 @@ function RequestEnjoyment() {
   };
 
   const handleFinishAssisted = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: true }));
+    openSendModal();
   };
 
-  const handleCloseSendModal = () => {
-    setModalState((prev) => ({ ...prev, isSendModalVisible: false }));
-  };
+  const handleConfirmSendModal = async () => {
+    setShowErrorFlag(false);
 
-  const handleConfirmSendModal = () => {
-    setModalState({
-      isSendModalVisible: false,
-      isRequestInfoModalVisible: true,
-    });
+    const isSuccess = await submitRequest();
+    if (isSuccess) {
+      openInfoModal();
+    } else {
+      closeSendModal();
+    }
   };
 
   const handleSubmitRequestInfoModal = () => {
-    setModalState((prev) => ({ ...prev, isRequestInfoModalVisible: false }));
-    navigate("/holidays", {
-      state: {
-        showFlag: true,
-        flagTitle: "Solicitud enviada",
-        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
-        isSuccess: true,
-      },
-    });
+    closeInfoModal();
+    navigateAfterSubmission();
   };
 
   const {
@@ -103,19 +233,20 @@ function RequestEnjoyment() {
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
       />
+
       {modalState.isSendModalVisible && (
         <SendRequestModal
-          descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
+          descriptionText="¿Realmente deseas enviar la solicitud de vacaciones?"
           onSubmitButtonClick={handleConfirmSendModal}
-          onCloseModal={handleCloseSendModal}
-          onSecondaryButtonClick={handleCloseSendModal}
+          onCloseModal={closeSendModal}
+          onSecondaryButtonClick={closeSendModal}
         />
       )}
 
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
-          requestId="#45678822"
-          staffName="Nombre Nombre Apellido Apellido"
+          requestId={requestId}
+          staffName={staffName ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />
