@@ -6,7 +6,7 @@ export async function postHumanResourceRequest(
   requestBody: IRequestBody,
 ): Promise<IHumanResourceResponse> {
   const response = await fetch(
-    `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests`,
+    `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests/certifications`,
     {
       method: "POST",
       headers: {
