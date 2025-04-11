@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useMediaQuery } from "@inubekit/inubekit";
+import { useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlinePayments } from "react-icons/md";
-import { Icon } from "@inubekit/inubekit";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { useAppContext } from "@context/AppContext/useAppContext";
