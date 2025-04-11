@@ -13,6 +13,8 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { IRequestBody } from "@services/certifications/postHumanResourceRequest/types";
+
 import { IAppContextType, IPreferences, IClient } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -82,6 +84,10 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+
+  const [requestsCertifications, setRequestsCertifications] = useState<
+    IRequestBody[]
+  >([]);
 
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
@@ -164,6 +170,8 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         selectedEmployee,
         setSelectedEmployee,
+        requestsCertifications,
+        setRequestsCertifications,
       }}
     >
       {children}

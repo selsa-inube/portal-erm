@@ -17,7 +17,7 @@ import { StyledModal, StyledContainerClose } from "./styles";
 
 export interface RequestInfoModalProps {
   requestId: string;
-  staffName: string;
+  staffName?: string;
   buttonText?: string;
   title?: string;
   portalId?: string;
@@ -46,6 +46,10 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
       "The portal node is not defined. Ensure the specific node exists in the DOM.",
     );
   }
+
+  const message = staffName
+    ? `Este proceso será gestionado por ${staffName}, puede tardar algún tiempo mientras se gestiona la aprobación.`
+    : "Este proceso será gestionado por uno de nuestros funcionarios, puede tardar algún tiempo mientras se gestiona la aprobación.";
 
   return createPortal(
     <Blanket>
@@ -76,10 +80,7 @@ export function RequestInfoModal(props: RequestInfoModalProps) {
           <Text>
             Solicitud <b>{requestId}</b>
           </Text>
-          <Text size="medium">
-            Este proceso será gestionado por {staffName}, puede tardar algún
-            tiempo mientras se gestiona la aprobación.
-          </Text>
+          <Text size="medium">{message}</Text>
         </Stack>
         <Stack justifyContent="end">
           <Button onClick={onSubmitButtonClick} fullwidth={isMobile}>

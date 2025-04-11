@@ -6,6 +6,7 @@ import {
 } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
+import { IRequestBody } from "@services/certifications/postHumanResourceRequest/types";
 
 interface BusinessManager {
   id: string;
@@ -64,4 +65,8 @@ export interface IAppContextType {
   setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
   selectedEmployee: Employee;
   setSelectedEmployee: (employee: Employee) => void;
+  requestsCertifications: IRequestBody[];
+  setRequestsCertifications: React.Dispatch<
+    React.SetStateAction<IRequestBody[]>
+  >;
 }
