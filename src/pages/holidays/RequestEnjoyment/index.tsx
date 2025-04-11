@@ -139,7 +139,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
       state: {
         showFlag: true,
         flagTitle: "Solicitud enviada",
-        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
+        flagMessage: "La solicitud de disfrute fue enviada exitosamente.",
         isSuccess: true,
       },
     });
