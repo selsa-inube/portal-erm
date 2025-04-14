@@ -25,6 +25,7 @@ import {
   StyledMain,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledMainScroll,
 } from "./styles";
 
 interface AppPageProps {
@@ -98,12 +99,12 @@ function AppPage(props: AppPageProps) {
           portalId="portal"
           navigation={{ items: navConfig, breakpoint: "800px" }}
           logoURL={renderLogo(
-            selectedClient?.logo || logoUrl,
-            selectedClient?.name || "Sin unidad seleccionada",
+            selectedClient?.logo ?? logoUrl,
+            selectedClient?.name ?? "Sin unidad seleccionada",
           )}
           user={{
-            username: user?.username || "Nombre de usuario",
-            client: selectedClient?.name || "Sin unidad seleccionada",
+            username: user?.username ?? "Nombre de usuario",
+            client: selectedClient?.name ?? "Sin unidad seleccionada",
             breakpoint: "800px",
           }}
           menu={userMenu}
@@ -126,7 +127,7 @@ function AppPage(props: AppPageProps) {
           <StyledCollapse ref={businessUnitChangeRef}>
             <BusinessUnitChange
               businessUnits={businessUnits}
-              selectedClient={selectedClient?.name || ""}
+              selectedClient={selectedClient?.name ?? ""}
               onLogoClick={handleLogoClick}
             />
           </StyledCollapse>
@@ -161,9 +162,11 @@ function AppPage(props: AppPageProps) {
             {withNav && !isTablet && (
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
-            <StyledMain>
-              <Outlet />
-            </StyledMain>
+            <StyledMainScroll>
+              <StyledMain>
+                <Outlet />
+              </StyledMain>
+            </StyledMainScroll>
           </Grid>
         </StyledContainer>
       </Grid>
