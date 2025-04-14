@@ -81,7 +81,19 @@ function RequestsUI(props: RequestsUIProps) {
   );
 
   const handleApplyFilters = (values: { filters?: IOption[] }) => {
-    setSelectedFilters(values.filters ?? []);
+    const newFilters = values.filters ?? [];
+
+    const mergedFilters = [
+      ...selectedFilters,
+      ...newFilters.filter(
+        (newFilter) =>
+          !selectedFilters.some(
+            (existingFilter) => existingFilter.value === newFilter.value,
+          ),
+      ),
+    ];
+
+    setSelectedFilters(mergedFilters);
     closeFilterModal();
   };
 

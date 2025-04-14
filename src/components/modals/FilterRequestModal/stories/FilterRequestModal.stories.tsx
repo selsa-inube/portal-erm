@@ -2,7 +2,6 @@ import { useState } from "react";
 import { StoryFn, Meta } from "@storybook/react";
 import { Button, IOption } from "@inubekit/inubekit";
 
-import { FormValues } from "../types";
 import { FilterRequestModal, FilterRequestModalProps } from "..";
 
 const assignmentOptions: IOption[] = [
@@ -31,8 +30,7 @@ const DefaultTemplate: StoryFn<FilterRequestModalProps> = (args) => {
     setShowModal(!showModal);
   };
 
-  const handleSubmit = (values: FormValues) => {
-    console.log("Datos seleccionados en el modal:", values);
+  const handleSubmit = () => {
     setShowModal(false);
   };
 
