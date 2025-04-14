@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
 
-import { postHumanResourceRequest } from "@services/holidays/postHumanResourceRequest";
-import { IRequestBody } from "@services/holidays/postHumanResourceRequest/types";
+import { postHumanResourceRequest } from "@src/services/humanResourcesRequest/postHumanResourceRequest";
+import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -72,7 +72,7 @@ function useModalManagement() {
 }
 
 function useRequestSubmission(formValues: IGeneralInformationEntry) {
-  const [requestId, setRequestId] = useState("45678822");
+  const [requestNum, setRequestNum] = useState("");
   const [staffName, setStaffName] = useState<string | null>(null);
   const { selectedEmployee, requestsHolidays, setRequestsHolidays } =
     useAppContext();
@@ -112,7 +112,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
       const response = await postHumanResourceRequest(requestBody);
 
       if (response?.humanResourceRequestId) {
-        setRequestId(response.humanResourceRequestId);
+        setRequestNum(response.humanResourceRequestNumber);
         setRequestsHolidays([...requestsHolidays, requestBody]);
         return true;
       }
@@ -139,7 +139,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
   };
 
   return {
-    requestId,
+    requestId: requestNum,
     staffName,
     submitRequest,
     navigateAfterSubmission,

@@ -8,7 +8,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import {
   RequestStatus,
   RequestStatusLabel,
-} from "@services/holidays/postHumanResourceRequest/types";
+} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 
 import { HolidaysOptionsUI } from "./interface";
 import { holidaysNavConfig } from "./config/nav.config";
