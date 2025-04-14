@@ -7,7 +7,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
