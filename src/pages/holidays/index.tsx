@@ -1,52 +1,98 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useMediaQuery, Icon } from "@inubekit/inubekit";
+import { MdOutlinePayments } from "react-icons/md";
 
-import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import {
+  RequestStatus,
+  RequestStatusLabel,
+} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 
-import { holidaysNavConfig } from "./config/nav.config";
 import { HolidaysOptionsUI } from "./interface";
+import { holidaysNavConfig } from "./config/nav.config";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
-import { formatHolidaysData } from "./config/table.config";
 
 function HolidaysOptions() {
-  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [flagShown, setFlagShown] = useState(false);
-  const { user } = useAppContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const { requestsHolidays } = useAppContext();
+  const isLoading = false;
+  const hasActiveContract = true;
 
-  useErrorFlag(flagShown, "Error en la consulta las solicitudes en tramite");
+  useErrorFlag(
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
+  );
 
   useEffect(() => {
-    const fetchHolidays = async () => {
-      setIsLoading(true);
-      try {
-        if (!user?.id) return;
-
-        const holidays = await getHumanResourceRequests("vacations", user.id);
-        const formattedData = formatHolidaysData(holidays || []);
-
-        setTableData(formattedData);
-      } catch (error) {
-        console.error("Error al obtener las vacaciones:", error);
-        setFlagShown(true);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (user?.id) {
-      fetchHolidays();
+    if (location.state?.showFlag) {
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [user?.id]);
+  }, [location, navigate]);
+
+  const holidaysTableData: IHolidaysTable[] = requestsHolidays.map(
+    (request) => {
+      const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
+
+      return {
+        description: { value: request.humanResourceRequestDescription },
+        date: { value: requestData.startDate },
+        days: { value: Number(requestData.daysOff) },
+        status: {
+          value:
+            RequestStatusLabel[
+              request.humanResourceRequestStatus as RequestStatus
+            ],
+        },
+        dataDetails: {
+          value: {
+            daysEnjoyed: requestData.daysOff,
+            startDate: requestData.startDate,
+            contract: requestData.contract,
+            description: request.humanResourceRequestDescription,
+          },
+        },
+        details: {
+          type: "icon",
+          value: (
+            <Icon
+              appearance="dark"
+              size="16px"
+              cursorHover={true}
+              icon={<MdOutlinePayments />}
+            />
+          ),
+        },
+        delete: {
+          type: "icon",
+          value: (
+            <Icon
+              appearance="danger"
+              size="16px"
+              cursorHover={true}
+              icon={<MdOutlinePayments />}
+            />
+          ),
+        },
+        type: { value: request.humanResourceRequestType ?? "Ordinario" },
+      };
+    },
+  );
 
   return (
     <HolidaysOptionsUI
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
       navigatePage={holidaysNavConfig[0].url}
-      tableData={tableData}
+      tableData={holidaysTableData.length > 0 ? holidaysTableData : []}
       isLoading={isLoading}
+      hasActiveContract={hasActiveContract}
+      isMobile={isMobile}
     />
   );
 }
