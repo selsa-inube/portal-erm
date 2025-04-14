@@ -111,14 +111,14 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
 
       const response = await postHumanResourceRequest(requestBody);
 
-      if (response?.data?.requestId) {
-        setRequestId(response.data.requestId);
+      if (response.humanResourceRequestId) {
+        setRequestId(response?.humanResourceRequestId);
 
         setRequestsHolidays([
           ...requestsHolidays,
           {
             ...requestBody,
-            requestId: response.data.requestId,
+            requestId: response?.humanResourceRequestId,
           },
         ]);
         return true;
