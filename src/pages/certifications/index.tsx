@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdOutlinePayments } from "react-icons/md";
 import { Icon, useMediaQuery } from "@inubekit/inubekit";
@@ -12,8 +12,8 @@ import {
 } from "@services/certifications/postHumanResourceRequest/types";
 import { deleteHumanResourceRequest } from "@services/certifications/deleteHumanResourceRequest";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
-
 import { formatDate } from "@utils/date";
+
 import { CertificationsOptionsUI } from "./interface";
 import { certificationsNavConfig } from "./config/nav.config";
 import { ICertificationsTable } from "./components/CertificationsTable/types";
@@ -23,11 +23,13 @@ function CertificationsOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
-  const { requestsCertifications, setRequestsCertifications } = useAppContext();
+  const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
   const [showFlag, setShowFlag] = useState(false);
+
+  const { requestsCertifications, setRequestsCertifications } = useAppContext();
 
   useErrorFlag(
     location.state?.showFlag,
