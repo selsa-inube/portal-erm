@@ -1,10 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryObj } from "@storybook/react";
 
-import { RequestCard } from "@components/cards/RequestCard";
 import { boardSectionConfig } from "@mocks/BoardSection/boardSection.mock";
-
-import { Request } from "./types";
 import { props } from "./props";
 import { BoardSection } from "..";
 
@@ -26,14 +23,6 @@ const boardSection: Meta<typeof BoardSection> = {
 const generateStory = (config: typeof boardSectionConfig.Default): Story => ({
   args: {
     ...config,
-    CardComponent: ({ request }: { request: Request }) => (
-      <RequestCard
-        id={request.creditRequestCode ?? "N/A"}
-        title={request.title}
-        requestDate={request.creditRequestDateOfCreation ?? "N/A"}
-        responsible={request.userWhoPinnnedId ?? "Sin responsable"}
-      />
-    ),
   },
 });
 

@@ -25,7 +25,7 @@ const RequestCard = (props: RequestCardProps) => {
     <Stack direction="column" width="280px">
       <StyledRequestCard>
         <StyledTitle>
-          <Stack justifyContent="center" margin="0px 0px 10px">
+          <Stack justifyContent="center">
             <Text
               type="label"
               size="small"
