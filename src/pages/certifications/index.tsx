@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdOutlinePayments } from "react-icons/md";
 import { Icon, useMediaQuery } from "@inubekit/inubekit";
@@ -10,18 +10,43 @@ import {
   RequestStatusLabel,
   HumanResourceRequestType,
 } from "@services/certifications/postHumanResourceRequest/types";
+import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { formatDate } from "@utils/date";
 
 import { CertificationsOptionsUI } from "./interface";
 import { certificationsNavConfig } from "./config/nav.config";
 import { ICertificationsTable } from "./components/CertificationsTable/types";
+import { formatHumanResourceData } from "./config/table.config";
 
 function CertificationsOptions() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const { requestsCertifications } = useAppContext();
-  const isLoading = false;
+
+  useEffect(() => {
+    const fetchHumanResourceRequests = async () => {
+      setIsLoading(true);
+
+      try {
+        const requests = await getHumanResourceRequests("certification", "");
+        const formattedData = formatHumanResourceData(requests || []);
+        setTableData(formattedData);
+      } catch (error) {
+        console.error(
+          "Error al obtener las solicitudes de recursos humanos:",
+          error,
+        );
+        setTableData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHumanResourceRequests();
+  }, []);
 
   const shouldShowFlag =
     location.state?.showFlag &&
@@ -93,14 +118,14 @@ function CertificationsOptions() {
       };
     });
 
+  const combinedTableData = [...certificationsTableData, ...tableData];
+
   return (
     <CertificationsOptionsUI
       appName={certificationsNavConfig[0].label}
       appRoute={certificationsNavConfig[0].crumbs}
       navigatePage={certificationsNavConfig[0].url}
-      tableData={
-        certificationsTableData.length > 0 ? certificationsTableData : []
-      }
+      tableData={combinedTableData}
       isLoading={isLoading}
       isMobile={isMobile}
     />
