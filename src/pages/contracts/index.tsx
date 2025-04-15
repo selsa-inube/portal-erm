@@ -71,7 +71,7 @@ function Contracts(props: ContractsProps) {
   };
 
   const handleAddVinculation = () => {
-    console.log("Agregar vinculación");
+    window.open("/employees/new-employee", "_blank");
   };
 
   const handleDetailsClick = (contract: ContractCardProps) => {

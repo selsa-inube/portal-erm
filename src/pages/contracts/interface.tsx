@@ -267,34 +267,36 @@ function ContractsUI(props: ContractsUIProps) {
               />
             ))}
             {canCreateRequest && !isTablet && (
-              <StyledAddVinculation>
-                <Icon
-                  appearance="gray"
-                  icon={<MdOutlineAdd />}
-                  size="45px"
-                  onClick={canCreateRequest ? onAddVinculation : undefined}
-                  cursorHover={canCreateRequest}
-                />
-                <Text appearance="gray">Agregar vinculación</Text>
-              </StyledAddVinculation>
+              <div onClick={canCreateRequest ? onAddVinculation : undefined}>
+                <StyledAddVinculation>
+                  <Icon
+                    appearance="gray"
+                    icon={<MdOutlineAdd />}
+                    size="45px"
+                    cursorHover={canCreateRequest}
+                  />
+                  <Text appearance="gray">Agregar vinculación</Text>
+                </StyledAddVinculation>
+              </div>
             )}
           </Stack>
         </StyledContractsContainer>
       </AppMenu>
 
       {isTablet && canCreateRequest && (
-        <StyledAddVinculationMobile>
-          <Icon
-            appearance="primary"
-            variant="filled"
-            spacing="wide"
-            shape="circle"
-            icon={<MdOutlineAdd />}
-            size="50px"
-            cursorHover={canCreateRequest}
-            onClick={canCreateRequest ? onAddVinculation : undefined}
-          />
-        </StyledAddVinculationMobile>
+        <div onClick={canCreateRequest ? onAddVinculation : undefined}>
+          <StyledAddVinculationMobile>
+            <Icon
+              appearance="primary"
+              variant="filled"
+              spacing="wide"
+              shape="circle"
+              icon={<MdOutlineAdd />}
+              size="50px"
+              cursorHover={canCreateRequest}
+            />
+          </StyledAddVinculationMobile>
+        </div>
       )}
 
       {modals.detail && selectedContract && (
@@ -316,11 +318,11 @@ function ContractsUI(props: ContractsUIProps) {
               ? [
                   {
                     label: "Fecha de retiro",
-                    value: selectedContract.retirementDate || "",
+                    value: selectedContract.retirementDate ?? "",
                   },
                   {
                     label: "Causal de retiro",
-                    value: selectedContract.retirementReason || "",
+                    value: selectedContract.retirementReason ?? "",
                   },
                 ]
               : []),

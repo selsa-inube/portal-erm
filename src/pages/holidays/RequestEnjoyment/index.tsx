@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FormikProps } from "formik";
+import { useNavigate } from "react-router-dom";
 
 import { postHumanResourceRequest } from "@services/holidays/postHumanResourceRequest";
 import { IRequestBody } from "@services/holidays/postHumanResourceRequest/types";
@@ -10,7 +10,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { formatDate } from "@utils/date";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
-import { IGeneralInformationEntry } from "./forms/GeneralInformationForm/types";
+import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
@@ -96,7 +96,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData: humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observations || "",
+        humanResourceRequestDescription: formValues.observations ?? "",
         humanResourceRequestStatus: "in_progress",
         humanResourceRequestType: "vacations",
         userCodeInCharge,
