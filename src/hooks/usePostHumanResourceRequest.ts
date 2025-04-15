@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import { formatDate } from "@utils/date";
 import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
-import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
-import { postHumanResourceRequest } from "@src/services/humanResourcesRequest/postHumanResourceRequest";
+import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
+import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 export function useRequestSubmission(
@@ -35,7 +35,7 @@ export function useRequestSubmission(
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData: humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observations || "",
+        humanResourceRequestDescription: formValues.observations ?? "",
         humanResourceRequestStatus: "in_progress",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,

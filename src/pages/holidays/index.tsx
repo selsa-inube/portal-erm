@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlinePayments } from "react-icons/md";
@@ -8,8 +8,12 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import {
   RequestStatus,
   RequestStatusLabel,
-} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
+} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
+import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
+import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 
+import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
 import { holidaysNavConfig } from "./config/nav.config";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
@@ -17,10 +21,41 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const { requestsHolidays } = useAppContext();
-  const isLoading = false;
+  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+  const { requestsHolidays, setRequestsHolidays } = useAppContext();
   const hasActiveContract = true;
+
+  useEffect(() => {
+    const fetchHumanResourceRequests = async () => {
+      setIsLoading(true);
+
+      try {
+        const requests = await getHumanResourceRequests("vacations", "");
+        const formattedData = formatHolidaysData(requests ?? []);
+        setTableData(formattedData);
+      } catch (error) {
+        console.error(
+          "Error al obtener las solicitudes de recursos humanos:",
+          error,
+        );
+        setTableData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHumanResourceRequests();
+  }, []);
+
+  const { isDeleting, handleDelete } = useDeleteRequest(
+    deleteHumanResourceRequest,
+    (filterFn) =>
+      setRequestsHolidays((prevRequests) => prevRequests.filter(filterFn)),
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
+  );
 
   useErrorFlag(
     location.state?.showFlag,
@@ -38,9 +73,11 @@ function HolidaysOptions() {
   const holidaysTableData: IHolidaysTable[] = requestsHolidays.map(
     (request) => {
       const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
-
       return {
-        description: { value: request.humanResourceRequestDescription },
+        requestId: request.requestId,
+        description: {
+          value: request.humanResourceRequestDescription,
+        },
         date: { value: requestData.startDate },
         days: { value: Number(requestData.daysOff) },
         status: {
@@ -70,6 +107,7 @@ function HolidaysOptions() {
         },
         delete: {
           type: "icon",
+          disabled: isDeleting,
           value: (
             <Icon
               appearance="danger"
@@ -79,20 +117,25 @@ function HolidaysOptions() {
             />
           ),
         },
-        type: { value: request.humanResourceRequestType ?? "Ordinario" },
+        type: {
+          value: request.humanResourceRequestType ?? "Ordinario",
+        },
       };
     },
   );
+
+  const combinedTableData = [...holidaysTableData, ...tableData];
 
   return (
     <HolidaysOptionsUI
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
       navigatePage={holidaysNavConfig[0].url}
-      tableData={holidaysTableData.length > 0 ? holidaysTableData : []}
+      tableData={combinedTableData.length > 0 ? combinedTableData : []}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
+      handleDeleteRequest={(requestId) => void handleDelete(requestId)}
     />
   );
 }
