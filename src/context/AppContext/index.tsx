@@ -14,6 +14,7 @@ import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
 import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
+import { IHumanResourceRequest } from "@services/certifications/postHumanResourceRequest/types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 
@@ -85,6 +86,10 @@ function AppProvider(props: AppProviderProps) {
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
   const [requestsHolidays, setRequestsHolidays] = useState<IRequestBody[]>([]);
+
+  const [requestsCertifications, setRequestsCertifications] = useState<
+    IHumanResourceRequest[]
+  >([]);
 
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
@@ -169,6 +174,8 @@ function AppProvider(props: AppProviderProps) {
         setSelectedEmployee,
         requestsHolidays,
         setRequestsHolidays,
+        requestsCertifications,
+        setRequestsCertifications,
       }}
     >
       {children}
