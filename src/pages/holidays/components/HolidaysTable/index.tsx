@@ -20,6 +20,7 @@ import {
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
+import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
 import { StyledTd, StyledTh } from "./styles";
@@ -345,8 +346,10 @@ function HolidaysTable({
         <RequestComponentDetail
           handleClose={handleClose}
           modalContent={selectedRecord}
-          title="Detalles de la certificación"
+          requirements={mockRequirements}
+          title="Detalles"
           buttonLabel="Cerrar"
+          showRequirementsTable
         />
       )}
 

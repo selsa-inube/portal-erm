@@ -117,6 +117,7 @@ const Actions = (props: IActionsComponent) => {
 interface ITableBoardUIProps extends ITableBoardProps {
   loading: boolean;
   isTablet: boolean;
+  showTagsInMobile?: boolean;
 }
 
 export const TableBoardUI = (props: ITableBoardUIProps) => {
@@ -131,9 +132,17 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
     isTablet,
     actionMobile,
     isFirstTable,
+    showTagsInMobile = false,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const shouldShowTitle = (title: ITitle) => {
+    if (title.id === "tag" && isTablet && !showTagsInMobile) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <StyledContainer
@@ -149,22 +158,18 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
       >
         <StyledThead>
           <tr>
-            {titles
-              .filter((title) => !(isTablet && title.id === "tag"))
-              .map((title) =>
-                !isTablet || title.titleName ? (
-                  <StyledTh key={title.id + id}>
-                    <Text
-                      appearance={appearanceTable!.title}
-                      type="title"
-                      size="medium"
-                      padding={isTablet ? "0px" : "0px 4px"}
-                    >
-                      {title.titleName}
-                    </Text>
-                  </StyledTh>
-                ) : null,
-              )}
+            {titles.filter(shouldShowTitle).map((title) => (
+              <StyledTh key={title.id + id}>
+                <Text
+                  appearance={appearanceTable!.title}
+                  type="title"
+                  size="medium"
+                  padding={isTablet ? "0px" : "0px 4px"}
+                >
+                  {title.titleName}
+                </Text>
+              </StyledTh>
+            ))}
 
             {actions && actionMobile && (
               <RenderActionsTitles
@@ -188,25 +193,23 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
                   key={`${entry.id}-${index}`}
                   $borderTable={appearanceTable!.borderTable}
                 >
-                  {titles
-                    .filter((title) => !(isTablet && title.id === "tag"))
-                    .map((title) => (
-                      <StyledTd
-                        key={title.id}
-                        $widthTd={appearanceTable?.widthTd}
-                      >
-                        {typeof entry[title.id] !== "string" ? (
-                          entry[title.id]
-                        ) : (
-                          <Text
-                            size="medium"
-                            padding={isTablet ? "0px" : "0px 4px"}
-                          >
-                            {entry[title.id]}
-                          </Text>
-                        )}
-                      </StyledTd>
-                    ))}
+                  {titles.filter(shouldShowTitle).map((title) => (
+                    <StyledTd
+                      key={title.id}
+                      $widthTd={appearanceTable?.widthTd}
+                    >
+                      {typeof entry[title.id] !== "string" ? (
+                        entry[title.id]
+                      ) : (
+                        <Text
+                          size="medium"
+                          padding={isTablet ? "0px" : "0px 4px"}
+                        >
+                          {entry[title.id]}
+                        </Text>
+                      )}
+                    </StyledTd>
+                  ))}
                   {actions && (
                     <Actions
                       actions={actions}
