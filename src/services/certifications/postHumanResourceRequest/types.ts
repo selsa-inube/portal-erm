@@ -34,6 +34,7 @@ export interface IHumanResourceRequestData {
 }
 
 export interface IRequestBody {
+  requestId?: string;
   employeeId: string;
   humanResourceRequestData: string;
   humanResourceRequestDate: string;
@@ -50,7 +51,32 @@ export interface IHumanResourceResponseData {
 }
 
 export interface IHumanResourceResponse {
-  status: string;
-  message: string;
-  data: IHumanResourceResponseData;
+  employeeId: string;
+  humanResourceRequestData: string;
+  humanResourceRequestDate: string;
+  humanResourceRequestDescription: string;
+  humanResourceRequestId: string;
+  humanResourceRequestNumber: string;
+  humanResourceRequestStatus: string;
+  humanResourceRequestTraceabilities: {
+    actionExecuted: string;
+    description: string;
+    executionDate: string;
+    humanResourceRequestId: string;
+    traceabilityId: string;
+    transactionOperation: string;
+    userWhoExecutedAction: string;
+  }[];
+  humanResourceRequestType: string;
+  tasksToManageTheHumanResourcesRequests: {
+    description: string;
+    humanResourceRequestId: string;
+    taskCode: string;
+    taskManagingId: string;
+    taskName: string;
+    taskStatus: string;
+    transactionOperation: string;
+  }[];
+  userCodeInCharge: string;
+  userNameInCharge: string;
 }

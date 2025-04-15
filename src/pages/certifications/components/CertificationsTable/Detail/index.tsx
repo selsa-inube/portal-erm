@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { MdOutlineMoreVert } from "react-icons/md";
-import { ActionModal } from "../Actions";
 import { Stack, Icon } from "@inubekit/inubekit";
+
+import { ActionModal } from "../Actions";
 
 interface DetailProps {
   onClickDetails?: () => void;

@@ -18,6 +18,8 @@ interface CertificationsOptionsUIProps {
   isLoading: boolean;
   isMobile: boolean;
   appDescription?: string;
+  hasActiveContract?: boolean;
+  handleDeleteRequest: (requestId: string) => void;
 }
 
 function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
@@ -29,6 +31,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     tableData,
     isMobile,
     isLoading,
+    handleDeleteRequest,
   } = props;
 
   return (
@@ -57,7 +60,11 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
               Nueva certificación
             </Button>
           </Stack>
-          <CertificationsTable data={tableData} loading={isLoading} />
+          <CertificationsTable
+            data={tableData}
+            loading={isLoading}
+            handleDeleteRequest={handleDeleteRequest}
+          />
         </StyledCertificationsContainer>
       </AppMenu>
     </>
