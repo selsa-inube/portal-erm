@@ -13,7 +13,7 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { IRequestBody } from "@services/holidays/postHumanResourceRequest/types";
+import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 

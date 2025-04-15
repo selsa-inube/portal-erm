@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { useNavigate } from "react-router-dom";
 
-import { postHumanResourceRequest } from "@services/holidays/postHumanResourceRequest";
-import { IRequestBody } from "@services/holidays/postHumanResourceRequest/types";
+import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
+import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useAppContext } from "@context/AppContext/useAppContext";
