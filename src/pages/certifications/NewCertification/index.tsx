@@ -8,7 +8,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { postHumanResourceRequest } from "@services/certifications/postHumanResourceRequest";
-import { IRequestBody } from "@services/certifications/postHumanResourceRequest/types";
+import { IHumanResourceRequest } from "@services/certifications/postHumanResourceRequest/types";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
@@ -91,7 +91,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
       const userCodeInCharge = "User 1";
       const userNameInCharge = "Johan Daniel Garcia Nova";
 
-      const requestBody: IRequestBody = {
+      const requestBody: IHumanResourceRequest = {
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData: JSON.stringify({
           certification: formValues.certification,

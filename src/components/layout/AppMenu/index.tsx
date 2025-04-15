@@ -14,19 +14,12 @@ interface AppMenuProps {
 }
 
 function AppMenu(props: AppMenuProps) {
-  const {
-    appName,
-    appRoute,
-    children,
-    navigatePage,
-    appDescription,
-    isMobile = false,
-  } = props;
+  const { appName, appRoute, children, navigatePage, appDescription } = props;
 
   return (
     <StyledAppMenu>
       <Breadcrumbs crumbs={appRoute} />
-      <Stack margin={isMobile ? "24px 0px 18px 0px" : "24px 0px 0px 0px"}>
+      <Stack>
         <PageTitle
           title={appName}
           description={appDescription}

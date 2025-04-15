@@ -1,12 +1,12 @@
-import { IHumanResourceRequest, IHumanResourceResponse } from "./types";
+import { IRequestBody, IHumanResourceResponse } from "./types";
 
 import { environment } from "@config/environment";
 
 export async function postHumanResourceRequest(
-  requestBody: IHumanResourceRequest,
+  requestBody: IRequestBody,
 ): Promise<IHumanResourceResponse> {
   const response = await fetch(
-    `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests/certifications`,
+    `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests`,
     {
       method: "POST",
       headers: {

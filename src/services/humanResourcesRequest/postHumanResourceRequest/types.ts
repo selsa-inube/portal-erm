@@ -29,12 +29,12 @@ export enum HumanResourceRequestType {
 }
 
 export interface IHumanResourceRequestData {
-  certification: string;
+  daysOff: string;
+  startDate: string;
   contract: string;
 }
 
-export interface IHumanResourceRequest {
-  requestId?: string;
+export interface IRequestBody {
   employeeId: string;
   humanResourceRequestData: string;
   humanResourceRequestDate: string;
@@ -43,11 +43,6 @@ export interface IHumanResourceRequest {
   humanResourceRequestType: string;
   userCodeInCharge: string;
   userNameInCharge: string;
-}
-
-export interface IHumanResourceResponseData {
-  requestId: string;
-  timestamp: string;
 }
 
 export interface IHumanResourceResponse {
