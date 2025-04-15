@@ -24,9 +24,18 @@ const StyledContainer = styled.div`
 
 const StyledMain = styled.main`
   box-sizing: border-box;
-  height: calc(100vh - 54px);
-  overflow-y: auto;
+  width: 100%;
+  max-width: 1192px;
   padding-bottom: ${spacing.s600};
+`;
+
+const StyledMainScroll = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100vh - 54px);
 `;
 const StyledContentImg = styled(Link)`
   width: 100px;
@@ -64,4 +73,5 @@ export {
   StyledMain,
   StyledCollapse,
   StyledCollapseIcon,
+  StyledMainScroll,
 };
