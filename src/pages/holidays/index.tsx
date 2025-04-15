@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlinePayments } from "react-icons/md";
@@ -11,7 +11,9 @@ import {
 } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 
+import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
 import { holidaysNavConfig } from "./config/nav.config";
 import { IHolidaysTable } from "./components/HolidaysTable/types";
@@ -19,10 +21,33 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
   const { requestsHolidays, setRequestsHolidays } = useAppContext();
-  const isLoading = false;
   const hasActiveContract = true;
+
+  useEffect(() => {
+    const fetchHumanResourceRequests = async () => {
+      setIsLoading(true);
+
+      try {
+        const requests = await getHumanResourceRequests("vacations", "");
+        const formattedData = formatHolidaysData(requests ?? []);
+        setTableData(formattedData);
+      } catch (error) {
+        console.error(
+          "Error al obtener las solicitudes de recursos humanos:",
+          error,
+        );
+        setTableData([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHumanResourceRequests();
+  }, []);
 
   const { isDeleting, handleDelete } = useDeleteRequest(
     deleteHumanResourceRequest,
@@ -99,12 +124,14 @@ function HolidaysOptions() {
     },
   );
 
+  const combinedTableData = [...holidaysTableData, ...tableData];
+
   return (
     <HolidaysOptionsUI
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
       navigatePage={holidaysNavConfig[0].url}
-      tableData={holidaysTableData.length > 0 ? holidaysTableData : []}
+      tableData={combinedTableData.length > 0 ? combinedTableData : []}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
