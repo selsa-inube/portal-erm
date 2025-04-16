@@ -30,7 +30,7 @@ const MoreFiltersWrapper = styled.div`
 const HiddenFiltersMenu = styled.div<IHiddenFiltersMenu>`
   position: absolute;
   top: calc(100% + 8px);
-  right: ${({ $isMobile }) => ($isMobile ? "-75px" : "0px")};
+  right: ${({ $isMobile }) => ($isMobile ? "-75px" : "5px")};
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   border-radius: 8px;

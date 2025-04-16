@@ -19,10 +19,11 @@ function BoardSection(props: IBoardSectionProps) {
 
   const isVertical = orientation === "vertical";
   const isEmpty = sectionInformation.length === 0;
-  const isCollapsed = collapse || isVertical;
   const disabledCollapse = isEmpty;
   const titleType = isVertical || isMobile ? "title" : "headline";
   const titleSize = isVertical || isMobile ? "large" : "medium";
+
+  const shouldShowContent = isVertical || !collapse;
 
   return (
     <StyledBoardSection
@@ -61,7 +62,7 @@ function BoardSection(props: IBoardSectionProps) {
         </Text>
       </Stack>
 
-      {isCollapsed && (
+      {shouldShowContent && (
         <Stack
           wrap="wrap"
           alignItems="center"
@@ -76,7 +77,7 @@ function BoardSection(props: IBoardSectionProps) {
               gap="24px"
               alignItems="center"
               justifyContent="center"
-              height="533px"
+              height={isMobile ? "auto" : "533px"} // Ajuste para móviles
               width="100%"
             >
               <Text type="title" size="small" appearance="gray">

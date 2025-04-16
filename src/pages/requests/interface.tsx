@@ -113,6 +113,17 @@ function RequestsUI(props: RequestsUIProps) {
         })),
       )
       .filter((info) => {
+        const matchesSearch = [
+          info.id,
+          info.title,
+          info.requestDate,
+          info.responsible,
+        ].some((field) =>
+          field?.toString().toLowerCase().includes(debouncedSearchTerm),
+        );
+
+        if (!matchesSearch) return false;
+
         if (isStatusFilter) {
           return info.status.toLowerCase() === filter.value.toLowerCase();
         }
