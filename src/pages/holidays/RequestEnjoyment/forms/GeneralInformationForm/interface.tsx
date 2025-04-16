@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
 import {
@@ -44,6 +45,13 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     );
   };
 
+  useEffect(() => {
+    if (contractOptions.length === 1 && !formik.values.contract) {
+      const onlyOption = contractOptions[0];
+      handleContractChange("contract", onlyOption.value);
+    }
+  }, [formik.values.contract]);
+
   return (
     <form>
       <Stack direction="column" gap={isMobile ? spacing.s300 : spacing.s400}>
@@ -82,26 +90,29 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 required={isRequired(validationSchema, "startDate")}
               />
             </Stack>
-            <Stack>
-              <Select
-                label="Contrato"
-                name="contract"
-                id="contract"
-                options={contractOptions}
-                placeholder="Selecciona un contrato"
-                value={formik.values.contract}
-                message={formik.errors.contract}
-                disabled={getDisabledState(
-                  loading,
-                  contractOptions.length !== 1 || !formik.values.contract,
-                )}
-                size="compact"
-                fullwidth
-                onBlur={formik.handleBlur}
-                onChange={handleContractChange}
-                required={isRequired(validationSchema, "contract")}
-              />
-            </Stack>
+
+            {contractOptions.length > 1 && (
+              <Stack>
+                <Select
+                  label="Contrato"
+                  name="contract"
+                  id="contract"
+                  options={contractOptions}
+                  placeholder="Selecciona de la lista"
+                  value={formik.values.contract}
+                  message={formik.errors.contract}
+                  disabled={getDisabledState(
+                    loading,
+                    contractOptions.length !== 1 || !formik.values.contract,
+                  )}
+                  size="compact"
+                  fullwidth
+                  onBlur={formik.handleBlur}
+                  onChange={handleContractChange}
+                  required={isRequired(validationSchema, "contract")}
+                />
+              </Stack>
+            )}
 
             <Textarea
               label="Observaciones"
@@ -109,7 +120,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               name="observations"
               id="observations"
               value={formik.values.observations}
-              maxLength={120}
+              maxLength={1000}
               disabled={loading}
               status={getFieldState(formik, "observations")}
               message={formik.errors.observations}

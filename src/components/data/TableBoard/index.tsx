@@ -13,6 +13,7 @@ export interface ITableBoardProps extends IInfoItems {
   loading?: boolean;
   portalId?: string;
   appearanceTable?: IAppearances;
+  showTagsInMobile?: boolean;
 }
 
 export const TableBoard = (props: ITableBoardProps) => {
@@ -34,6 +35,7 @@ export const TableBoard = (props: ITableBoardProps) => {
     },
     isFirstTable,
     infoItems,
+    showTagsInMobile,
   } = props;
 
   const isTablet = useMediaQuery("(max-width: 730px)");
@@ -52,6 +54,7 @@ export const TableBoard = (props: ITableBoardProps) => {
       isTablet={isTablet}
       isFirstTable={isFirstTable}
       infoItems={infoItems}
+      showTagsInMobile={showTagsInMobile}
     />
   );
 };

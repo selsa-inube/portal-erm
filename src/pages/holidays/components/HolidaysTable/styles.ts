@@ -12,3 +12,22 @@ export const StyledTd = styled(Td)`
     text-align: center;
   }
 `;
+
+export const TooltipWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+
+  & > div {
+    position: absolute;
+    visibility: hidden;
+    top: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  &:hover > div {
+    visibility: visible;
+  }
+`;
