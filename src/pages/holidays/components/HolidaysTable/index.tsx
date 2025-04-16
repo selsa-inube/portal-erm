@@ -1,5 +1,3 @@
-import { MdOutlineVisibility, MdOutlineHighlightOff } from "react-icons/md";
-import { useState } from "react";
 import {
   Col,
   Colgroup,
@@ -16,14 +14,18 @@ import {
   Text,
   SkeletonLine,
 } from "@inubekit/inubekit";
+import { MdOutlineVisibility, MdOutlineHighlightOff } from "react-icons/md";
+import { useState } from "react";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
+import { Tooltip } from "@components/overlay/Tooltip";
+import { InfoModal } from "@components/modals/InfoModal";
 
 import { IHolidaysTable, HolidayTableDataDetails } from "./types";
-import { StyledTd, StyledTh } from "./styles";
+import { StyledTd, StyledTh, TooltipWrapper } from "./styles";
 import { columns, headers } from "./tableConfig";
 import { usePagination } from "./usePagination";
 import { Detail } from "./Detail";
@@ -32,16 +34,28 @@ interface HolidaysTableProps {
   data: IHolidaysTable[];
   loading?: boolean;
   disableDeleteAction?: boolean;
+  hasViewDetailsPrivilege?: boolean;
+  hasDeletePrivilege?: boolean;
 }
 
-function HolidaysTable({
-  data,
-  loading = false,
-  disableDeleteAction = false,
-}: HolidaysTableProps) {
+function HolidaysTable(props: HolidaysTableProps) {
+  const {
+    data,
+    loading = false,
+    disableDeleteAction = false,
+    hasViewDetailsPrivilege = false,
+    hasDeletePrivilege = false,
+  } = props;
+
   const [showFlag, setShowFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const [infoModalContent, setInfoModalContent] = useState({
+    title: "Información",
+    titleDescription: "No tienes privilegios",
+    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+  });
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
   >(null);
@@ -99,11 +113,23 @@ function HolidaysTable({
       ? columns.slice(0, 3)
       : columns;
 
-  const handleOpenModal = () => setIsSecondModalOpen(true);
+  const handleOpenModal = () => {
+    if (!hasDeletePrivilege) {
+      showInfoModal(
+        "No tienes privilegios",
+        "No tienes privilegios para eliminar este registro.",
+      );
+      return;
+    }
+    setIsSecondModalOpen(true);
+  };
+
   const handleCloseModal = () => setIsSecondModalOpen(false);
 
   const handleClose = () => {
     setIsSecondModalOpen(false);
+    setIsModalOpen(false);
+    setIsInfoModalOpen(false);
     setSelectedRecord(null);
   };
 
@@ -113,7 +139,24 @@ function HolidaysTable({
     setTimeout(() => setShowFlag(true), 0);
   };
 
+  const showInfoModal = (titleDescription: string, description: string) => {
+    setInfoModalContent({
+      title: "Información",
+      titleDescription,
+      description,
+    });
+    setIsInfoModalOpen(true);
+  };
+
   const handleOpenDetailsModal = (rowIndex: number) => {
+    if (!hasViewDetailsPrivilege) {
+      showInfoModal(
+        "No tienes privilegios",
+        "No tienes privilegios para ver detalles.",
+      );
+      return;
+    }
+
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
     const dataDeta = [
@@ -146,26 +189,42 @@ function HolidaysTable({
     ) {
       if (headerKey === "details") {
         const iconProps: IIcon = {
-          appearance: "dark",
+          appearance: hasViewDetailsPrivilege ? "dark" : "gray",
           size: "16px",
           cursorHover: true,
           onClick: () =>
             rowIndex !== undefined && handleOpenDetailsModal(rowIndex),
           icon: <MdOutlineVisibility />,
         };
-        return <Icon {...iconProps} />;
+        return (
+          <TooltipWrapper>
+            <Icon {...iconProps} />
+            <Tooltip
+              text={
+                hasViewDetailsPrivilege ? "Ver más detalles" : "Sin privilegios"
+              }
+            />
+          </TooltipWrapper>
+        );
       }
 
       if (headerKey === "delete") {
-        const hasPrivilege = !disableDeleteAction;
+        const hasPrivilege = !disableDeleteAction && hasDeletePrivilege;
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege ? handleOpenModal : undefined,
-          cursorHover: hasPrivilege,
+          onClick: handleOpenModal,
+          cursorHover: true,
           icon: <MdOutlineHighlightOff />,
         };
-        return <Icon {...iconProps} />;
+        return (
+          <TooltipWrapper>
+            <Icon {...iconProps} />
+            <Tooltip
+              text={hasPrivilege ? "Descartar solicitud" : "Sin privilegios"}
+            />
+          </TooltipWrapper>
+        );
       }
     }
 
@@ -200,9 +259,7 @@ function HolidaysTable({
             <Detail
               onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
-              onClickEliminate={
-                !disableDeleteAction ? handleOpenModal : undefined
-              }
+              onClickEliminate={() => handleOpenModal()}
               disableDeleteAction={disableDeleteAction}
             />
           )}
@@ -355,11 +412,23 @@ function HolidaysTable({
 
       {isSecondModalOpen && (
         <TextAreaModal
-          title="Cancelación"
-          buttonText="Cancelar"
+          title="Descartar"
+          buttonText="Descartar"
           inputLabel="Justificación"
           inputPlaceholder="¿Por qué eliminarás el registro?"
+          description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
+          maxLength={500}
           onSubmit={handleDelete}
+          onCloseModal={handleClose}
+        />
+      )}
+
+      {isInfoModalOpen && (
+        <InfoModal
+          title="Información"
+          titleDescription={infoModalContent.titleDescription}
+          description={infoModalContent.description}
+          buttonText="Entendido"
           onCloseModal={handleClose}
         />
       )}
