@@ -6,8 +6,10 @@ import {
 } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { IHumanResourceRequest } from "@services/certifications/postHumanResourceRequest/types";
-import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
+import {
+  IRequestBody,
+  IHumanResourceRequest,
+} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 
 interface BusinessManager {
   id: string;

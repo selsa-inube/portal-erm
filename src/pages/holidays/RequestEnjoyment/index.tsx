@@ -7,7 +7,7 @@ import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
-import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
@@ -15,16 +15,17 @@ import { ModalState } from "./types";
 import { useRequestSubmission } from "@src/hooks/usePostHumanResourceResquest";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
-    id: "",
-    daysOff: "",
-    startDate: "",
-    observations: "",
-    contract: "",
-  });
+  const [formValues, setFormValues] =
+    useState<IVacationGeneralInformationEntry>({
+      id: "",
+      daysOff: "",
+      startDate: "",
+      observations: "",
+      contract: "",
+    });
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+    useRef<FormikProps<IVacationGeneralInformationEntry>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {

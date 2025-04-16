@@ -9,7 +9,7 @@ import {
   RequestStatus,
   RequestStatusLabel,
   HumanResourceRequestType,
-} from "@services/certifications/postHumanResourceRequest/types";
+} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { formatDate } from "@utils/date";
 

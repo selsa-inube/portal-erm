@@ -2,19 +2,24 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { formatDate } from "@utils/date";
-import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
 import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 import { postHumanResourceRequest } from "@src/services/humanResourcesRequest/postHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
 
 export function useRequestSubmission(
-  formValues: IGeneralInformationEntry,
+  formValues: HumanResourceRequestData,
   typeRequest: string,
 ) {
   const [requestNum, setRequestNum] = useState("");
   const [staffName, setStaffName] = useState<string | null>(null);
-  const { selectedEmployee, requestsHolidays, setRequestsHolidays } =
-    useAppContext();
+  const {
+    selectedEmployee,
+    requestsHolidays,
+    setRequestsHolidays,
+    requestsCertifications,
+    setRequestsCertifications,
+  } = useAppContext();
   const navigate = useNavigate();
 
   const [showErrorFlag, setShowErrorFlag] = useState(false);
@@ -22,11 +27,22 @@ export function useRequestSubmission(
 
   const submitRequest = async () => {
     try {
-      const humanResourceRequestData = JSON.stringify({
-        daysOff: formValues.daysOff,
-        startDate: formatDate(formValues.startDate),
-        contract: formValues.contract,
-      });
+      let humanResourceRequestData: string;
+
+      if ("daysOff" in formValues) {
+        humanResourceRequestData = JSON.stringify({
+          daysOff: formValues.daysOff,
+          startDate: formatDate(formValues.startDate),
+          contract: formValues.contract,
+        });
+      } else {
+        humanResourceRequestData = JSON.stringify({
+          certification: formValues.certification,
+          addressee: formValues.addressee,
+          contract: formValues.contract,
+          contractDesc: formValues.contractDesc,
+        });
+      }
 
       const userCodeInCharge = "User 1";
       const userNameInCharge = "Johan Daniel Garcia Nova";
@@ -37,7 +53,7 @@ export function useRequestSubmission(
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observations || "",
         humanResourceRequestStatus: "in_progress",
-        humanResourceRequestType: typeRequest,
+        humanResourceRequestType: "certification",
         userCodeInCharge,
         userNameInCharge,
       };
@@ -52,14 +68,20 @@ export function useRequestSubmission(
 
       if (response?.humanResourceRequestId) {
         setRequestNum(response.humanResourceRequestNumber);
-        setRequestsHolidays([...requestsHolidays, requestBody]);
+
+        if (typeRequest === "vacations") {
+          setRequestsHolidays([...requestsHolidays, requestBody]);
+        } else if (typeRequest === "certifications") {
+          setRequestsCertifications([...requestsCertifications, requestBody]);
+        }
+
         return true;
       }
       return false;
     } catch (error) {
       console.error("Error sending request:", error);
       setErrorMessage(
-        "Error al enviar la solicitud de vacaciones. Intente nuevamente.",
+        "Error al enviar la solicitud de vacaciones o certificación. Intente nuevamente.",
       );
       setShowErrorFlag(true);
       return false;
@@ -67,14 +89,26 @@ export function useRequestSubmission(
   };
 
   const navigateAfterSubmission = () => {
-    navigate("/holidays", {
-      state: {
-        showFlag: true,
-        flagTitle: "Solicitud enviada",
-        flagMessage: "La solicitud de certificación fue enviada exitosamente.",
-        isSuccess: true,
-      },
-    });
+    if (typeRequest === "vacations") {
+      navigate("/holidays", {
+        state: {
+          showFlag: true,
+          flagTitle: "Solicitud enviada",
+          flagMessage: "La solicitud de vacaciones fue enviada exitosamente.",
+          isSuccess: true,
+        },
+      });
+    } else if (typeRequest === "certifications") {
+      navigate("/certifications", {
+        state: {
+          showFlag: true,
+          flagTitle: "Solicitud enviada",
+          flagMessage:
+            "La solicitud de certificación fue enviada exitosamente.",
+          isSuccess: true,
+        },
+      });
+    }
   };
 
   return {

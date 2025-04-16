@@ -13,8 +13,10 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
-import { IHumanResourceRequest } from "@services/certifications/postHumanResourceRequest/types";
+import {
+  IRequestBody,
+  IHumanResourceRequest,
+} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 
