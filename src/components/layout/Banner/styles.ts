@@ -37,10 +37,10 @@ const StyledBannerImage = styled.img`
 `;
 
 const VerticalDivider = styled.div`
-  width: 1px;
+  width: 2px;
   height: auto;
   background-color: ${({ theme }) =>
-    theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
+    theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
   border-radius: 2px;
 `;
 

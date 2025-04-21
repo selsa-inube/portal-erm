@@ -173,15 +173,19 @@ function VinculationBanner(props: VinculationBannerProps) {
 
         {!isMobile && (
           <Stack gap={spacing.s100}>
+            <InfoItem
+              icon={infoItems[0].icon}
+              value={infoItems[0].value}
+              label={infoItems[0].label}
+            />
+
             <VerticalDivider />
-            {infoItems.map((item, index) => (
-              <InfoItem
-                key={index}
-                icon={item.icon}
-                value={item.value}
-                label={item.label}
-              />
-            ))}
+
+            <InfoItem
+              icon={infoItems[1].icon}
+              value={infoItems[1].value}
+              label={infoItems[1].label}
+            />
           </Stack>
         )}
       </Stack>
