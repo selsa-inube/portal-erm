@@ -1,4 +1,5 @@
 import { FormikProps } from "formik";
+import { useEffect } from "react";
 import { ObjectSchema, AnyObject } from "yup";
 import {
   Stack,
@@ -32,6 +33,21 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
   const { formik, loading, withNextButton, validationSchema, handleNextStep } =
     props;
 
+  const handleContractChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
+    formik.setFieldValue(
+      "contractDesc",
+      contractOptions.find((option) => option.value === value)?.label,
+    );
+  };
+
+  useEffect(() => {
+    if (contractOptions.length === 1 && !formik.values.contract) {
+      const onlyOption = contractOptions[0];
+      handleContractChange("contract", onlyOption.value);
+    }
+  }, [formik.values.contract]);
+
   const isMobile = useMediaQuery("(max-width: 700px)");
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -45,7 +61,7 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               fullwidth={true}
               required
               options={certificationOptions}
-              placeholder="Selecciona una opción"
+              placeholder="Selecciona de la lista"
               value={formik.values.certification}
               onChange={(name, value) => {
                 formik.setFieldValue(name, value);
@@ -64,21 +80,21 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               onBlur={formik.handleBlur}
             />
           </Stack>
-          <Stack>
-            <Select
-              size="compact"
-              fullwidth={true}
-              name="contract"
-              required
-              label="Contrato"
-              options={contractOptions}
-              value={formik.values.contract}
-              placeholder="Selecciona una opción"
-              onChange={(name, value) => {
-                formik.setFieldValue(name, value);
-              }}
-            />
-          </Stack>
+          {contractOptions.length > 1 && (
+            <Stack>
+              <Select
+                size="compact"
+                fullwidth={true}
+                name="contract"
+                required
+                label="Contrato"
+                options={contractOptions}
+                value={formik.values.contract}
+                placeholder="Selecciona de la lista"
+                onChange={handleContractChange}
+              />
+            </Stack>
+          )}
           <Stack>
             <Textarea
               label="Observaciones"
