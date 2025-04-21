@@ -1,21 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import {
-  Nav,
-  Stack,
-  Grid,
-  Header,
-  useMediaQuery,
-  Icon,
-} from "@inubekit/inubekit";
+import { Nav, Grid, Header, useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlineChevronRight } from "react-icons/md";
 
 import { useNavConfig, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculationBanner } from "@components/layout/Banner";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
-import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledAppPage,
@@ -44,15 +35,9 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 };
 
 function AppPage(props: AppPageProps) {
-  const { withNav = true, withBanner = true } = props;
-  const {
-    user,
-    logoUrl,
-    selectedClient,
-    businessUnits,
-    setSelectedClient,
-    selectedEmployee,
-  } = useAppContext();
+  const { withNav = true } = props;
+  const { user, logoUrl, selectedClient, businessUnits, setSelectedClient } =
+    useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
@@ -133,27 +118,6 @@ function AppPage(props: AppPageProps) {
           </StyledCollapse>
         )}
         <StyledContainer>
-          {withBanner && (
-            <Stack padding={spacing.s075}>
-              <VinculationBanner
-                key={
-                  selectedEmployee ? selectedEmployee.employeeId : "no-employee"
-                }
-                name={
-                  selectedEmployee
-                    ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-                    : "Empleado no seleccionado"
-                }
-                status={
-                  selectedEmployee
-                    ? selectedEmployee.employeeStatus
-                    : "estado-desconocido"
-                }
-                imageUrl={logoUrl}
-                redirectUrl="/employees/select-employee"
-              />
-            </Stack>
-          )}
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"

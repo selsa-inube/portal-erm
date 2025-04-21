@@ -4,6 +4,8 @@ import { Button, Stack } from "@inubekit/inubekit";
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { VinculationBanner } from "@components/layout/Banner";
 
 import { StyledHolidaysContainer } from "./styles";
 import { HolidaysTable } from "./components/HolidaysTable";
@@ -32,8 +34,27 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     hasActiveContract = true,
   } = props;
 
+  const { logoUrl, selectedEmployee } = useAppContext();
+
   return (
     <>
+      <Stack padding={spacing.s075} justifyContent="center">
+        <VinculationBanner
+          key={selectedEmployee ? selectedEmployee.employeeId : "no-employee"}
+          name={
+            selectedEmployee
+              ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+              : "Empleado no seleccionado"
+          }
+          status={
+            selectedEmployee
+              ? selectedEmployee.employeeStatus
+              : "estado-desconocido"
+          }
+          imageUrl={logoUrl}
+          redirectUrl="/employees/select-employee"
+        />
+      </Stack>
       <AppMenu
         appName={appName}
         appDescription={appDescription}

@@ -10,6 +10,8 @@ import {
 import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { BoardSection } from "@components/layout/BoardSection";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { VinculationBanner } from "@components/layout/Banner";
 
 import { IRoute, IOption } from "./types";
 import { boardSections } from "./config";
@@ -55,137 +57,160 @@ function RequestsUI(props: RequestsUIProps) {
     statusOptions,
   } = props;
 
+  const { logoUrl, selectedEmployee } = useAppContext();
+
   return (
-    <AppMenu
-      appName={appName}
-      appRoute={appRoute}
-      navigatePage={navigatePage}
-      isMobile={isMobile}
-    >
-      <SearchContainer $isMobile={isMobile}>
-        <Stack gap={spacing.s150} direction="column" width="100%">
-          <Stack
-            direction="row"
-            gap={spacing.s150}
-            padding={
-              isMobile
-                ? `${spacing.s0} ${spacing.s0} ${spacing.s150} ${spacing.s0}`
-                : spacing.s0
-            }
-          >
-            <Input
-              id="seeker"
-              placeholder="Palabra clave"
-              iconAfter={<MdSearch size={20} />}
-              size="compact"
-              fullwidth={isMobile}
-            />
-            {isMobile && (
-              <>
-                <StyledMenuIconContainer $isMobile={isMobile}>
-                  <Icon
-                    appearance="dark"
-                    icon={<MdMoreVert />}
-                    cursorHover={true}
-                    parentHover={false}
-                    disabled={false}
-                    spacing="narrow"
-                    variant="empty"
-                    size="24px"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsMenuOpen(!isMenuOpen);
-                    }}
-                  />
-                </StyledMenuIconContainer>
-                {isMenuOpen && (
-                  <StyledMenuContainer $isMobile={isMobile} ref={menuRef}>
-                    <StyledMenuButton onClick={openFilterModal}>
-                      <Icon
-                        appearance="primary"
-                        icon={<MdOutlineFilterAlt />}
-                        spacing="narrow"
-                        variant="empty"
-                        size="24px"
-                      />
-                      <Text size="medium">Filtrar (0)</Text>
-                      <Stack margin="0px 0px 0px 25px">
+    <>
+      <Stack padding={spacing.s075} justifyContent="center">
+        <VinculationBanner
+          key={selectedEmployee ? selectedEmployee.employeeId : "no-employee"}
+          name={
+            selectedEmployee
+              ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+              : "Empleado no seleccionado"
+          }
+          status={
+            selectedEmployee
+              ? selectedEmployee.employeeStatus
+              : "estado-desconocido"
+          }
+          imageUrl={logoUrl}
+          redirectUrl="/employees/select-employee"
+        />
+      </Stack>
+      <AppMenu
+        appName={appName}
+        appRoute={appRoute}
+        navigatePage={navigatePage}
+        isMobile={isMobile}
+      >
+        <SearchContainer $isMobile={isMobile}>
+          <Stack gap={spacing.s150} direction="column" width="100%">
+            <Stack
+              direction="row"
+              gap={spacing.s150}
+              padding={
+                isMobile
+                  ? `${spacing.s0} ${spacing.s0} ${spacing.s150} ${spacing.s0}`
+                  : spacing.s0
+              }
+            >
+              <Input
+                id="seeker"
+                placeholder="Palabra clave"
+                iconAfter={<MdSearch size={20} />}
+                size="compact"
+                fullwidth={isMobile}
+              />
+              {isMobile && (
+                <>
+                  <StyledMenuIconContainer $isMobile={isMobile}>
+                    <Icon
+                      appearance="dark"
+                      icon={<MdMoreVert />}
+                      cursorHover={true}
+                      parentHover={false}
+                      disabled={false}
+                      spacing="narrow"
+                      variant="empty"
+                      size="24px"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMenuOpen(!isMenuOpen);
+                      }}
+                    />
+                  </StyledMenuIconContainer>
+                  {isMenuOpen && (
+                    <StyledMenuContainer $isMobile={isMobile} ref={menuRef}>
+                      <StyledMenuButton onClick={openFilterModal}>
                         <Icon
-                          icon={<MdClear />}
-                          size="18px"
-                          cursorHover
-                          appearance="dark"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            closeFilterModal();
-                            setIsMenuOpen(false);
-                          }}
+                          appearance="primary"
+                          icon={<MdOutlineFilterAlt />}
+                          spacing="narrow"
+                          variant="empty"
+                          size="24px"
                         />
-                      </Stack>
-                    </StyledMenuButton>
-                  </StyledMenuContainer>
-                )}
-              </>
+                        <Text size="medium">Filtrar (0)</Text>
+                        <Stack margin="0px 0px 0px 25px">
+                          <Icon
+                            icon={<MdClear />}
+                            size="18px"
+                            cursorHover
+                            appearance="dark"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              closeFilterModal();
+                              setIsMenuOpen(false);
+                            }}
+                          />
+                        </Stack>
+                      </StyledMenuButton>
+                    </StyledMenuContainer>
+                  )}
+                </>
+              )}
+            </Stack>
+
+            {!isMobile && (
+              <StyledRequestsContainer $isMobile={isMobile}>
+                <SelectedFilters filters={[]} />
+                <Button
+                  appearance="gray"
+                  iconBefore={<MdOutlineFilterAltOff />}
+                  type="button"
+                  spacing="wide"
+                  variant="outlined"
+                >
+                  Quitar
+                </Button>
+                <Button
+                  appearance="primary"
+                  iconBefore={<MdOutlineFilterAlt />}
+                  type="button"
+                  spacing="wide"
+                  variant="outlined"
+                  onClick={openFilterModal}
+                >
+                  Filtrar
+                </Button>
+              </StyledRequestsContainer>
             )}
           </Stack>
+        </SearchContainer>
 
-          {!isMobile && (
-            <StyledRequestsContainer $isMobile={isMobile}>
-              <SelectedFilters filters={[]} />
-              <Button
-                appearance="gray"
-                iconBefore={<MdOutlineFilterAltOff />}
-                type="button"
-                spacing="wide"
-                variant="outlined"
-              >
-                Quitar
-              </Button>
-              <Button
-                appearance="primary"
-                iconBefore={<MdOutlineFilterAlt />}
-                type="button"
-                spacing="wide"
-                variant="outlined"
-                onClick={openFilterModal}
-              >
-                Filtrar
-              </Button>
-            </StyledRequestsContainer>
-          )}
-        </Stack>
-      </SearchContainer>
-
-      {isFilterModalOpen && (
-        <FilterRequestModal
-          portalId="portal"
-          assignmentOptions={assignmentOptions}
-          statusOptions={statusOptions}
-          onCloseModal={closeFilterModal}
-          onSubmit={(values) => {
-            console.log("Filtro aplicado:", values);
-            closeFilterModal();
-          }}
-        />
-      )}
-
-      <StyledBoardContainer $isMobile={isMobile}>
-        {boardSections.map(
-          ({ sectionTitle, sectionBackground, sectionInformation }) => (
-            <BoardSection
-              key={sectionTitle}
-              sectionTitle={sectionTitle}
-              sectionBackground={sectionBackground}
-              orientation={isMobile ? "horizontal" : "vertical"}
-              sectionInformation={sectionInformation}
-              errorLoadingPins={false}
-              searchRequestValue=""
-              CardComponent={() => <Text>No hay solicitudes en trámite.</Text>}
-            />
-          ),
+        {isFilterModalOpen && (
+          <FilterRequestModal
+            portalId="portal"
+            assignmentOptions={assignmentOptions}
+            statusOptions={statusOptions}
+            onCloseModal={closeFilterModal}
+            onSubmit={(values) => {
+              console.log("Filtro aplicado:", values);
+              closeFilterModal();
+            }}
+          />
         )}
-      </StyledBoardContainer>
-    </AppMenu>
+
+        <StyledBoardContainer $isMobile={isMobile}>
+          {boardSections.map(
+            ({ sectionTitle, sectionBackground, sectionInformation }) => (
+              <BoardSection
+                key={sectionTitle}
+                sectionTitle={sectionTitle}
+                sectionBackground={sectionBackground}
+                orientation={isMobile ? "horizontal" : "vertical"}
+                sectionInformation={sectionInformation}
+                errorLoadingPins={false}
+                searchRequestValue=""
+                CardComponent={() => (
+                  <Text>No hay solicitudes en trámite.</Text>
+                )}
+              />
+            ),
+          )}
+        </StyledBoardContainer>
+      </AppMenu>
+    </>
   );
 }
 

@@ -7,6 +7,8 @@ import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { VinculationBanner } from "@components/layout/Banner";
 
 import { StyledCertificationsContainer } from "./styles";
 import { CertificationsTable } from "./components/CertificationsTable";
@@ -35,6 +37,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { logoUrl, selectedEmployee } = useAppContext();
 
   useErrorFlag(
     location.state?.showFlag,
@@ -51,6 +54,23 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
 
   return (
     <>
+      <Stack padding={spacing.s075} justifyContent="center">
+        <VinculationBanner
+          key={selectedEmployee ? selectedEmployee.employeeId : "no-employee"}
+          name={
+            selectedEmployee
+              ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+              : "Empleado no seleccionado"
+          }
+          status={
+            selectedEmployee
+              ? selectedEmployee.employeeStatus
+              : "estado-desconocido"
+          }
+          imageUrl={logoUrl}
+          redirectUrl="/employees/select-employee"
+        />
+      </Stack>
       <AppMenu
         appName={appName}
         appDescription={appDescription}
