@@ -13,7 +13,10 @@ import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-import { IRequestBody } from "@services/certifications/postHumanResourceRequest/types";
+import {
+  IRequestBody,
+  IHumanResourceRequest,
+} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 
@@ -84,9 +87,10 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+  const [requestsHolidays, setRequestsHolidays] = useState<IRequestBody[]>([]);
 
   const [requestsCertifications, setRequestsCertifications] = useState<
-    IRequestBody[]
+    IHumanResourceRequest[]
   >([]);
 
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
@@ -170,6 +174,8 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         selectedEmployee,
         setSelectedEmployee,
+        requestsHolidays,
+        setRequestsHolidays,
         requestsCertifications,
         setRequestsCertifications,
       }}

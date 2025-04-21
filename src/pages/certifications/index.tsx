@@ -9,9 +9,10 @@ import {
   RequestStatus,
   RequestStatusLabel,
   HumanResourceRequestType,
-} from "@services/certifications/postHumanResourceRequest/types";
-import { deleteHumanResourceRequest } from "@services/certifications/deleteHumanResourceRequest";
+} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
+import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { formatDate } from "@utils/date";
 
 import { CertificationsOptionsUI } from "./interface";
@@ -23,26 +24,16 @@ function CertificationsOptions() {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const { requestsCertifications, setRequestsCertifications } = useAppContext();
 
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [showFlag, setShowFlag] = useState(false);
-
-  const { requestsCertifications, setRequestsCertifications } = useAppContext();
 
   useErrorFlag(
     location.state?.showFlag,
     location.state?.flagMessage,
     location.state?.flagTitle,
     location.state?.isSuccess,
-  );
-
-  useErrorFlag(
-    showFlag,
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-    true,
   );
 
   useEffect(() => {
@@ -73,29 +64,15 @@ function CertificationsOptions() {
     }
   }, [location, navigate]);
 
-  const handleDeleteRequest = async (requestToDelete: string) => {
-    setIsDeleting(true);
-    try {
-      await deleteHumanResourceRequest(requestToDelete);
+  const { isDeleting, handleDelete } = useDeleteRequest(
+    deleteHumanResourceRequest,
+    (filterFn) =>
       setRequestsCertifications((prevRequests) =>
-        prevRequests.filter((request) => request.requestId !== requestToDelete),
-      );
-      setShowFlag(false);
-      setTimeout(() => setShowFlag(true), 0);
-    } catch {
-      navigate(location.pathname, {
-        state: {
-          showFlag: true,
-          flagTitle: "Error",
-          flagMessage: "No se pudo eliminar la solicitud",
-          isSuccess: false,
-        },
-        replace: true,
-      });
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+        prevRequests.filter(filterFn),
+      ),
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
+  );
 
   const certificationsTableData: ICertificationsTable[] =
     requestsCertifications.map((request) => {
@@ -162,7 +139,7 @@ function CertificationsOptions() {
       tableData={combinedTableData}
       isLoading={isLoading}
       isMobile={isMobile}
-      handleDeleteRequest={(requestId) => void handleDeleteRequest(requestId)}
+      handleDeleteRequest={(requestId) => void handleDelete(requestId)}
     />
   );
 }
