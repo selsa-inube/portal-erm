@@ -72,9 +72,11 @@ export function useRequestSubmission(
         if (typeRequest === "vacations") {
           setRequestsHolidays([...requestsHolidays, requestBody]);
         } else if (typeRequest === "certifications") {
-          setRequestsCertifications([...requestsCertifications, requestBody]);
+          setRequestsCertifications([
+            ...requestsCertifications,
+            { ...requestBody, requestId: response.humanResourceRequestId },
+          ]);
         }
-
         return true;
       }
       return false;
