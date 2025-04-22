@@ -77,7 +77,7 @@ function BoardSection(props: IBoardSectionProps) {
               gap="24px"
               alignItems="center"
               justifyContent="center"
-              height={isMobile ? "auto" : "533px"} // Ajuste para móviles
+              height={isMobile ? "auto" : "533px"}
               width="100%"
             >
               <Text type="title" size="small" appearance="gray">

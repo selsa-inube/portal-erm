@@ -72,6 +72,7 @@ function RequestsUI(props: RequestsUIProps) {
       selectedFilters.filter((filter) => filter.value !== filterValueToRemove),
     );
   };
+
   const selectedStatusFilters = selectedFilters.filter((filter) =>
     statusOptions.some((status) => status.value === filter.value),
   );
@@ -97,6 +98,34 @@ function RequestsUI(props: RequestsUIProps) {
     closeFilterModal();
   };
 
+  const getFilteredRequests = () =>
+    boardSections.flatMap(({ value, sectionInformation }) =>
+      sectionInformation
+        .filter(({ id, title, requestDate, responsible }) => {
+          const matchesSearch = [id, title, requestDate, responsible].some(
+            (field) =>
+              field?.toString().toLowerCase().includes(debouncedSearchTerm),
+          );
+
+          const matchesAssignment =
+            selectedAssignmentFilters.length === 0 ||
+            selectedAssignmentFilters.some((assignment) =>
+              title.toLowerCase().includes(assignment.label.toLowerCase()),
+            );
+
+          const matchesStatus =
+            selectedStatusFilters.length === 0 ||
+            selectedStatusFilters.some(
+              (filter) => filter.value.toLowerCase() === value.toLowerCase(),
+            );
+
+          return matchesSearch && matchesAssignment && matchesStatus;
+        })
+        .map((info) => ({ ...info, status: value })),
+    );
+
+  const filteredRequestsData = getFilteredRequests();
+
   const getFilterCount = (filter: IOption) => {
     const isStatusFilter = statusOptions.some(
       (status) => status.value === filter.value,
@@ -105,35 +134,15 @@ function RequestsUI(props: RequestsUIProps) {
       (assignment) => assignment.value === filter.value,
     );
 
-    return boardSections
-      .flatMap(({ value: sectionStatus, sectionInformation }) =>
-        sectionInformation.map((info) => ({
-          ...info,
-          status: sectionStatus,
-        })),
-      )
-      .filter((info) => {
-        const matchesSearch = [
-          info.id,
-          info.title,
-          info.requestDate,
-          info.responsible,
-        ].some((field) =>
-          field?.toString().toLowerCase().includes(debouncedSearchTerm),
-        );
-
-        if (!matchesSearch) return false;
-
-        if (isStatusFilter) {
-          return info.status.toLowerCase() === filter.value.toLowerCase();
-        }
-
-        if (isAssignmentFilter) {
-          return info.title.toLowerCase().includes(filter.value.toLowerCase());
-        }
-
-        return false;
-      }).length;
+    return filteredRequestsData.filter((info) => {
+      if (isStatusFilter) {
+        return info.status.toLowerCase() === filter.value.toLowerCase();
+      }
+      if (isAssignmentFilter) {
+        return info.title.toLowerCase().includes(filter.value.toLowerCase());
+      }
+      return false;
+    }).length;
   };
 
   return (
