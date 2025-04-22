@@ -1,12 +1,25 @@
 import { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Nav, Grid, Header, useMediaQuery, Icon } from "@inubekit/inubekit";
-import { MdOutlineChevronRight } from "react-icons/md";
+import {
+  Nav,
+  Grid,
+  Header,
+  useMediaQuery,
+  Icon,
+  Stack,
+} from "@inubekit/inubekit";
+import {
+  MdOutlineChevronRight,
+  MdEditCalendar,
+  MdCached,
+} from "react-icons/md";
 
 import { useNavConfig, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { VinculationBanner } from "@components/layout/Banner";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledAppPage,
@@ -35,9 +48,15 @@ const renderLogo = (imgUrl: string, clientName: string) => {
 };
 
 function AppPage(props: AppPageProps) {
-  const { withNav = true } = props;
-  const { user, logoUrl, selectedClient, businessUnits, setSelectedClient } =
-    useAppContext();
+  const { withNav = true, withBanner = true } = props;
+  const {
+    user,
+    logoUrl,
+    selectedClient,
+    businessUnits,
+    setSelectedClient,
+    selectedEmployee,
+  } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
 
@@ -127,6 +146,50 @@ function AppPage(props: AppPageProps) {
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMainScroll>
+              <Stack
+                width="100%"
+                padding={`${spacing.s0} ${spacing.s1000} ${spacing.s0} ${spacing.s1000}`}
+              >
+                {withBanner && (
+                  <Stack
+                    padding={spacing.s075}
+                    width="100%"
+                    justifyContent="center"
+                  >
+                    <VinculationBanner
+                      key={
+                        selectedEmployee
+                          ? selectedEmployee.employeeId
+                          : "no-employee"
+                      }
+                      name={
+                        selectedEmployee
+                          ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+                          : "Empleado no seleccionado"
+                      }
+                      status={
+                        selectedEmployee
+                          ? selectedEmployee.employeeStatus
+                          : "estado-desconocido"
+                      }
+                      imageUrl={logoUrl}
+                      redirectUrl="/employees/select-employee"
+                      infoItems={[
+                        {
+                          icon: <MdEditCalendar />,
+                          value: 10,
+                          label: "Días pendientes",
+                        },
+                        {
+                          icon: <MdCached />,
+                          value: 12,
+                          label: "Actualizaciones",
+                        },
+                      ]}
+                    />
+                  </Stack>
+                )}
+              </Stack>
               <StyledMain>
                 <Outlet />
               </StyledMain>

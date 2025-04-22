@@ -3,22 +3,21 @@ import { Text, Icon, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import {
   MdCached,
-  MdEditCalendar,
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
 } from "react-icons/md";
 
 import bannerImage from "@assets/images/banner.png";
+import { WidgetBanner } from "@components/cards/WidgetBanner";
 import { spacing } from "@design/tokens/spacing";
 
-import { getStatusConfig } from "./config";
+import { getStatusConfig, infoItems } from "./config";
 import {
   StyledRadioClient,
   StyledBannerImage,
   VerticalDivider,
   MobileToggle,
   MobileDropdown,
-  StyledInfoItem,
 } from "./styles";
 
 export interface VinculationBannerProps {
@@ -27,8 +26,8 @@ export interface VinculationBannerProps {
   imageUrl: string;
   redirectUrl?: string;
   pendingDays?: number;
+  infoItems: InfoItemProps[];
 }
-
 interface InfoItemProps {
   icon: JSX.Element;
   value: number | string;
@@ -36,44 +35,14 @@ interface InfoItemProps {
   onClick?: () => void;
 }
 
-function InfoItem({ icon, value, label, onClick }: InfoItemProps) {
-  return (
-    <StyledInfoItem onClick={onClick} clickable={!!onClick}>
-      <Stack alignItems="center" gap={spacing.s100}>
-        <Icon icon={icon} appearance="gray" size="18px" />
-        <Text type="title" weight="bold" size="large" appearance="primary">
-          {value}
-        </Text>
-      </Stack>
-      <Text type="label" appearance="gray">
-        {label}
-      </Text>
-    </StyledInfoItem>
-  );
-}
-
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status, redirectUrl, pendingDays = 30 } = props;
+  const { name, status, redirectUrl } = props;
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleRef = useRef<HTMLDivElement>(null);
 
   const isMobile = useMediaQuery("(max-width: 550px)");
-
-  const infoItems = [
-    {
-      icon: <MdEditCalendar />,
-      value: pendingDays,
-      label: "Días pendientes",
-    },
-    {
-      icon: <MdCached />,
-      value: 12,
-      label: "Actualizaciones",
-    },
-  ];
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -157,12 +126,13 @@ function VinculationBanner(props: VinculationBannerProps) {
                   gap={spacing.s100}
                   alignItems="flex-start"
                 >
-                  {infoItems.map((item, index) => (
-                    <InfoItem
+                  {props.infoItems.map((item, index) => (
+                    <WidgetBanner
                       key={index}
                       icon={item.icon}
                       value={item.value}
                       label={item.label}
+                      onClick={item.onClick}
                     />
                   ))}
                 </Stack>
@@ -173,7 +143,7 @@ function VinculationBanner(props: VinculationBannerProps) {
 
         {!isMobile && (
           <Stack gap={spacing.s100}>
-            <InfoItem
+            <WidgetBanner
               icon={infoItems[0].icon}
               value={infoItems[0].value}
               label={infoItems[0].label}
@@ -181,7 +151,7 @@ function VinculationBanner(props: VinculationBannerProps) {
 
             <VerticalDivider />
 
-            <InfoItem
+            <WidgetBanner
               icon={infoItems[1].icon}
               value={infoItems[1].value}
               label={infoItems[1].label}

@@ -2,10 +2,6 @@ import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
-interface StyledInfoItemProps {
-  clickable?: boolean;
-}
-
 const StyledRadioClient = styled.div`
   position: relative;
   display: flex;
@@ -73,17 +69,10 @@ const MobileDropdown = styled.div`
   justify-content: center;
 `;
 
-const StyledInfoItem = styled.div<StyledInfoItemProps>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-`;
 export {
   StyledRadioClient,
   StyledBannerImage,
   VerticalDivider,
   MobileToggle,
   MobileDropdown,
-  StyledInfoItem,
 };

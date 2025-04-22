@@ -10,8 +10,6 @@ import {
 import { AppMenu } from "@components/layout/AppMenu";
 import { spacing } from "@design/tokens/spacing";
 import { BoardSection } from "@components/layout/BoardSection";
-import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculationBanner } from "@components/layout/Banner";
 
 import { IRoute, IOption } from "./types";
 import { boardSections } from "./config";
@@ -57,27 +55,8 @@ function RequestsUI(props: RequestsUIProps) {
     statusOptions,
   } = props;
 
-  const { logoUrl, selectedEmployee } = useAppContext();
-
   return (
     <>
-      <Stack padding={spacing.s075} justifyContent="center">
-        <VinculationBanner
-          key={selectedEmployee ? selectedEmployee.employeeId : "no-employee"}
-          name={
-            selectedEmployee
-              ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-              : "Empleado no seleccionado"
-          }
-          status={
-            selectedEmployee
-              ? selectedEmployee.employeeStatus
-              : "estado-desconocido"
-          }
-          imageUrl={logoUrl}
-          redirectUrl="/employees/select-employee"
-        />
-      </Stack>
       <AppMenu
         appName={appName}
         appRoute={appRoute}

@@ -1,4 +1,10 @@
-import { MdOutlineSchedule, MdCancel, MdCheckCircle } from "react-icons/md";
+import {
+  MdOutlineSchedule,
+  MdCancel,
+  MdCheckCircle,
+  MdCached,
+  MdEditCalendar,
+} from "react-icons/md";
 
 export type StatusKey =
   | "vinculado"
@@ -52,3 +58,16 @@ export function getStatusConfig(status: string): StatusConfig {
     }
   );
 }
+
+export const infoItems = [
+  {
+    icon: <MdEditCalendar />,
+    value: 10,
+    label: "Días pendientes",
+  },
+  {
+    icon: <MdCached />,
+    value: 12,
+    label: "Actualizaciones",
+  },
+];

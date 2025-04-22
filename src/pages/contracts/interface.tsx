@@ -19,8 +19,6 @@ import { RequestComponentDetail } from "@components/modals/ComponentDetailModal"
 import { SelectModal } from "@components/modals/SelectModal";
 import { InfoModal } from "@components/modals/InfoModal";
 import { currencyFormat } from "@utils/forms/currency";
-import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculationBanner } from "@components/layout/Banner";
 
 import {
   StyledContractsContainer,
@@ -106,27 +104,8 @@ function ContractsUI(props: ContractsUIProps) {
   const isTablet = useMediaQuery("(max-width: 1235px)");
   const isMobile = useMediaQuery("(max-width: 550px)");
 
-  const { logoUrl, selectedEmployee } = useAppContext();
-
   return (
     <>
-      <Stack padding={spacing.s075} justifyContent="center">
-        <VinculationBanner
-          key={selectedEmployee ? selectedEmployee.employeeId : "no-employee"}
-          name={
-            selectedEmployee
-              ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-              : "Empleado no seleccionado"
-          }
-          status={
-            selectedEmployee
-              ? selectedEmployee.employeeStatus
-              : "estado-desconocido"
-          }
-          imageUrl={logoUrl}
-          redirectUrl="/employees/select-employee"
-        />
-      </Stack>
       <AppMenu
         appName={appName}
         appRoute={appRoute}
