@@ -146,10 +146,7 @@ function AppPage(props: AppPageProps) {
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMainScroll>
-              <Stack
-                width="100%"
-                padding={`${spacing.s0} ${spacing.s1000} ${spacing.s0} ${spacing.s1000}`}
-              >
+              <Stack width="100%" padding={`${spacing.s0} ${spacing.s1000}`}>
                 {withBanner && (
                   <Stack
                     padding={spacing.s075}

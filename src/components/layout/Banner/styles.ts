@@ -62,11 +62,11 @@ const MobileDropdown = styled.div`
       theme?.palette?.neutralAlpha?.N40A || inube.palette.neutralAlpha.N40A};
   min-width: 130px;
   padding: ${spacing.s100};
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 2;
 `;
 
 export {
