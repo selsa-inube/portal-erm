@@ -17,11 +17,11 @@ interface IStyledCollapseIcon {
 
 const StyledBoardSection = styled.div<IStyledBoardSection>`
   display: flex;
+  justify-content: center;
   gap: ${spacing.s150};
   flex-direction: column;
   padding: 10px 12px 12px;
   width: calc(100% - 24px);
-  height: 699px;
   border-top: 1px solid;
   border-bottom: ${({ $orientation }) =>
     $orientation !== "horizontal" ? "1px solid" : "none"};
