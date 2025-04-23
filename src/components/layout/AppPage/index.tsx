@@ -8,11 +8,7 @@ import {
   Icon,
   Stack,
 } from "@inubekit/inubekit";
-import {
-  MdOutlineChevronRight,
-  MdEditCalendar,
-  MdCached,
-} from "react-icons/md";
+import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
 
 import { useNavConfig, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
@@ -146,12 +142,13 @@ function AppPage(props: AppPageProps) {
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMainScroll>
-              <Stack width="100%" padding={`${spacing.s0} ${spacing.s1000}`}>
+              <Stack width="100%">
                 {withBanner && (
                   <Stack
                     padding={spacing.s075}
                     width="100%"
                     justifyContent="center"
+                    margin={isTablet ? "0px 16px" : "32px 64px"}
                   >
                     <VinculationBanner
                       key={
@@ -173,14 +170,9 @@ function AppPage(props: AppPageProps) {
                       redirectUrl="/employees/select-employee"
                       infoItems={[
                         {
-                          icon: <MdEditCalendar />,
+                          icon: <MdOutlineBeachAccess />,
                           value: 10,
                           label: "Días pendientes",
-                        },
-                        {
-                          icon: <MdCached />,
-                          value: 12,
-                          label: "Actualizaciones",
                         },
                       ]}
                     />

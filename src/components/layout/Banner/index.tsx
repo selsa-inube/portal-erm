@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useRef, useEffect } from "react";
 import { Text, Icon, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,7 @@ import bannerImage from "@assets/images/banner.png";
 import { WidgetBanner } from "@components/cards/WidgetBanner";
 import { spacing } from "@design/tokens/spacing";
 
-import { getStatusConfig, infoItems } from "./config";
+import { getStatusConfig } from "./config";
 import {
   StyledRadioClient,
   StyledBannerImage,
@@ -28,6 +29,7 @@ export interface VinculationBannerProps {
   pendingDays?: number;
   infoItems: InfoItemProps[];
 }
+
 interface InfoItemProps {
   icon: JSX.Element;
   value: number | string;
@@ -36,13 +38,14 @@ interface InfoItemProps {
 }
 
 function VinculationBanner(props: VinculationBannerProps) {
-  const { name, status, redirectUrl } = props;
+  const { name, status, redirectUrl, infoItems } = props;
   const navigate = useNavigate();
   const { color, icon, label } = getStatusConfig(status);
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleRef = useRef<HTMLDivElement>(null);
 
   const isMobile = useMediaQuery("(max-width: 550px)");
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -99,14 +102,14 @@ function VinculationBanner(props: VinculationBannerProps) {
                 spacing="narrow"
                 variant="outlined"
                 shape="rectangle"
-                size="22px"
+                size="20px"
                 onClick={() => navigate(redirectUrl)}
               />
             )}
           </Stack>
         </Stack>
 
-        {isMobile && (
+        {isMobile ? (
           <div ref={toggleRef}>
             <MobileToggle onClick={() => setIsExpanded((prev) => !prev)}>
               <Icon
@@ -126,7 +129,7 @@ function VinculationBanner(props: VinculationBannerProps) {
                   gap={spacing.s100}
                   alignItems="flex-start"
                 >
-                  {props.infoItems.map((item, index) => (
+                  {infoItems.map((item, index) => (
                     <WidgetBanner
                       key={index}
                       icon={item.icon}
@@ -139,23 +142,19 @@ function VinculationBanner(props: VinculationBannerProps) {
               </MobileDropdown>
             )}
           </div>
-        )}
-
-        {!isMobile && (
+        ) : (
           <Stack gap={spacing.s100}>
-            <WidgetBanner
-              icon={infoItems[0].icon}
-              value={infoItems[0].value}
-              label={infoItems[0].label}
-            />
-
-            <VerticalDivider />
-
-            <WidgetBanner
-              icon={infoItems[1].icon}
-              value={infoItems[1].value}
-              label={infoItems[1].label}
-            />
+            {infoItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && <VerticalDivider />}
+                <WidgetBanner
+                  icon={item.icon}
+                  value={item.value}
+                  label={item.label}
+                  onClick={item.onClick}
+                />
+              </React.Fragment>
+            ))}
           </Stack>
         )}
       </Stack>

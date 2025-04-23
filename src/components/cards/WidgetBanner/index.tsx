@@ -15,7 +15,7 @@ export const WidgetBanner = (props: WidgetBannerProps) => {
   return (
     <IStyledWidgetBanner onClick={onClick} clickable={!!onClick}>
       <Stack alignItems="center" gap={spacing.s100}>
-        <Icon icon={icon} appearance="primary" size="24px" />
+        <Icon icon={icon} appearance="gray" size="24px" />
         <Text type="title" weight="bold" size="large" appearance="primary">
           {value}
         </Text>
