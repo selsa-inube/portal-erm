@@ -1,13 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useMediaQuery, Icon } from "@inubekit/inubekit";
-import { MdOutlinePayments } from "react-icons/md";
+import { useMediaQuery } from "@inubekit/inubekit";
 
-import {
-  RequestStatus,
-  RequestStatusLabel,
-} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
-import { useAppContext } from "@context/AppContext/useAppContext";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { useErrorFlag } from "@hooks/useErrorFlag";
@@ -23,7 +17,6 @@ function HolidaysOptions() {
   const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
-  const { requestsHolidays, setRequestsHolidays } = useAppContext();
   const hasActiveContract = true;
 
   useEffect(() => {
@@ -45,8 +38,7 @@ function HolidaysOptions() {
     fetchData();
   }, []);
 
-  const { isDeleting, handleDelete } = useDeleteRequest((filterFn) => {
-    setRequestsHolidays((prev) => prev.filter(filterFn));
+  const { handleDelete } = useDeleteRequest((filterFn) => {
     setTableData((prev) => prev.filter(filterFn));
   });
 
@@ -63,71 +55,17 @@ function HolidaysOptions() {
     }
   }, [location, navigate]);
 
-  const mapHolidaysData = (): IHolidaysTable[] =>
-    requestsHolidays.map((request) => {
-      const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
-      return {
-        requestId: request.requestId,
-        requestNumber: request.humanResourceRequestNumber,
-        description: { value: request.humanResourceRequestDescription },
-        date: { value: requestData.startDate },
-        days: { value: Number(requestData.daysOff) },
-        status: {
-          value:
-            RequestStatusLabel[
-              request.humanResourceRequestStatus as RequestStatus
-            ],
-        },
-        dataDetails: {
-          value: {
-            daysEnjoyed: requestData.daysOff,
-            startDate: requestData.startDate,
-            contract: requestData.contract,
-            description: request.humanResourceRequestDescription,
-          },
-        },
-        details: {
-          type: "icon" as const,
-          value: (
-            <Icon
-              appearance="dark"
-              size="16px"
-              cursorHover
-              icon={<MdOutlinePayments />}
-            />
-          ),
-        },
-        delete: {
-          type: "icon" as const,
-          disabled: isDeleting,
-          value: (
-            <Icon
-              appearance="danger"
-              size="16px"
-              cursorHover
-              icon={<MdOutlinePayments />}
-            />
-          ),
-        },
-        type: { value: request.humanResourceRequestType ?? "Ordinario" },
-      };
-    });
-
-  const combinedTableData = [...mapHolidaysData(), ...tableData];
-
   return (
     <HolidaysOptionsUI
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
       navigatePage={holidaysNavConfig[0].url}
-      tableData={combinedTableData.length > 0 ? combinedTableData : []}
+      tableData={tableData}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
       handleDeleteRequest={(requestId, justification) => {
-        const request = combinedTableData.find(
-          (item) => item.requestId === requestId,
-        );
+        const request = tableData.find((item) => item.requestId === requestId);
         const requestNumber = request?.requestNumber ?? "";
         void handleDelete(requestId, justification, requestNumber);
       }}
