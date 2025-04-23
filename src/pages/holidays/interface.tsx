@@ -18,7 +18,7 @@ interface HolidaysOptionsUIProps {
   isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
-  handleDeleteRequest: (requestId: string) => void;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {

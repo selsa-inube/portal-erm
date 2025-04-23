@@ -2,59 +2,83 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { IDeleteResponse } from "@services/humanResourcesRequest/deleteHumanResourceRequest/types";
+import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
 
-export function useDeleteRequest<T>(
-  deleteFunction: (id: string) => Promise<unknown>,
+export function useDeleteRequest<T extends { requestId?: string }>(
   updateStateFunction: (filterFn: (item: T) => boolean) => void,
-  successMessage = "La solicitud se canceló correctamente",
-  successTitle = "Solicitud cancelada",
-  errorMessage = "No se pudo eliminar la solicitud",
-  errorTitle = "Error",
 ) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDeleting, setIsDeleting] = useState(false);
   const [showFlag, setShowFlag] = useState(false);
 
-  useErrorFlag(showFlag, successMessage, successTitle, true);
+  useErrorFlag(
+    showFlag,
+    "La solicitud se canceló correctamente",
+    "Solicitud cancelada",
+    true,
+  );
+
+  const createRequestBody = (
+    id: string,
+    justification = "",
+  ): IDeleteResponse => ({
+    humanResourceRequestDescription: "",
+    humanResourceRequestId: id,
+    humanResourceRequestNumber: "",
+    humanResourceRequestTraceabilities: [
+      {
+        actionExecuted: "Remove",
+        description: "Request removal",
+        executionDate: new Date().toISOString(),
+        humanResourceRequestId: id,
+        traceabilityId: "",
+        transactionOperation: "Insert",
+        userWhoExecutedAction: "",
+      },
+    ],
+    removalJustification: justification,
+    tasksToManageTheHumanResourcesRequests: [
+      {
+        description: "Delete human resource request",
+        humanResourceRequestId: id,
+        taskCode: "",
+        taskManagingId: "",
+        taskName: "RemoveRequest",
+        taskStatus: "Completed",
+        transactionOperation: "Insert",
+      },
+    ],
+  });
 
   const handleDelete = async (
     id: string,
-    idField: keyof T = "requestId" as keyof T,
+    justification?: string,
+    idField: keyof T = "requestId",
   ) => {
     setIsDeleting(true);
     try {
-      await deleteFunction(id);
-
-      updateStateFunction(
-        (item: T) => (item[idField] as unknown as string) !== id,
-      );
-
+      await deleteHumanResourceRequest(createRequestBody(id, justification));
+      updateStateFunction((item: T) => item[idField] !== id);
       setShowFlag(false);
       setTimeout(() => setShowFlag(true), 0);
-
       return true;
     } catch {
       navigate(location.pathname, {
         state: {
           showFlag: true,
-          flagTitle: errorTitle,
-          flagMessage: errorMessage,
+          flagTitle: "Error",
+          flagMessage: "No se pudo eliminar la solicitud",
           isSuccess: false,
         },
         replace: true,
       });
-
       return false;
     } finally {
       setIsDeleting(false);
     }
   };
 
-  return {
-    isDeleting,
-    handleDelete,
-    showFlag,
-    setShowFlag,
-  };
+  return { isDeleting, handleDelete, showFlag, setShowFlag };
 }

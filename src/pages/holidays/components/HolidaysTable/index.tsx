@@ -30,7 +30,7 @@ interface HolidaysTableProps {
   data: IHolidaysTable[];
   loading?: boolean;
   disableDeleteAction?: boolean;
-  handleDeleteRequest: (requestId: string) => void;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function HolidaysTable(props: HolidaysTableProps) {
@@ -362,9 +362,9 @@ function HolidaysTable(props: HolidaysTableProps) {
           buttonText="Cancelar"
           inputLabel="Justificación"
           inputPlaceholder="¿Por qué eliminarás el registro?"
-          onSubmit={() => {
+          onSubmit={(values) => {
             if (selectedRequestId) {
-              handleDeleteRequest(selectedRequestId);
+              handleDeleteRequest(selectedRequestId, values.textarea);
               handleCloseModal();
             }
           }}

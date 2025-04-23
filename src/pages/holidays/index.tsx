@@ -3,15 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery, Icon } from "@inubekit/inubekit";
 import { MdOutlinePayments } from "react-icons/md";
 
-import { useErrorFlag } from "@hooks/useErrorFlag";
-import { useAppContext } from "@context/AppContext/useAppContext";
 import {
   RequestStatus,
   RequestStatusLabel,
 } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
-import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
-import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { useAppContext } from "@context/AppContext/useAppContext";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { formatHolidaysData } from "./config/table.config";
 import { HolidaysOptionsUI } from "./interface";
@@ -28,13 +27,11 @@ function HolidaysOptions() {
   const hasActiveContract = true;
 
   useEffect(() => {
-    const fetchHumanResourceRequests = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
-
       try {
         const requests = await getHumanResourceRequests("vacations", "");
-        const formattedData = formatHolidaysData(requests ?? []);
-        setTableData(formattedData);
+        setTableData(formatHolidaysData(requests ?? []));
       } catch (error) {
         console.error(
           "Error al obtener las solicitudes de recursos humanos:",
@@ -45,17 +42,13 @@ function HolidaysOptions() {
         setIsLoading(false);
       }
     };
-
-    fetchHumanResourceRequests();
+    fetchData();
   }, []);
 
-  const { isDeleting, handleDelete } = useDeleteRequest(
-    deleteHumanResourceRequest,
-    (filterFn) =>
-      setRequestsHolidays((prevRequests) => prevRequests.filter(filterFn)),
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-  );
+  const { isDeleting, handleDelete } = useDeleteRequest((filterFn) => {
+    setRequestsHolidays((prev) => prev.filter(filterFn));
+    setTableData((prev) => prev.filter(filterFn));
+  });
 
   useErrorFlag(
     location.state?.showFlag,
@@ -70,14 +63,12 @@ function HolidaysOptions() {
     }
   }, [location, navigate]);
 
-  const holidaysTableData: IHolidaysTable[] = requestsHolidays.map(
-    (request) => {
+  const mapHolidaysData = (): IHolidaysTable[] =>
+    requestsHolidays.map((request) => {
       const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
       return {
         requestId: request.requestId,
-        description: {
-          value: request.humanResourceRequestDescription,
-        },
+        description: { value: request.humanResourceRequestDescription },
         date: { value: requestData.startDate },
         days: { value: Number(requestData.daysOff) },
         status: {
@@ -95,36 +86,33 @@ function HolidaysOptions() {
           },
         },
         details: {
-          type: "icon",
+          type: "icon" as const,
           value: (
             <Icon
               appearance="dark"
               size="16px"
-              cursorHover={true}
+              cursorHover
               icon={<MdOutlinePayments />}
             />
           ),
         },
         delete: {
-          type: "icon",
+          type: "icon" as const,
           disabled: isDeleting,
           value: (
             <Icon
               appearance="danger"
               size="16px"
-              cursorHover={true}
+              cursorHover
               icon={<MdOutlinePayments />}
             />
           ),
         },
-        type: {
-          value: request.humanResourceRequestType ?? "Ordinario",
-        },
+        type: { value: request.humanResourceRequestType ?? "Ordinario" },
       };
-    },
-  );
+    });
 
-  const combinedTableData = [...holidaysTableData, ...tableData];
+  const combinedTableData = [...mapHolidaysData(), ...tableData];
 
   return (
     <HolidaysOptionsUI
@@ -135,7 +123,9 @@ function HolidaysOptions() {
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
-      handleDeleteRequest={(requestId) => void handleDelete(requestId)}
+      handleDeleteRequest={(requestId, justification) =>
+        void handleDelete(requestId, justification)
+      }
     />
   );
 }

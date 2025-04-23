@@ -1,19 +1,10 @@
 import { environment } from "@config/environment";
+
 import { IDeleteResponse } from "./types";
 
-interface IRemoveHumanResourcesRequest {
-  humanResourceRequestIds: string[];
-  reason?: string;
-  remarks?: string;
-}
-
 export async function deleteHumanResourceRequest(
-  requestId: string,
+  body: IDeleteResponse,
 ): Promise<IDeleteResponse> {
-  const requestPayload: IRemoveHumanResourcesRequest = {
-    humanResourceRequestIds: [requestId],
-  };
-
   const response = await fetch(
     `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests`,
     {
@@ -22,13 +13,10 @@ export async function deleteHumanResourceRequest(
         "Content-Type": "application/json",
         "X-Action": "RemoveHumanResourcesRequest",
       },
-      body: JSON.stringify(requestPayload),
+      body: JSON.stringify(body),
     },
   );
 
-  if (!response.ok) {
-    throw new Error(`Error: ${response.status}`);
-  }
-
+  if (!response.ok) throw new Error(`Error: ${response.status}`);
   return response.json();
 }
