@@ -29,6 +29,11 @@ export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
       : null;
 
     return {
+      requestId: holiday.humanResourceRequestId,
+      requestNumber: holiday.humanResourceRequestNumber,
+      description: {
+        value: holiday.humanResourceRequestDescription,
+      },
       date: {
         value: formatDate(holiday.humanResourceRequestDate),
       },

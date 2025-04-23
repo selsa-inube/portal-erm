@@ -4,14 +4,13 @@ import { FormikProps } from "formik";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { ICertificationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { useRequestSubmission } from "@src/hooks/usePostHumanResourceRequest";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";
 import { certificationsNavConfig } from "../config/nav.config";
-import { ICertificationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 import { ModalState } from "./types";
-
-import { useRequestSubmission } from "@src/hooks/usePostHumanResourceResquest";
 
 function useFormManagement() {
   const [formValues, setFormValues] =

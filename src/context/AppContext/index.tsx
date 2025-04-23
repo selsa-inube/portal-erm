@@ -16,7 +16,7 @@ import { Employee } from "@ptypes/employeePortalConsultation.types";
 import {
   IRequestBody,
   IHumanResourceRequest,
-} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
+} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 

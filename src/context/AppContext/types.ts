@@ -9,7 +9,7 @@ import { Employee } from "@ptypes/employeePortalConsultation.types";
 import {
   IRequestBody,
   IHumanResourceRequest,
-} from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
+} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 
 interface BusinessManager {
   id: string;

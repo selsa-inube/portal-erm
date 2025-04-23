@@ -1,7 +1,9 @@
 import { useState } from "react";
+
 import { formatDate } from "@utils/date";
-import { useAppContext } from "@context/AppContext/useAppContext";
 import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { useAppContext } from "@context/AppContext/useAppContext";
+
 import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
 import { useRequestNavigation } from "./useRequestNavigation";
 
@@ -56,7 +58,7 @@ export function useRequestSubmission(
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
-        humanResourceRequestDescription: formValues.observations || "",
+        humanResourceRequestDescription: formValues.observations ?? "",
         humanResourceRequestStatus: "in_progress",
         humanResourceRequestType: typeRequest,
         userCodeInCharge,

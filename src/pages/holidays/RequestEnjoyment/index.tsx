@@ -1,10 +1,13 @@
 import { useRef, useState } from "react";
-
 import { FormikProps } from "formik";
+import { useNavigate } from "react-router-dom";
 
+import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
+import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
-
+import { useAppContext } from "@context/AppContext/useAppContext";
+import { formatDate } from "@utils/date";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 
 import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
@@ -12,7 +15,6 @@ import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
 import { ModalState } from "./types";
-import { useRequestSubmission } from "@src/hooks/usePostHumanResourceResquest";
 
 function useFormManagement() {
   const [formValues, setFormValues] =
@@ -70,6 +72,92 @@ function useModalManagement() {
   };
 }
 
+function useRequestSubmission(formValues: IVacationGeneralInformationEntry) {
+  const [requestId, setRequestId] = useState("45678822");
+  const [staffName, setStaffName] = useState<string | null>(null);
+  const { selectedEmployee, requestsHolidays, setRequestsHolidays } =
+    useAppContext();
+  const navigate = useNavigate();
+
+  const [showErrorFlag, setShowErrorFlag] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const submitRequest = async () => {
+    try {
+      const humanResourceRequestData = JSON.stringify({
+        daysOff: formValues.daysOff,
+        startDate: formatDate(formValues.startDate),
+        contract: formValues.contract,
+      });
+
+      const userCodeInCharge = "User 1";
+      const userNameInCharge = "Johan Daniel Garcia Nova";
+
+      const requestBody: IRequestBody = {
+        employeeId: selectedEmployee.employeeId,
+        humanResourceRequestData: humanResourceRequestData,
+        humanResourceRequestDate: new Date().toISOString(),
+        humanResourceRequestDescription: formValues.observations ?? "",
+        humanResourceRequestStatus: "in_progress",
+        humanResourceRequestType: "vacations",
+        userCodeInCharge,
+        userNameInCharge,
+      };
+
+      if (userCodeInCharge && userNameInCharge) {
+        setStaffName(userNameInCharge);
+      } else {
+        setStaffName(null);
+      }
+
+      const response = await postHumanResourceRequest(requestBody);
+
+      if (response.humanResourceRequestId) {
+        setRequestId(response?.humanResourceRequestId);
+
+        setRequestsHolidays([
+          ...requestsHolidays,
+          {
+            ...requestBody,
+            requestId: response?.humanResourceRequestId,
+            humanResourceRequestNumber: response?.humanResourceRequestNumber,
+          },
+        ]);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error sending request:", error);
+      setErrorMessage(
+        "Error al enviar la solicitud de vacaciones. Intente nuevamente.",
+      );
+      setShowErrorFlag(true);
+      return false;
+    }
+  };
+
+  const navigateAfterSubmission = () => {
+    navigate("/holidays", {
+      state: {
+        showFlag: true,
+        flagTitle: "Solicitud enviada",
+        flagMessage: "La solicitud de disfrute fue enviada exitosamente.",
+        isSuccess: true,
+      },
+    });
+  };
+
+  return {
+    requestId,
+    staffName,
+    submitRequest,
+    navigateAfterSubmission,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+  };
+}
+
 function RequestEnjoyment() {
   const [currentStep, setCurrentStep] = useState(1);
   const {
@@ -86,15 +174,16 @@ function RequestEnjoyment() {
     openInfoModal,
     closeInfoModal,
   } = useModalManagement();
+
   const {
     requestId,
-    submitRequestHandler,
+    submitRequest,
     navigateAfterSubmission,
     staffName,
     showErrorFlag,
     errorMessage,
     setShowErrorFlag,
-  } = useRequestSubmission(formValues, "vacations");
+  } = useRequestSubmission(formValues);
 
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
@@ -117,7 +206,7 @@ function RequestEnjoyment() {
 
   const handleConfirmSendModal = async () => {
     setShowErrorFlag(false);
-    const isSuccess = await submitRequestHandler();
+    const isSuccess = await submitRequest();
 
     if (isSuccess) {
       closeSendModal();
@@ -129,7 +218,7 @@ function RequestEnjoyment() {
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
-    navigateAfterSubmission("vacations");
+    navigateAfterSubmission();
   };
 
   const {
