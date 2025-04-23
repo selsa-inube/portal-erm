@@ -1,5 +1,5 @@
 import { environment } from "@config/environment";
-import { mapRequestBody } from "@src/services/humanResourcesRequest/deleteHumanResourceRequest/mappers";
+import { mapRequestBody } from "@services/humanResourcesRequest/deleteHumanResourceRequest/mappers";
 
 import { IDeleteResponse } from "./types";
 
