@@ -10,17 +10,12 @@ import { useRequestNavigation } from "./useRequestNavigation";
 export function useRequestSubmission(
   formValues: HumanResourceRequestData,
   typeRequest: string,
+  userCodeInCharge: string,
+  userNameInCharge: string,
 ) {
   const [requestNum, setRequestNum] = useState("");
-  const [staffName, setStaffName] = useState<string | null>(null);
 
-  const {
-    selectedEmployee,
-    requestsHolidays,
-    setRequestsHolidays,
-    requestsCertifications,
-    setRequestsCertifications,
-  } = useAppContext();
+  const { selectedEmployee } = useAppContext();
 
   const {
     submitRequestToAPI,
@@ -51,9 +46,6 @@ export function useRequestSubmission(
         });
       }
 
-      const userCodeInCharge = "User 1";
-      const userNameInCharge = "Johan Daniel Garcia Nova";
-
       const requestBody = {
         employeeId: selectedEmployee.employeeId,
         humanResourceRequestData,
@@ -65,29 +57,10 @@ export function useRequestSubmission(
         userNameInCharge,
       };
 
-      if (userCodeInCharge && userNameInCharge) {
-        setStaffName(userNameInCharge);
-      } else {
-        setStaffName(null);
-      }
-
       const { success, response } = await submitRequestToAPI(requestBody);
 
       if (success && response?.humanResourceRequestId) {
         setRequestNum(response.humanResourceRequestNumber);
-
-        const newRequest = {
-          ...requestBody,
-          id: response.humanResourceRequestId,
-          number: response.humanResourceRequestNumber,
-          humanResourceRequestNumber: response.humanResourceRequestNumber,
-        };
-
-        if (typeRequest === "vacations") {
-          setRequestsHolidays([...requestsHolidays, newRequest]);
-        } else if (typeRequest === "certifications") {
-          setRequestsCertifications([...requestsCertifications, newRequest]);
-        }
 
         if (humanResourceRequestId) {
           navigateAfterSubmission(typeRequest);
@@ -103,8 +76,7 @@ export function useRequestSubmission(
   };
 
   return {
-    requestId: requestNum,
-    staffName,
+    requestNum,
     submitRequestHandler,
     navigateAfterSubmission,
     showErrorFlag,

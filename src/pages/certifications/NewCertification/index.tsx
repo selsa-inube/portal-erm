@@ -89,15 +89,22 @@ function NewCertification() {
     closeInfoModal,
   } = useModalManagement();
 
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
   const {
-    requestId,
+    requestNum,
     submitRequestHandler,
     navigateAfterSubmission,
-    staffName,
     showErrorFlag,
     errorMessage,
     setShowErrorFlag,
-  } = useRequestSubmission(formValues, "certifications");
+  } = useRequestSubmission(
+    formValues,
+    "certifications",
+    userCodeInCharge,
+    userNameInCharge,
+  );
 
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
@@ -169,8 +176,8 @@ function NewCertification() {
 
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
-          requestId={requestId}
-          staffName={staffName ?? ""}
+          requestId={requestNum}
+          staffName={userNameInCharge ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />

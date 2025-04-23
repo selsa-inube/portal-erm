@@ -25,7 +25,7 @@ export interface HumanResourceRequest {
   humanResourceRequestNumber: string;
   humanResourceRequestStatus: EStatus;
   humanResourceRequestTraceabilities: HumanResourceRequestTraceability[];
-  humanResourceRequestType: string;
+  humanResourceRequestType: EType;
   tasksToManageTheHumanResourcesRequests: TaskToManageHumanResourceRequest[];
   userCodeInCharge: string;
   userNameInCharge: string;

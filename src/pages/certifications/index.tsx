@@ -1,18 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MdOutlinePayments } from "react-icons/md";
-import { Icon, useMediaQuery } from "@inubekit/inubekit";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { useAppContext } from "@context/AppContext/useAppContext";
-import {
-  RequestStatus,
-  RequestStatusLabel,
-  IHumanResourceResponse,
-  HumanResourceRequestType,
-} from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
-import { formatDate } from "@utils/date";
 
 import { CertificationsOptionsUI } from "./interface";
 import { certificationsNavConfig } from "./config/nav.config";
@@ -25,7 +16,6 @@ function CertificationsOptions() {
   const [isLoading, setIsLoading] = useState(true);
   const [tableData, setTableData] = useState<ICertificationsTable[]>([]);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const { requestsCertifications } = useAppContext();
 
   useEffect(() => {
     const fetchHumanResourceRequests = async () => {
@@ -49,9 +39,7 @@ function CertificationsOptions() {
     fetchHumanResourceRequests();
   }, []);
 
-  const shouldShowFlag =
-    location.state?.showFlag &&
-    (location.state?.isSuccess || requestsCertifications.length > 0);
+  const shouldShowFlag = location.state?.showFlag && location.state?.isSuccess;
 
   useErrorFlag(
     shouldShowFlag,
@@ -66,68 +54,12 @@ function CertificationsOptions() {
     }
   }, [location, navigate]);
 
-  const certificationsTableData: ICertificationsTable[] = (
-    requestsCertifications as IHumanResourceResponse[]
-  ).map((request) => {
-    const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
-
-    return {
-      requestNumber: { value: request.humanResourceRequestNumber },
-      type: {
-        value:
-          HumanResourceRequestType[
-            request.humanResourceRequestType as keyof typeof HumanResourceRequestType
-          ],
-      },
-      date: { value: formatDate(request.humanResourceRequestDate) },
-      status: {
-        value:
-          RequestStatusLabel[
-            request.humanResourceRequestStatus as RequestStatus
-          ],
-      },
-      dataDetails: {
-        value: {
-          employeeId: request.employeeId,
-          issuer: request.humanResourceRequestType,
-          date: request.humanResourceRequestDate,
-          contract: requestData.contract,
-          description: request.humanResourceRequestDescription,
-        },
-      },
-      details: {
-        type: "icon",
-        value: (
-          <Icon
-            appearance="dark"
-            size="16px"
-            cursorHover={true}
-            icon={<MdOutlinePayments />}
-          />
-        ),
-      },
-      delete: {
-        type: "icon",
-        value: (
-          <Icon
-            appearance="danger"
-            size="16px"
-            cursorHover={true}
-            icon={<MdOutlinePayments />}
-          />
-        ),
-      },
-    };
-  });
-
-  const combinedTableData = [...certificationsTableData, ...tableData];
-
   return (
     <CertificationsOptionsUI
       appName={certificationsNavConfig[0].label}
       appRoute={certificationsNavConfig[0].crumbs}
       navigatePage={certificationsNavConfig[0].url}
-      tableData={combinedTableData}
+      tableData={tableData}
       isLoading={isLoading}
       isMobile={isMobile}
     />
