@@ -1,7 +1,11 @@
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Stack, Icon, Text } from "@inubekit/inubekit";
 
-import { StyledBoardSection, StyledCollapseIcon } from "./styles";
+import {
+  StyledBoardSection,
+  StyledCollapseIcon,
+  StyledEmptyContainer,
+} from "./styles";
 import { useBoardSectionLogic } from "./interface";
 import { ICreditRequest, IBoardSectionProps } from "./types";
 
@@ -73,11 +77,11 @@ function BoardSection(props: IBoardSectionProps) {
           {!isEmpty ? (
             children
           ) : (
-            <Stack>
+            <StyledEmptyContainer>
               <Text type="title" size="small" appearance="gray">
                 {getNoDataMessage()}
               </Text>
-            </Stack>
+            </StyledEmptyContainer>
           )}
         </Stack>
       )}

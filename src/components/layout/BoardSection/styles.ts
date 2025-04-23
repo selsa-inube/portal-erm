@@ -31,7 +31,7 @@ const StyledBoardSection = styled.div<IStyledBoardSection>`
       ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
       : theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
 
-  min-height: ${({ $isTablet }) => ($isTablet ? "auto" : "547px")};
+  min-height: ${({ $isTablet }) => ($isTablet ? "auto" : "585px")};
 
   & > div:nth-child(1) {
     justify-content: space-between;
@@ -47,4 +47,12 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
     $disabledCollapse ? "not-allowed" : "pointer"};
 `;
 
-export { StyledBoardSection, StyledCollapseIcon };
+const StyledEmptyContainer = styled.div`
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export { StyledBoardSection, StyledCollapseIcon, StyledEmptyContainer };
