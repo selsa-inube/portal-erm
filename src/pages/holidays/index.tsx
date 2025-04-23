@@ -123,9 +123,13 @@ function HolidaysOptions() {
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
-      handleDeleteRequest={(requestId, justification) =>
-        void handleDelete(requestId, justification)
-      }
+      handleDeleteRequest={(requestId, justification) => {
+        const request = combinedTableData.find(
+          (item) => item.requestId === requestId,
+        );
+        const description = request?.description?.value ?? "";
+        void handleDelete(requestId, justification, description);
+      }}
     />
   );
 }
