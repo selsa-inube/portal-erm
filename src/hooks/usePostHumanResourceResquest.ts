@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import { formatDate } from "@utils/date";
-import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
-import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
-import { postHumanResourceRequest } from "@src/services/humanResourcesRequest/postHumanResourceRequest";
 import { useAppContext } from "@context/AppContext/useAppContext";
+import { HumanResourceRequestData } from "@ptypes/humanResourcesRequest.types";
+import { useRequestSubmissionAPI } from "./useRequestSubmissionAPI";
+import { useRequestNavigation } from "./useRequestNavigation";
 
 export function useRequestSubmission(
   formValues: HumanResourceRequestData,
@@ -13,6 +11,7 @@ export function useRequestSubmission(
 ) {
   const [requestNum, setRequestNum] = useState("");
   const [staffName, setStaffName] = useState<string | null>(null);
+
   const {
     selectedEmployee,
     requestsHolidays,
@@ -20,12 +19,18 @@ export function useRequestSubmission(
     requestsCertifications,
     setRequestsCertifications,
   } = useAppContext();
-  const navigate = useNavigate();
 
-  const [showErrorFlag, setShowErrorFlag] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const {
+    submitRequestToAPI,
+    showErrorFlag,
+    errorMessage,
+    setShowErrorFlag,
+    humanResourceRequestId,
+  } = useRequestSubmissionAPI();
 
-  const submitRequest = async () => {
+  const { navigateAfterSubmission } = useRequestNavigation();
+
+  const submitRequestHandler = async () => {
     try {
       let humanResourceRequestData: string;
 
@@ -47,13 +52,13 @@ export function useRequestSubmission(
       const userCodeInCharge = "User 1";
       const userNameInCharge = "Johan Daniel Garcia Nova";
 
-      const requestBody: IRequestBody = {
+      const requestBody = {
         employeeId: selectedEmployee.employeeId,
-        humanResourceRequestData: humanResourceRequestData,
+        humanResourceRequestData,
         humanResourceRequestDate: new Date().toISOString(),
         humanResourceRequestDescription: formValues.observations || "",
         humanResourceRequestStatus: "in_progress",
-        humanResourceRequestType: "certification",
+        humanResourceRequestType: typeRequest,
         userCodeInCharge,
         userNameInCharge,
       };
@@ -64,57 +69,41 @@ export function useRequestSubmission(
         setStaffName(null);
       }
 
-      const response = await postHumanResourceRequest(requestBody);
+      const { success, response } = await submitRequestToAPI(requestBody);
 
-      if (response?.humanResourceRequestId) {
+      if (success && response?.humanResourceRequestId) {
         setRequestNum(response.humanResourceRequestNumber);
 
+        const newRequest = {
+          ...requestBody,
+          id: response.humanResourceRequestId,
+          number: response.humanResourceRequestNumber,
+          humanResourceRequestNumber: response.humanResourceRequestNumber,
+        };
+
         if (typeRequest === "vacations") {
-          setRequestsHolidays([...requestsHolidays, requestBody]);
+          setRequestsHolidays([...requestsHolidays, newRequest]);
         } else if (typeRequest === "certifications") {
-          setRequestsCertifications([...requestsCertifications, requestBody]);
+          setRequestsCertifications([...requestsCertifications, newRequest]);
         }
 
+        if (humanResourceRequestId) {
+          navigateAfterSubmission(typeRequest);
+        }
         return true;
       }
+
       return false;
     } catch (error) {
-      console.error("Error sending request:", error);
-      setErrorMessage(
-        "Error al enviar la solicitud de vacaciones o certificación. Intente nuevamente.",
-      );
-      setShowErrorFlag(true);
+      console.error("Error in request handler:", error);
       return false;
-    }
-  };
-
-  const navigateAfterSubmission = () => {
-    if (typeRequest === "vacations") {
-      navigate("/holidays", {
-        state: {
-          showFlag: true,
-          flagTitle: "Solicitud enviada",
-          flagMessage: "La solicitud de vacaciones fue enviada exitosamente.",
-          isSuccess: true,
-        },
-      });
-    } else if (typeRequest === "certifications") {
-      navigate("/certifications", {
-        state: {
-          showFlag: true,
-          flagTitle: "Solicitud enviada",
-          flagMessage:
-            "La solicitud de certificación fue enviada exitosamente.",
-          isSuccess: true,
-        },
-      });
     }
   };
 
   return {
     requestId: requestNum,
     staffName,
-    submitRequest,
+    submitRequestHandler,
     navigateAfterSubmission,
     showErrorFlag,
     errorMessage,

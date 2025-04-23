@@ -8,6 +8,7 @@ import { useAppContext } from "@context/AppContext/useAppContext";
 import {
   RequestStatus,
   RequestStatusLabel,
+  IHumanResourceResponse,
   HumanResourceRequestType,
 } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
@@ -65,58 +66,59 @@ function CertificationsOptions() {
     }
   }, [location, navigate]);
 
-  const certificationsTableData: ICertificationsTable[] =
-    requestsCertifications.map((request) => {
-      const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
+  const certificationsTableData: ICertificationsTable[] = (
+    requestsCertifications as IHumanResourceResponse[]
+  ).map((request) => {
+    const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
 
-      return {
-        requestNumber: { value: request.employeeId },
-        type: {
-          value:
-            HumanResourceRequestType[
-              request.humanResourceRequestType as keyof typeof HumanResourceRequestType
-            ],
+    return {
+      requestNumber: { value: request.humanResourceRequestNumber },
+      type: {
+        value:
+          HumanResourceRequestType[
+            request.humanResourceRequestType as keyof typeof HumanResourceRequestType
+          ],
+      },
+      date: { value: formatDate(request.humanResourceRequestDate) },
+      status: {
+        value:
+          RequestStatusLabel[
+            request.humanResourceRequestStatus as RequestStatus
+          ],
+      },
+      dataDetails: {
+        value: {
+          employeeId: request.employeeId,
+          issuer: request.humanResourceRequestType,
+          date: request.humanResourceRequestDate,
+          contract: requestData.contract,
+          description: request.humanResourceRequestDescription,
         },
-        date: { value: formatDate(request.humanResourceRequestDate) },
-        status: {
-          value:
-            RequestStatusLabel[
-              request.humanResourceRequestStatus as RequestStatus
-            ],
-        },
-        dataDetails: {
-          value: {
-            employeeId: request.employeeId,
-            issuer: request.humanResourceRequestType,
-            date: request.humanResourceRequestDate,
-            contract: requestData.contract,
-            description: request.humanResourceRequestDescription,
-          },
-        },
-        details: {
-          type: "icon",
-          value: (
-            <Icon
-              appearance="dark"
-              size="16px"
-              cursorHover={true}
-              icon={<MdOutlinePayments />}
-            />
-          ),
-        },
-        delete: {
-          type: "icon",
-          value: (
-            <Icon
-              appearance="danger"
-              size="16px"
-              cursorHover={true}
-              icon={<MdOutlinePayments />}
-            />
-          ),
-        },
-      };
-    });
+      },
+      details: {
+        type: "icon",
+        value: (
+          <Icon
+            appearance="dark"
+            size="16px"
+            cursorHover={true}
+            icon={<MdOutlinePayments />}
+          />
+        ),
+      },
+      delete: {
+        type: "icon",
+        value: (
+          <Icon
+            appearance="danger"
+            size="16px"
+            cursorHover={true}
+            icon={<MdOutlinePayments />}
+          />
+        ),
+      },
+    };
+  });
 
   const combinedTableData = [...certificationsTableData, ...tableData];
 

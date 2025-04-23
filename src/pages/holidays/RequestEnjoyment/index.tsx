@@ -88,7 +88,7 @@ function RequestEnjoyment() {
   } = useModalManagement();
   const {
     requestId,
-    submitRequest,
+    submitRequestHandler,
     navigateAfterSubmission,
     staffName,
     showErrorFlag,
@@ -117,9 +117,10 @@ function RequestEnjoyment() {
 
   const handleConfirmSendModal = async () => {
     setShowErrorFlag(false);
+    const isSuccess = await submitRequestHandler();
 
-    const isSuccess = await submitRequest();
     if (isSuccess) {
+      closeSendModal();
       openInfoModal();
     } else {
       closeSendModal();
@@ -128,7 +129,7 @@ function RequestEnjoyment() {
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
-    navigateAfterSubmission();
+    navigateAfterSubmission("vacations");
   };
 
   const {

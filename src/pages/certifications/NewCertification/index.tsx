@@ -92,7 +92,7 @@ function NewCertification() {
 
   const {
     requestId,
-    submitRequest,
+    submitRequestHandler,
     navigateAfterSubmission,
     staffName,
     showErrorFlag,
@@ -121,8 +121,10 @@ function NewCertification() {
 
   const handleConfirmSendModal = async () => {
     setShowErrorFlag(false);
-    const isSuccess = await submitRequest();
+    const isSuccess = await submitRequestHandler();
+
     if (isSuccess) {
+      closeSendModal();
       openInfoModal();
     } else {
       closeSendModal();
@@ -131,7 +133,7 @@ function NewCertification() {
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
-    navigateAfterSubmission();
+    navigateAfterSubmission("certifications");
   };
 
   const {
@@ -157,7 +159,6 @@ function NewCertification() {
         generalInformationRef={generalInformationRef}
         initialGeneralInformationValues={formValues}
       />
-
       {modalState.isSendModalVisible && (
         <SendRequestModal
           descriptionText="¿Realmente deseas enviar la solicitud de certificación?"
