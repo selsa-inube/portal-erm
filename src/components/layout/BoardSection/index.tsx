@@ -1,6 +1,11 @@
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Stack, Icon, Text } from "@inubekit/inubekit";
-import { StyledBoardSection, StyledCollapseIcon } from "./styles";
+
+import {
+  StyledBoardSection,
+  StyledCollapseIcon,
+  StyledEmptyContainer,
+} from "./styles";
 import { useBoardSectionLogic } from "./interface";
 import { ICreditRequest, IBoardSectionProps } from "./types";
 
@@ -10,13 +15,19 @@ function BoardSection(props: IBoardSectionProps) {
     sectionBackground = "light",
     orientation = "vertical",
     sectionInformation,
-    CardComponent,
+    children,
   } = props;
 
   const { collapse, handleCollapse, getNoDataMessage, isTablet, isMobile } =
     useBoardSectionLogic(props);
 
-  const disabledCollapse = sectionInformation.length === 0;
+  const isVertical = orientation === "vertical";
+  const isEmpty = sectionInformation.length === 0;
+  const disabledCollapse = isEmpty;
+  const titleType = isVertical || isMobile ? "title" : "headline";
+  const titleSize = isVertical || isMobile ? "large" : "medium";
+
+  const shouldShowContent = isVertical || !collapse;
 
   return (
     <StyledBoardSection
@@ -25,14 +36,12 @@ function BoardSection(props: IBoardSectionProps) {
       $isTablet={isTablet}
     >
       <Stack
-        justifyContent={
-          orientation === "vertical" ? "space-between" : "flex-start"
-        }
+        justifyContent={isVertical ? "space-between" : "flex-start"}
         alignItems="end"
         gap="24px"
       >
         <Stack alignItems="end" gap="8px">
-          {orientation !== "vertical" && (
+          {!isVertical && (
             <StyledCollapseIcon
               $collapse={collapse}
               $disabledCollapse={disabledCollapse}
@@ -47,41 +56,32 @@ function BoardSection(props: IBoardSectionProps) {
               />
             </StyledCollapseIcon>
           )}
-          <Text
-            type={orientation === "vertical" || isMobile ? "title" : "headline"}
-            size={orientation === "vertical" || isMobile ? "large" : "medium"}
-          >
+          <Text type={titleType} size={titleSize}>
             {sectionTitle}
           </Text>
         </Stack>
+
         <Text type="title" size="medium">
           {sectionInformation.length}/{sectionInformation.length || 0}
         </Text>
       </Stack>
-      {(collapse || orientation === "vertical") && (
+
+      {shouldShowContent && (
         <Stack
           wrap="wrap"
           alignItems="center"
-          direction={orientation === "vertical" ? "column" : "row"}
-          justifyContent={isMobile ? "center" : "flex-start"}
+          direction={isVertical ? "column" : "row"}
+          justifyContent={isMobile || isTablet ? "center" : "flex-start"}
           gap="20px"
         >
-          {sectionInformation.length > 0 ? (
-            sectionInformation.map((request, index) => (
-              <CardComponent key={index} request={request} />
-            ))
+          {!isEmpty ? (
+            children
           ) : (
-            <Stack
-              gap="24px"
-              alignItems="center"
-              justifyContent="center"
-              height="533px"
-              width="100%"
-            >
+            <StyledEmptyContainer>
               <Text type="title" size="small" appearance="gray">
                 {getNoDataMessage()}
               </Text>
-            </Stack>
+            </StyledEmptyContainer>
           )}
         </Stack>
       )}
