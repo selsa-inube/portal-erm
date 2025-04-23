@@ -25,8 +25,6 @@ function BoardSection(props: IBoardSectionProps) {
 
   const shouldShowContent = isVertical || !collapse;
 
-  const containerHeight = isTablet ? "auto" : "547px";
-
   return (
     <StyledBoardSection
       $sectionBackground={sectionBackground}
@@ -71,7 +69,6 @@ function BoardSection(props: IBoardSectionProps) {
           direction={isVertical ? "column" : "row"}
           justifyContent={isMobile || isTablet ? "center" : "flex-start"}
           gap="20px"
-          height={containerHeight}
         >
           {!isEmpty ? (
             children
