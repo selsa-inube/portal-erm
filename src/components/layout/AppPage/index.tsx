@@ -148,7 +148,11 @@ function AppPage(props: AppPageProps) {
                     padding={spacing.s075}
                     width="100%"
                     justifyContent="center"
-                    margin={isTablet ? "0px 16px" : "32px 64px"}
+                    margin={
+                      isTablet
+                        ? `${spacing.s0} ${spacing.s200}`
+                        : `${spacing.s400} ${spacing.s800} ${spacing.s0} `
+                    }
                   >
                     <VinculationBanner
                       key={
