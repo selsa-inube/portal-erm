@@ -1,3 +1,5 @@
+import { IOption } from "@inubekit/inubekit";
+
 type SectionBackground = "gray" | "light";
 
 type SectionOrientation = "horizontal" | "vertical";
@@ -8,8 +10,8 @@ interface ICreditRequest {
   creditRequestDateOfCreation?: string;
   userWhoPinnnedId?: string;
   title: string;
-  count: string;
-  message: string;
+  count?: string;
+  message?: string;
 }
 
 interface IBoardSectionProps {
@@ -19,9 +21,9 @@ interface IBoardSectionProps {
   sectionInformation: ICreditRequest[];
   errorLoadingPins: boolean;
   searchRequestValue: string;
-  CardComponent: React.FC<{ request: ICreditRequest }>;
+  selectedFilters: IOption[];
+  children?: React.ReactNode;
 }
-
 export type {
   SectionBackground,
   SectionOrientation,

@@ -20,7 +20,7 @@ const statusOptions: IOption[] = [
 
 const story: Meta<typeof FilterRequestModal> = {
   component: FilterRequestModal,
-  title: "modals/FilterRequestModal",
+  title: "components/modals/FilterRequestModal",
 };
 
 const DefaultTemplate: StoryFn<FilterRequestModalProps> = (args) => {
@@ -30,11 +30,19 @@ const DefaultTemplate: StoryFn<FilterRequestModalProps> = (args) => {
     setShowModal(!showModal);
   };
 
+  const handleSubmit = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <Button onClick={handleShowModal}>Open Modal</Button>
       {showModal && (
-        <FilterRequestModal {...args} onCloseModal={handleShowModal} />
+        <FilterRequestModal
+          {...args}
+          onCloseModal={handleShowModal}
+          onSubmit={handleSubmit}
+        />
       )}
     </>
   );

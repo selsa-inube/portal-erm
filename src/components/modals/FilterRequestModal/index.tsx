@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import { MdClear, MdApps, MdOutlineFilterAlt } from "react-icons/md";
 import {
@@ -16,33 +17,46 @@ import * as Yup from "yup";
 
 import { spacing } from "@design/tokens/spacing";
 import { validationMessages } from "@validations/validationMessages";
+import { SelectedFilters } from "@components/cards/SelectedFilters/index.tsx";
 
-import { SelectedFilters } from "../SelectedFilters/index.tsx";
-import { StyledModal, StyledContainerClose } from "./styles";
-import { FormValues } from "./types";
+import { StyledModal, StyledContainerClose } from "./styles.ts";
+import { FormValues } from "./types.ts";
+
+export interface SelectedFilter extends IOption {
+  count: number;
+}
 
 export interface FilterRequestModalProps {
   portalId?: string;
   assignmentOptions?: IOption[];
   statusOptions?: IOption[];
+  selectedFilters?: SelectedFilter[];
   onCloseModal?: () => void;
   onSubmit?: (values: FormValues) => void;
+  onClearFilters?: () => void;
+  onRemoveFilter?: (filterValue: string) => void;
 }
 
 export function FilterRequestModal(props: FilterRequestModalProps) {
   const {
     portalId = "portal",
-    onCloseModal,
-    onSubmit,
     assignmentOptions = [],
     statusOptions = [],
+    selectedFilters = [],
+    onCloseModal,
+    onSubmit,
+    onClearFilters,
+    onRemoveFilter,
   } = props;
 
-  const isMobile = useMediaQuery("(max-width: 700px)");
+  const isMobile = useMediaQuery("(max-width: 1280px)");
   const portalNode = document.getElementById(portalId);
+
+  const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object({
     assignment: Yup.string().required(validationMessages.required),
+    status: Yup.string().required(validationMessages.required),
     value: Yup.number()
       .required(validationMessages.required)
       .min(1, "El valor debe ser mayor a 0"),
@@ -52,15 +66,24 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
     initialValues: {
       assignment: "",
       status: "",
-      value: 0,
+      value: 1,
+      filters: [],
     },
     validationSchema,
-    onSubmit: (values) => {
-      if (onSubmit) {
-        onSubmit(values);
-      }
+    onSubmit: () => {
+      console.log("Form submitted");
     },
   });
+
+  const handleSubmit = () => {
+    setLoading(true);
+    setTimeout(() => {
+      if (onSubmit) {
+        onSubmit(formik.values);
+      }
+      setLoading(false);
+    }, 1000);
+  };
 
   const sortedAssignmentOptions = [...assignmentOptions].sort((a, b) =>
     a.label.localeCompare(b.label),
@@ -103,7 +126,18 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 size="20px"
                 appearance="gray"
               />
-              <SelectedFilters filters={[]} />
+              <SelectedFilters
+                filters={selectedFilters.map((filter) => ({
+                  label: filter.value,
+                  type: statusOptions.some(
+                    (status) => status.value === filter.value,
+                  )
+                    ? "status"
+                    : "assignment",
+                  count: filter.count,
+                }))}
+                onRemove={onRemoveFilter}
+              />
             </Stack>
             <Divider dashed />
           </>
@@ -115,7 +149,11 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
               <Stack
                 margin={`${spacing.s250} ${spacing.s0} ${spacing.s0} ${spacing.s0}`}
               >
-                <Icon icon={<MdApps />} size="20px" appearance="gray" />
+                <Icon
+                  icon={<MdApps />}
+                  size="20px"
+                  appearance={formik.values.assignment ? "primary" : "gray"}
+                />
               </Stack>
               <Checkpicker
                 label="Tipo"
@@ -130,17 +168,26 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 }
                 size="compact"
                 fullwidth
-                onChange={(name, value) =>
-                  void formik.setFieldValue(name, value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                  void formik.setFieldValue("filters", [
+                    ...(formik.values.filters ?? []),
+                    { id: name, label: value, value: value, color: "primary" },
+                  ]);
+                }}
                 options={sortedAssignmentOptions}
               />
             </Stack>
+
             <Stack alignItems="center" gap={spacing.s100}>
               <Stack
                 margin={`${spacing.s250} ${spacing.s0} ${spacing.s0} ${spacing.s0}`}
               >
-                <Icon icon={<MdApps />} size="20px" appearance="gray" />
+                <Icon
+                  icon={<MdApps />}
+                  size="20px"
+                  appearance={formik.values.status ? "primary" : "gray"}
+                />
               </Stack>
               <Checkpicker
                 label="Estado"
@@ -153,22 +200,28 @@ export function FilterRequestModal(props: FilterRequestModalProps) {
                 }
                 size="compact"
                 fullwidth
-                onChange={(name, value) =>
-                  void formik.setFieldValue(name, value)
-                }
+                onChange={(name, value) => {
+                  void formik.setFieldValue(name, value);
+                  void formik.setFieldValue("filters", [
+                    ...(formik.values.filters ?? []),
+                    { id: name, label: value, value: value, color: "dark" },
+                  ]);
+                }}
                 options={sortedStatusOptions}
               />
             </Stack>
+
             <Stack justifyContent="flex-end" gap={spacing.s250}>
               <Button
-                type="button"
-                onClick={onCloseModal}
+                onClick={onClearFilters}
                 appearance="gray"
                 variant="outlined"
               >
-                Cancelar
+                Quitar
               </Button>
-              <Button type="submit">Filtrar</Button>
+              <Button onClick={handleSubmit} loading={loading}>
+                Filtrar
+              </Button>
             </Stack>
           </Stack>
         </form>

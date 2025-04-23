@@ -18,7 +18,7 @@ const renderPersonalInfoVerification = (
       gap={spacing.s100}
       width="100%"
     >
-      <BoxAttribute label="Días de disfrute:" value={values.certification} />
+      <BoxAttribute label="Tipo de solicitud" value={values.certification} />
       <BoxAttribute label="Destinatario:" value={values.addressee} />
       <BoxAttribute label="Contrato:" value={values.contract} />
     </Grid>
