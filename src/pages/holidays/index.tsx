@@ -68,6 +68,7 @@ function HolidaysOptions() {
       const requestData = JSON.parse(request.humanResourceRequestData ?? "{}");
       return {
         requestId: request.requestId,
+        requestNumber: request.humanResourceRequestNumber,
         description: { value: request.humanResourceRequestDescription },
         date: { value: requestData.startDate },
         days: { value: Number(requestData.daysOff) },
@@ -127,8 +128,8 @@ function HolidaysOptions() {
         const request = combinedTableData.find(
           (item) => item.requestId === requestId,
         );
-        const description = request?.description?.value ?? "";
-        void handleDelete(requestId, justification, description);
+        const requestNumber = request?.requestNumber ?? "";
+        void handleDelete(requestId, justification, requestNumber);
       }}
     />
   );

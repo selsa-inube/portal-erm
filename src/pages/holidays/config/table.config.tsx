@@ -11,6 +11,7 @@ import { VacationType } from "./enums";
 export const formatHolidaysData = (holidays: HumanResourceRequest[]) =>
   holidays.map((holiday) => ({
     requestId: holiday.humanResourceRequestId,
+    requestNumber: holiday.humanResourceRequestNumber,
     description: {
       value:
         VacationType[

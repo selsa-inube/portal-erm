@@ -23,13 +23,13 @@ export function useDeleteRequest<T extends { requestId?: string }>(
   const createRequestBody = (
     id: string,
     justification = "",
-    description = "",
+    number = "",
   ): IDeleteResponse => ({
     removeHumanResourcesRequest: [
       {
-        humanResourceRequestDescription: description,
+        humanResourceRequestDescription: justification,
         humanResourceRequestId: id,
-        humanResourceRequestNumber: id,
+        humanResourceRequestNumber: number,
         removalJustification: justification,
       },
     ],
@@ -38,13 +38,13 @@ export function useDeleteRequest<T extends { requestId?: string }>(
   const handleDelete = async (
     id: string,
     justification?: string,
-    description?: string,
+    number?: string,
     idField: keyof T = "requestId",
   ) => {
     setIsDeleting(true);
     try {
       await deleteHumanResourceRequest(
-        createRequestBody(id, justification, description),
+        createRequestBody(id, justification, number),
       );
       updateStateFunction((item: T) => item[idField] !== id);
       setShowFlag(false);

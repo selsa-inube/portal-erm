@@ -119,6 +119,7 @@ function useRequestSubmission(formValues: IGeneralInformationEntry) {
           {
             ...requestBody,
             requestId: response?.humanResourceRequestId,
+            humanResourceRequestNumber: response?.humanResourceRequestNumber,
           },
         ]);
         return true;
