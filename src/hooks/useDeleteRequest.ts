@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { IDeleteResponse } from "@services/humanResourcesRequest/deleteHumanResourceRequest/types";
 import { deleteHumanResourceRequest } from "@services/humanResourcesRequest/deleteHumanResourceRequest";
 
 export function useDeleteRequest<T extends { requestId?: string }>(
@@ -20,35 +19,17 @@ export function useDeleteRequest<T extends { requestId?: string }>(
     true,
   );
 
-  const createRequestBody = (
-    id: string,
-    justification = "",
-    number = "",
-  ): IDeleteResponse => ({
-    removeHumanResourcesRequest: [
-      {
-        humanResourceRequestDescription: justification,
-        humanResourceRequestId: id,
-        humanResourceRequestNumber: number,
-        removalJustification: justification,
-      },
-    ],
-  });
-
   const handleDelete = async (
     id: string,
-    justification?: string,
-    number?: string,
+    justification: string,
+    number: string,
     idField: keyof T = "requestId",
   ) => {
     setIsDeleting(true);
     try {
-      await deleteHumanResourceRequest(
-        createRequestBody(id, justification, number),
-      );
+      await deleteHumanResourceRequest(id, justification, number);
       updateStateFunction((item: T) => item[idField] !== id);
       setShowFlag(false);
-      setTimeout(() => setShowFlag(true), 0);
       return true;
     } catch {
       navigate(location.pathname, {
@@ -63,8 +44,9 @@ export function useDeleteRequest<T extends { requestId?: string }>(
       return false;
     } finally {
       setIsDeleting(false);
+      setShowFlag(true);
     }
   };
 
-  return { isDeleting, handleDelete, showFlag, setShowFlag };
+  return { isDeleting, handleDelete };
 }

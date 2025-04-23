@@ -1,10 +1,14 @@
 import { environment } from "@config/environment";
+import { mapRequestBody } from "@src/services/humanResourcesRequest/deleteHumanResourceRequest/mappers";
 
 import { IDeleteResponse } from "./types";
 
 export async function deleteHumanResourceRequest(
-  body: IDeleteResponse,
+  id: string,
+  justification: string,
+  number: string,
 ): Promise<IDeleteResponse> {
+  const body = mapRequestBody(id, justification, number);
   const response = await fetch(
     `${environment.IVITE_IHUREM_PERSISTENCE_PROCESS_SERVICE}/human-resources-requests`,
     {
