@@ -318,11 +318,11 @@ function ContractsUI(props: ContractsUIProps) {
               ? [
                   {
                     label: "Fecha de retiro",
-                    value: selectedContract.retirementDate || "",
+                    value: selectedContract.retirementDate ?? "",
                   },
                   {
                     label: "Causal de retiro",
-                    value: selectedContract.retirementReason || "",
+                    value: selectedContract.retirementReason ?? "",
                   },
                 ]
               : []),

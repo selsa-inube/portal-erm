@@ -1,30 +1,29 @@
 import { useRef, useState } from "react";
-
 import { FormikProps } from "formik";
 
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
-
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useRequestSubmission } from "@src/hooks/usePostHumanResourceRequest";
 
-import { IGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";
 import { ModalState } from "./types";
-import { useRequestSubmission } from "@src/hooks/usePostHumanResourceResquest";
 
 function useFormManagement() {
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
-    id: "",
-    daysOff: "",
-    startDate: "",
-    observations: "",
-    contract: "",
-  });
+  const [formValues, setFormValues] =
+    useState<IVacationGeneralInformationEntry>({
+      id: "",
+      daysOff: "",
+      startDate: "",
+      observations: "",
+      contract: "",
+    });
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+    useRef<FormikProps<IVacationGeneralInformationEntry>>(null);
 
   const updateFormValues = () => {
     if (generalInformationRef.current) {
@@ -85,15 +84,23 @@ function RequestEnjoyment() {
     openInfoModal,
     closeInfoModal,
   } = useModalManagement();
+
+  const userCodeInCharge = "User 1";
+  const userNameInCharge = "Johan Daniel Garcia Nova";
+
   const {
-    requestId,
-    submitRequest,
+    requestNum,
+    submitRequestHandler,
     navigateAfterSubmission,
-    staffName,
     showErrorFlag,
     errorMessage,
     setShowErrorFlag,
-  } = useRequestSubmission(formValues, "vacations");
+  } = useRequestSubmission(
+    formValues,
+    "vacations",
+    userCodeInCharge,
+    userNameInCharge,
+  );
 
   useErrorFlag(showErrorFlag, errorMessage, "Error", false, 10000);
 
@@ -116,9 +123,10 @@ function RequestEnjoyment() {
 
   const handleConfirmSendModal = async () => {
     setShowErrorFlag(false);
+    const isSuccess = await submitRequestHandler();
 
-    const isSuccess = await submitRequest();
     if (isSuccess) {
+      closeSendModal();
       openInfoModal();
     } else {
       closeSendModal();
@@ -127,7 +135,7 @@ function RequestEnjoyment() {
 
   const handleSubmitRequestInfoModal = () => {
     closeInfoModal();
-    navigateAfterSubmission();
+    navigateAfterSubmission("vacations");
   };
 
   const {
@@ -165,8 +173,8 @@ function RequestEnjoyment() {
 
       {modalState.isRequestInfoModalVisible && (
         <RequestInfoModal
-          requestId={requestId}
-          staffName={staffName ?? ""}
+          requestId={requestNum}
+          staffName={userNameInCharge ?? ""}
           onCloseModal={handleSubmitRequestInfoModal}
           onSubmitButtonClick={handleSubmitRequestInfoModal}
         />

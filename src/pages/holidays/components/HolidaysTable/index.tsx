@@ -18,7 +18,6 @@ import { MdOutlineVisibility, MdOutlineHighlightOff } from "react-icons/md";
 import { useState } from "react";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
@@ -36,6 +35,7 @@ interface HolidaysTableProps {
   disableDeleteAction?: boolean;
   hasViewDetailsPrivilege?: boolean;
   hasDeletePrivilege?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function HolidaysTable(props: HolidaysTableProps) {
@@ -45,9 +45,9 @@ function HolidaysTable(props: HolidaysTableProps) {
     disableDeleteAction = false,
     hasViewDetailsPrivilege = false,
     hasDeletePrivilege = false,
+    handleDeleteRequest,
   } = props;
 
-  const [showFlag, setShowFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -59,6 +59,9 @@ function HolidaysTable(props: HolidaysTableProps) {
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
   >(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
+    null,
+  );
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -75,12 +78,6 @@ function HolidaysTable(props: HolidaysTableProps) {
     lastEntryInPage,
     currentData,
   } = usePagination(data);
-
-  useErrorFlag(
-    showFlag,
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-  );
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -113,7 +110,7 @@ function HolidaysTable(props: HolidaysTableProps) {
       ? columns.slice(0, 3)
       : columns;
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (requestId: string) => {
     if (!hasDeletePrivilege) {
       showInfoModal(
         "No tienes privilegios",
@@ -121,22 +118,21 @@ function HolidaysTable(props: HolidaysTableProps) {
       );
       return;
     }
+    setSelectedRequestId(requestId);
     setIsSecondModalOpen(true);
   };
 
-  const handleCloseModal = () => setIsSecondModalOpen(false);
+  const handleCloseModal = () => {
+    setIsSecondModalOpen(false);
+    setSelectedRequestId(null);
+  };
 
   const handleClose = () => {
     setIsSecondModalOpen(false);
     setIsModalOpen(false);
     setIsInfoModalOpen(false);
     setSelectedRecord(null);
-  };
-
-  const handleDelete = () => {
-    handleCloseModal();
-    setShowFlag(false);
-    setTimeout(() => setShowFlag(true), 0);
+    setSelectedRequestId(null);
   };
 
   const showInfoModal = (titleDescription: string, description: string) => {
@@ -210,11 +206,15 @@ function HolidaysTable(props: HolidaysTableProps) {
 
       if (headerKey === "delete") {
         const hasPrivilege = !disableDeleteAction && hasDeletePrivilege;
+        const requestId = currentData[rowIndex!]?.requestId;
+
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: handleOpenModal,
-          cursorHover: true,
+          onClick: hasPrivilege
+            ? () => requestId && handleOpenModal(requestId)
+            : undefined,
+          cursorHover: hasPrivilege,
           icon: <MdOutlineHighlightOff />,
         };
         return (
@@ -259,8 +259,12 @@ function HolidaysTable(props: HolidaysTableProps) {
             <Detail
               onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
-              onClickEliminate={() => handleOpenModal()}
-              disableDeleteAction={disableDeleteAction}
+              onClickEliminate={
+                !disableDeleteAction && hasDeletePrivilege
+                  ? () => handleOpenModal(currentData[rowIndex].requestId!)
+                  : undefined
+              }
+              disableDeleteAction={disableDeleteAction || !hasDeletePrivilege}
             />
           )}
         </Td>
@@ -418,7 +422,12 @@ function HolidaysTable(props: HolidaysTableProps) {
           inputPlaceholder="¿Por qué eliminarás el registro?"
           description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
           maxLength={500}
-          onSubmit={handleDelete}
+          onSubmit={(values) => {
+            if (selectedRequestId) {
+              handleDeleteRequest(selectedRequestId, values.textarea);
+              handleCloseModal();
+            }
+          }}
           onCloseModal={handleClose}
         />
       )}

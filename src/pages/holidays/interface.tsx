@@ -18,6 +18,7 @@ interface HolidaysOptionsUIProps {
   isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -30,6 +31,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     isMobile,
     appDescription,
     hasActiveContract = true,
+    handleDeleteRequest,
   } = props;
 
   return (
@@ -75,6 +77,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             loading={isLoading}
             hasViewDetailsPrivilege
             hasDeletePrivilege
+            handleDeleteRequest={handleDeleteRequest}
           />
         </StyledHolidaysContainer>
       </AppMenu>
