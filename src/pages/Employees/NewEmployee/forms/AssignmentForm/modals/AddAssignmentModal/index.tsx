@@ -109,7 +109,7 @@ export function AddAssignmentModal(props: AddAssignmentModalProps) {
           >
             <Select
               label="Asignación"
-              placeholder="Selecciona una opción"
+              placeholder="Selecciona de la lista"
               name="assignment"
               id="assignment"
               value={formik.values.assignment}
