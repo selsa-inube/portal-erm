@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Input, Icon, Text } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 import { MdOutlineCancel } from "react-icons/md";
+
 import {
   StyledTextfieldContainer,
   StyledDropdownMenu,
   StyledDropdownItem,
-} from "./styled";
+} from "./styles";
 
 interface SearchInputProps<T> {
   value: string;

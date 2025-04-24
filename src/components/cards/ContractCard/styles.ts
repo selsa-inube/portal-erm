@@ -7,6 +7,10 @@ interface IStyledContainer {
   theme: typeof inube;
 }
 
+interface IStyledSeparatorLine {
+  theme: typeof inube;
+}
+
 const StyledContractCard = styled.div<IStyledContainer>`
   height: 344px;
   border-radius: 8px;
@@ -16,7 +20,7 @@ const StyledContractCard = styled.div<IStyledContainer>`
   user-select: none;
 `;
 
-const StyledSeparatorLine = styled.hr`
+const StyledSeparatorLine = styled.hr<IStyledSeparatorLine>`
   width: 2px;
   margin: 0px;
   border: 0px;

@@ -3,11 +3,16 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
+interface IStyledContainerFilters {
+  theme: typeof inube;
+}
+
 interface IHiddenFiltersMenu {
+  theme: typeof inube;
   $isMobile: boolean;
 }
 
-const StyledContainerFilters = styled.div`
+const StyledContainerFilters = styled.div<IStyledContainerFilters>`
   display: flex;
   width: 100%;
   align-items: center;

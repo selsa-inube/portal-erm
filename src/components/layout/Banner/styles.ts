@@ -3,7 +3,15 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-const StyledRadioClient = styled.div`
+interface IStyledRadioClient {
+  theme: typeof inube;
+}
+
+interface IStyledBannerImage {
+  theme: typeof inube;
+}
+
+const StyledRadioClient = styled.div<IStyledRadioClient>`
   position: relative;
   display: flex;
   align-items: center;
@@ -21,7 +29,7 @@ const StyledRadioClient = styled.div`
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
-const StyledBannerImage = styled.img`
+const StyledBannerImage = styled.img<IStyledBannerImage>`
   width: 34px;
   height: 34px;
   object-fit: contain;

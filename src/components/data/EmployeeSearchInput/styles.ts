@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing";
+
+interface IStyledDropdownItem {
+  theme: typeof inube;
+  $isselected?: boolean;
+}
 
 const StyledDropdownMenu = styled.div`
   position: absolute;
@@ -25,7 +31,7 @@ const StyledDropdownMenu = styled.div`
   }
 `;
 
-const StyledDropdownItem = styled.div<{ $isselected?: boolean }>`
+const StyledDropdownItem = styled.div<IStyledDropdownItem>`
   padding: ${spacing.s050} ${spacing.s200};
   cursor: pointer;
   display: flex;

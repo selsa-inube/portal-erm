@@ -7,6 +7,10 @@ interface IStyledRequestCard {
   theme: typeof inube;
 }
 
+interface IStyledTitle {
+  theme: typeof inube;
+}
+
 const StyledRequestCard = styled.div<IStyledRequestCard>`
   width: 280px;
   height: 207px;
@@ -24,7 +28,7 @@ const StyledRequestCard = styled.div<IStyledRequestCard>`
   user-select: none;
 `;
 
-const StyledTitle = styled.div`
+const StyledTitle = styled.div<IStyledTitle>`
   background-color: ${({ theme }) =>
     theme?.palette?.blue?.B50 ?? inube.palette.blue.B50};
   text-align: center;
