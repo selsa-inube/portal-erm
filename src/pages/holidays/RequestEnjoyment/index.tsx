@@ -4,9 +4,9 @@ import { FormikProps } from "formik";
 import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
-import { useRequestSubmission } from "@src/hooks/usePostHumanResourceRequest";
-
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 import { IVacationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
+
 import { RequestEnjoymentUI } from "./interface";
 import { requestEnjoymentSteps } from "./config/assisted.config";
 import { holidaysNavConfig } from "../config/nav.config";

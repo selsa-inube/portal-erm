@@ -1,11 +1,12 @@
 import { MdOutlineVisibility, MdDeleteOutline } from "react-icons/md";
-import { formatDate } from "@utils/date";
+
 import {
   EStatus,
   EType,
   HumanResourceRequest,
   IVacationGeneralInformationEntry,
-} from "@src/types/humanResourcesRequest.types";
+} from "@ptypes/humanResourcesRequest.types";
+import { formatDate } from "@utils/date";
 
 function isVacationData(
   data: unknown,
