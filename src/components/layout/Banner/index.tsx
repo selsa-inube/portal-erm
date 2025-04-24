@@ -80,12 +80,14 @@ function VinculationBanner(props: VinculationBannerProps) {
               {name}
             </Text>
             <Stack gap={spacing.s075} alignItems="center">
+              <Text size="small" appearance="gray">
+                Empleado
+              </Text>
               <Icon
                 appearance={color}
                 icon={icon}
                 spacing="narrow"
                 shape="rectangle"
-                variant="outlined"
                 size="12px"
               />
               <Text type="label" size="small" appearance={color}>
@@ -146,7 +148,7 @@ function VinculationBanner(props: VinculationBannerProps) {
           <Stack gap={spacing.s100}>
             {infoItems.map((item, index) => (
               <React.Fragment key={index}>
-                {index > 0 && <VerticalDivider />}
+                <VerticalDivider />
                 <WidgetBanner
                   icon={item.icon}
                   value={item.value}
