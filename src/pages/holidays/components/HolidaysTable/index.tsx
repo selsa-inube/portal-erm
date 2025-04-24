@@ -156,7 +156,7 @@ function HolidaysTable(props: HolidaysTableProps) {
     const dataDe = data[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
     const dataDeta = [
-      { label: "Días de disfrute", value: dataDe.daysEnjoyed },
+      { label: "Días de disfrute", value: dataDe.daysOff },
       { label: "Fecha de inicio", value: dataDe.startDate },
       { label: "Contrato", value: dataDe.contract },
       { label: "Observaciones", value: dataDe.description },
