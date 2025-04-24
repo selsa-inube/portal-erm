@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { FormikProps } from "formik";
-import * as Yup from "yup";
 import {
   Date,
   Stack,
@@ -10,11 +7,14 @@ import {
   Textfield,
   useMediaQuery,
 } from "@inubekit/inubekit";
+import { useEffect, useMemo } from "react";
+import { FormikProps } from "formik";
+import * as Yup from "yup";
 
 import { isRequired } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms/forms";
-import { contractOptions } from "@pages/holidays/RequestEnjoyment/config/assisted.config";
+import { useAppContext } from "@context/AppContext";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
@@ -36,13 +36,22 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { selectedEmployee } = useAppContext();
+
+  const contractOptions = useMemo(
+    () =>
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+        id: c.contractId,
+        value: `${c.businessName} - ${c.contractType}`,
+        label: `${c.businessName} - ${c.contractType}`,
+      })),
+    [selectedEmployee.employmentContracts],
+  );
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
-    formik.setFieldValue(
-      "contractDesc",
-      contractOptions.find((option) => option.value === value)?.label,
-    );
+    const found = contractOptions.find((option) => option.value === value);
+    formik.setFieldValue("contractDesc", found?.label ?? "");
   };
 
   useEffect(() => {
@@ -50,7 +59,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       const onlyOption = contractOptions[0];
       handleContractChange("contract", onlyOption.value);
     }
-  }, [formik.values.contract]);
+  }, [contractOptions, formik.values.contract]);
 
   return (
     <form>
@@ -74,7 +83,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 onChange={formik.handleChange}
                 required={isRequired(validationSchema, "daysOff")}
               />
-
               <Date
                 label="Fecha de inicio"
                 name="startDate"
@@ -90,7 +98,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 required={isRequired(validationSchema, "startDate")}
               />
             </Stack>
-
             {contractOptions.length > 1 && (
               <Stack>
                 <Select
@@ -113,7 +120,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 />
               </Stack>
             )}
-
             <Textarea
               label="Observaciones"
               placeholder="Detalles a tener en cuenta."
@@ -131,7 +137,6 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
             />
           </Stack>
         </StyledContainer>
-
         {withNextButton && (
           <Stack justifyContent="flex-end">
             <Button

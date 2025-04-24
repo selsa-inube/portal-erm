@@ -185,7 +185,7 @@ function HolidaysTable(props: HolidaysTableProps) {
     ) {
       if (headerKey === "details") {
         const iconProps: IIcon = {
-          appearance: hasViewDetailsPrivilege ? "dark" : "gray",
+          appearance: "dark",
           size: "16px",
           cursorHover: true,
           onClick: () =>
@@ -205,23 +205,24 @@ function HolidaysTable(props: HolidaysTableProps) {
       }
 
       if (headerKey === "delete") {
-        const hasPrivilege = !disableDeleteAction && hasDeletePrivilege;
         const requestId = currentData[rowIndex!]?.requestId;
 
         const iconProps: IIcon = {
-          appearance: hasPrivilege ? "danger" : "gray",
+          appearance: "danger",
           size: "16px",
-          onClick: hasPrivilege
-            ? () => requestId && handleOpenModal(requestId)
-            : undefined,
-          cursorHover: hasPrivilege,
+          onClick: () => requestId && handleOpenModal(requestId),
+          cursorHover: true,
           icon: <MdOutlineHighlightOff />,
         };
         return (
           <TooltipWrapper>
             <Icon {...iconProps} />
             <Tooltip
-              text={hasPrivilege ? "Descartar solicitud" : "Sin privilegios"}
+              text={
+                !disableDeleteAction && hasDeletePrivilege
+                  ? "Descartar solicitud"
+                  : "Sin privilegios"
+              }
             />
           </TooltipWrapper>
         );
@@ -259,12 +260,10 @@ function HolidaysTable(props: HolidaysTableProps) {
             <Detail
               onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
-              onClickEliminate={
-                !disableDeleteAction && hasDeletePrivilege
-                  ? () => handleOpenModal(currentData[rowIndex].requestId!)
-                  : undefined
+              onClickEliminate={() =>
+                handleOpenModal(currentData[rowIndex].requestId!)
               }
-              disableDeleteAction={disableDeleteAction || !hasDeletePrivilege}
+              disableDeleteAction={disableDeleteAction}
             />
           )}
         </Td>
