@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
+import { spacing } from "@design/tokens/spacing";
+
 import { SectionBackground, SectionOrientation } from "./types";
 interface IStyledBoardSection {
   theme?: typeof inube;
@@ -15,8 +17,8 @@ interface IStyledCollapseIcon {
 
 const StyledBoardSection = styled.div<IStyledBoardSection>`
   display: flex;
+  gap: ${spacing.s150};
   flex-direction: column;
-  gap: 12px;
   padding: 10px 12px 12px;
   width: calc(100% - 24px);
   border-top: 1px solid;
@@ -29,12 +31,13 @@ const StyledBoardSection = styled.div<IStyledBoardSection>`
       ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
       : theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
 
+  min-height: ${({ $isTablet }) => ($isTablet ? "auto" : "585px")};
+
   & > div:nth-child(1) {
     justify-content: space-between;
     margin-right: ${({ $isTablet }) => ($isTablet ? "20px" : "0px")};
   }
 `;
-
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
@@ -44,4 +47,12 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
     $disabledCollapse ? "not-allowed" : "pointer"};
 `;
 
-export { StyledBoardSection, StyledCollapseIcon };
+const StyledEmptyContainer = styled.div`
+  width: 100%;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export { StyledBoardSection, StyledCollapseIcon, StyledEmptyContainer };

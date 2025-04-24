@@ -1,4 +1,4 @@
-import { ICertificationsTable } from "./types";
+import { ICertificationsTable, CertificationsTableField } from "./types";
 
 export const columns = [
   { span: 1, style: { width: "auto" } },
@@ -10,8 +10,8 @@ export const columns = [
 ];
 
 interface ExtendedIHolidaysTable extends ICertificationsTable {
-  mobileActions?: { value: JSX.Element };
-  type?: { value: string };
+  mobileActions?: CertificationsTableField<JSX.Element>;
+  type: CertificationsTableField<string>;
 }
 
 export const headers: {

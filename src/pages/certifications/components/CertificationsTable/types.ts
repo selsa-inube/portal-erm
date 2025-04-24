@@ -5,11 +5,11 @@ export interface ICertificationsTable {
   dataDetails: CertificationsTableField<object>;
   details: CertificationsTableDetails;
   delete: CertificationsTableAction;
-  type?: CertificationsTableField<string>;
+  type: CertificationsTableField<string>;
   mobileActions?: CertificationsTableField<JSX.Element>;
 }
 
-interface CertificationsTableField<T> {
+export interface CertificationsTableField<T> {
   value: T;
 }
 
