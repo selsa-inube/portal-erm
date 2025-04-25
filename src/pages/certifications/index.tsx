@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useErrorFlag } from "@hooks/useErrorFlag";
+import { useDeleteRequest } from "@hooks/useDeleteRequest";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
 
 import { CertificationsOptionsUI } from "./interface";
@@ -39,10 +40,12 @@ function CertificationsOptions() {
     fetchHumanResourceRequests();
   }, []);
 
-  const shouldShowFlag = location.state?.showFlag && location.state?.isSuccess;
+  const { handleDelete } = useDeleteRequest((filterFn) => {
+    setTableData((prev) => prev.filter(filterFn));
+  });
 
   useErrorFlag(
-    shouldShowFlag,
+    location.state?.showFlag,
     location.state?.flagMessage,
     location.state?.flagTitle,
     location.state?.isSuccess,
@@ -62,6 +65,11 @@ function CertificationsOptions() {
       tableData={tableData}
       isLoading={isLoading}
       isMobile={isMobile}
+      handleDeleteRequest={(requestId, justification) => {
+        const request = tableData.find((item) => item.requestId === requestId);
+        const requestNumber = request?.requestNumber?.value ?? "";
+        void handleDelete(requestId, justification, requestNumber);
+      }}
     />
   );
 }

@@ -2,19 +2,19 @@ import { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import {
   Nav,
-  Stack,
   Grid,
   Header,
   useMediaQuery,
   Icon,
+  Stack,
 } from "@inubekit/inubekit";
-import { MdOutlineChevronRight } from "react-icons/md";
+import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
 
 import { useNavConfig, userMenu, actions } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
-import { VinculationBanner } from "@components/layout/Banner";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
 
 import {
@@ -133,27 +133,6 @@ function AppPage(props: AppPageProps) {
           </StyledCollapse>
         )}
         <StyledContainer>
-          {withBanner && (
-            <Stack padding={spacing.s075}>
-              <VinculationBanner
-                key={
-                  selectedEmployee ? selectedEmployee.employeeId : "no-employee"
-                }
-                name={
-                  selectedEmployee
-                    ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
-                    : "Empleado no seleccionado"
-                }
-                status={
-                  selectedEmployee
-                    ? selectedEmployee.employeeStatus
-                    : "estado-desconocido"
-                }
-                imageUrl={logoUrl}
-                redirectUrl="/employees/select-employee"
-              />
-            </Stack>
-          )}
           <Grid
             templateColumns={withNav && !isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
@@ -163,6 +142,47 @@ function AppPage(props: AppPageProps) {
               <Nav navigation={navConfig} actions={actions} collapse={true} />
             )}
             <StyledMainScroll>
+              <Stack width="100%">
+                {withBanner && (
+                  <Stack
+                    padding={spacing.s075}
+                    width="100%"
+                    justifyContent="center"
+                    margin={
+                      isTablet
+                        ? `${spacing.s0} ${spacing.s200}`
+                        : `${spacing.s400} ${spacing.s800} ${spacing.s0} `
+                    }
+                  >
+                    <VinculationBanner
+                      key={
+                        selectedEmployee
+                          ? selectedEmployee.employeeId
+                          : "no-employee"
+                      }
+                      name={
+                        selectedEmployee
+                          ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+                          : "Empleado no seleccionado"
+                      }
+                      status={
+                        selectedEmployee
+                          ? selectedEmployee.employeeStatus
+                          : "estado-desconocido"
+                      }
+                      imageUrl={logoUrl}
+                      redirectUrl="/employees/select-employee"
+                      infoItems={[
+                        {
+                          icon: <MdOutlineBeachAccess />,
+                          value: 10,
+                          label: "Días pendientes",
+                        },
+                      ]}
+                    />
+                  </Stack>
+                )}
+              </Stack>
               <StyledMain>
                 <Outlet />
               </StyledMain>
