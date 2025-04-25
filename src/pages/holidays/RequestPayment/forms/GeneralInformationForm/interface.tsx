@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { FormikProps } from "formik";
 import { ObjectSchema, AnyObject } from "yup";
 import {
@@ -13,7 +13,7 @@ import {
 import { isRequired } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms/forms";
-import { contractOptions } from "@pages/holidays/RequestPayment/config/assisted.config";
+import { useAppContext } from "@context/AppContext";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
@@ -35,13 +35,30 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { selectedEmployee } = useAppContext();
+
+  const contractOptions = useMemo(
+    () =>
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+        id: c.contractId,
+        value: `${c.businessName} - ${c.contractType}`,
+        label: `${c.businessName} - ${c.contractType}`,
+      })),
+    [selectedEmployee.employmentContracts],
+  );
+
+  const handleContractChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
+    const found = contractOptions.find((option) => option.value === value);
+    formik.setFieldValue("contractDesc", found?.label ?? "");
+  };
 
   useEffect(() => {
     if (contractOptions.length === 1 && !formik.values.contract) {
       const onlyOption = contractOptions[0];
-      formik.setFieldValue("contract", onlyOption.value);
+      handleContractChange("contract", onlyOption.value);
     }
-  }, [formik.values.contract]);
+  }, [contractOptions, formik.values.contract]);
 
   return (
     <form>
