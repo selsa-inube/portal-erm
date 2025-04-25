@@ -34,7 +34,7 @@ const StyledBannerImage = styled.img`
 
 const VerticalDivider = styled.div`
   width: 2px;
-  height: auto;
+  height: 50px;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N40 || inube.palette.neutral.N40};
   border-radius: 2px;

@@ -145,18 +145,21 @@ function VinculationBanner(props: VinculationBannerProps) {
             )}
           </div>
         ) : (
-          <Stack gap={spacing.s100}>
-            {infoItems.map((item, index) => (
-              <React.Fragment key={index}>
-                <VerticalDivider />
-                <WidgetBanner
-                  icon={item.icon}
-                  value={item.value}
-                  label={item.label}
-                  onClick={item.onClick}
-                />
-              </React.Fragment>
-            ))}
+          <Stack direction="row" gap={spacing.s100} alignItems="center">
+            {infoItems
+              .slice()
+              .reverse()
+              .map((item, index) => (
+                <React.Fragment key={index}>
+                  <VerticalDivider />
+                  <WidgetBanner
+                    icon={item.icon}
+                    value={item.value}
+                    label={item.label}
+                    onClick={item.onClick}
+                  />
+                </React.Fragment>
+              ))}
           </Stack>
         )}
       </Stack>
