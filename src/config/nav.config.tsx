@@ -10,7 +10,6 @@ import {
 } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 
-// Definimos el tipo para NavLink
 interface NavLink {
   id: string;
   label: string;
