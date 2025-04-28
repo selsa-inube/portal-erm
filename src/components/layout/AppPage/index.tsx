@@ -14,7 +14,7 @@ import {
   useNavConfig,
   userMenu,
   actions,
-  useNavConfigClone,
+  useConfigHeader,
 } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
@@ -63,7 +63,7 @@ function AppPage(props: AppPageProps) {
 
   const navConfig = useNavConfig();
 
-  const clone = useNavConfigClone();
+  const configHeader = useConfigHeader();
 
   const [collapse, setCollapse] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
@@ -103,7 +103,7 @@ function AppPage(props: AppPageProps) {
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
-          navigation={{ nav: clone, breakpoint: "800px" }}
+          navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
             selectedClient?.logo ?? logoUrl,
             selectedClient?.name ?? "Sin unidad seleccionada",

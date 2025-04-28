@@ -65,6 +65,17 @@ const baseNavLinks = [
 
 const noop = () => undefined;
 
+const actions = [
+  {
+    id: "logout",
+    label: "Cerrar sesión",
+    icon: <MdLogout />,
+    action: () => {
+      window.location.href = "/logout";
+    },
+  },
+];
+
 const useNavConfig = () => {
   const location = useLocation();
 
@@ -86,12 +97,13 @@ const useNavConfig = () => {
         ),
       },
     },
+    actions,
   };
 
   return nav;
 };
 
-const useNavConfigClone = () => {
+const useConfigHeader = () => {
   const nav = {
     reactPortalId: "portal",
     title: "MENU",
@@ -104,6 +116,7 @@ const useNavConfigClone = () => {
         links: baseNavLinks,
       },
     ],
+    actions,
   };
 
   return nav;
@@ -125,15 +138,4 @@ const userMenu = [
   },
 ];
 
-const actions = [
-  {
-    id: "logout",
-    label: "Cerrar sesión",
-    icon: <MdLogout />,
-    action: () => {
-      window.location.href = "/logout";
-    },
-  },
-];
-
-export { useNavConfig, useNavConfigClone, userMenu, actions };
+export { useNavConfig, useConfigHeader, userMenu, actions };
