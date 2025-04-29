@@ -18,7 +18,6 @@ import {
 } from "@inubekit/inubekit";
 
 import { TextAreaModal } from "@components/modals/TextAreaModal";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { RequestComponentDetail } from "@components/modals/ComponentDetailModal";
 import { mockRequirements } from "@mocks/requirements/requirementsTable.mock";
 import { Tooltip } from "@components/overlay/Tooltip";
@@ -36,6 +35,7 @@ interface CertificationsTableProps {
   disableDeleteAction?: boolean;
   hasViewDetailsPrivilege?: boolean;
   hasDeletePrivilege?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function CertificationsTable({
@@ -44,8 +44,8 @@ function CertificationsTable({
   disableDeleteAction = false,
   hasViewDetailsPrivilege = false,
   hasDeletePrivilege = false,
+  handleDeleteRequest,
 }: CertificationsTableProps) {
-  const [showFlag, setShowFlag] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -57,6 +57,9 @@ function CertificationsTable({
   const [selectedRecord, setSelectedRecord] = useState<
     { label: string; value: string }[] | null
   >(null);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
+    null,
+  );
 
   const mediaQueries = useMediaQueries([
     "(max-width: 1024px)",
@@ -73,12 +76,6 @@ function CertificationsTable({
     lastEntryInPage,
     currentData,
   } = usePagination(data);
-
-  useErrorFlag(
-    showFlag,
-    "La solicitud se canceló correctamente",
-    "Solicitud cancelada",
-  );
 
   const determineVisibleHeaders = () => {
     if (mediaQueries["(max-width: 542px)"]) {
@@ -113,15 +110,18 @@ function CertificationsTable({
       ? columns.slice(0, 3)
       : columns;
 
-  const handleOpenModal = () => {
-    if (!hasDeletePrivilege) {
-      showInfoModal(
-        "No tienes privilegios",
-        "No tienes privilegios para eliminar este registro.",
-      );
-      return;
+  const handleOpenModal = (requestId: string) => {
+    setSelectedRequestId(requestId);
+    {
+      if (!hasDeletePrivilege) {
+        showInfoModal(
+          "No tienes privilegios",
+          "No tienes privilegios para eliminar este registro.",
+        );
+        return;
+      }
+      setIsSecondModalOpen(true);
     }
-    setIsSecondModalOpen(true);
   };
 
   const handleCloseModal = () => setIsSecondModalOpen(false);
@@ -131,12 +131,6 @@ function CertificationsTable({
     setIsModalOpen(false);
     setIsInfoModalOpen(false);
     setSelectedRecord(null);
-  };
-
-  const handleDelete = () => {
-    handleCloseModal();
-    setShowFlag(false);
-    setTimeout(() => setShowFlag(true), 0);
   };
 
   const showInfoModal = (titleDescription: string, description: string) => {
@@ -209,10 +203,14 @@ function CertificationsTable({
 
       if (headerKey === "delete") {
         const hasPrivilege = !disableDeleteAction && hasDeletePrivilege;
+        const requestId = currentData[rowIndex!]?.requestId;
+
         const iconProps: IIcon = {
           appearance: hasPrivilege ? "danger" : "gray",
           size: "16px",
-          onClick: hasPrivilege ? handleOpenModal : undefined,
+          onClick: hasPrivilege
+            ? () => requestId && handleOpenModal(requestId)
+            : undefined,
           cursorHover: hasPrivilege,
           icon: <MdOutlineHighlightOff />,
         };
@@ -259,7 +257,9 @@ function CertificationsTable({
               onClickDetails={() => handleOpenDetailsModal(rowIndex)}
               onClickEdit={cellData?.onClick}
               onClickEliminate={
-                !disableDeleteAction ? handleOpenModal : undefined
+                !disableDeleteAction
+                  ? () => handleOpenModal(currentData[rowIndex].requestId!)
+                  : undefined
               }
               disableDeleteAction={disableDeleteAction}
             />
@@ -423,7 +423,12 @@ function CertificationsTable({
           inputPlaceholder="¿Por qué eliminarás el registro?"
           description="Al descartar una solicitud esta no podrá continuar su trámite y desaparecerá. ¿Realmente quieres descartar esta solicitud?"
           maxLength={500}
-          onSubmit={handleDelete}
+          onSubmit={(values) => {
+            if (selectedRequestId) {
+              handleDeleteRequest(selectedRequestId, values.textarea);
+              handleCloseModal();
+            }
+          }}
           onCloseModal={handleClose}
         />
       )}

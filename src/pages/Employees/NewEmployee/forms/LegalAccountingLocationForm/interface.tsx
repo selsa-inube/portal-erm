@@ -44,7 +44,7 @@ function LegalAccountingLocationFormUI(
             >
               <Select
                 label="Proyecto"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="proyect"
                 id="proyect"
                 value={formik.values.proyect}
@@ -62,7 +62,7 @@ function LegalAccountingLocationFormUI(
 
               <Select
                 label="Segmentación zonal"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="zonalSegmentation"
                 id="zonalSegmentation"
                 value={formik.values.zonalSegmentation}
@@ -80,7 +80,7 @@ function LegalAccountingLocationFormUI(
 
               <Select
                 label="Centro de costo"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="costCenter"
                 id="costCenter"
                 value={formik.values.costCenter}

@@ -18,6 +18,7 @@ interface CertificationsOptionsUIProps {
   isLoading: boolean;
   isMobile: boolean;
   appDescription?: string;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
@@ -29,6 +30,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     tableData,
     isMobile,
     isLoading,
+    handleDeleteRequest,
   } = props;
 
   return (
@@ -66,6 +68,7 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
             loading={isLoading}
             hasViewDetailsPrivilege
             hasDeletePrivilege
+            handleDeleteRequest={handleDeleteRequest}
           />
         </StyledCertificationsContainer>
       </AppMenu>
