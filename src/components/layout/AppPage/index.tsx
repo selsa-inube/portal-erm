@@ -62,7 +62,6 @@ function AppPage(props: AppPageProps) {
   const navigate = useNavigate();
 
   const navConfig = useNavConfig();
-
   const configHeader = useConfigHeader();
 
   const [collapse, setCollapse] = useState(false);
