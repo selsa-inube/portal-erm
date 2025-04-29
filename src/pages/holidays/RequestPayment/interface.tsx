@@ -108,16 +108,14 @@ function RequestPaymentUI(props: RequestPaymentUIProps) {
               </Stack>
             )}
             {currentStep === 1 && (
-              <AlertCardStep
-                handlePreviousStep={handlePreviousStep}
-                handleNextStep={handleNextStep}
-              />
+              <AlertCardStep handleNextStep={handleNextStep} />
             )}
             {currentStep === 2 && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
                 withNextButton={true}
+                handlePreviousStep={handlePreviousStep}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
               />

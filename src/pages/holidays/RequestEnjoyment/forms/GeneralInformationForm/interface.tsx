@@ -24,6 +24,7 @@ interface GeneralInformationFormUIProps {
   validationSchema: Yup.ObjectSchema<Yup.AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
+  handlePreviousStep: () => void;
   handleNextStep: () => void;
 }
 
@@ -32,8 +33,14 @@ function getDisabledState(loading: boolean | undefined, isValid: boolean) {
 }
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const { formik, loading, withNextButton, validationSchema, handleNextStep } =
-    props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    validationSchema,
+    handlePreviousStep,
+    handleNextStep,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
   const { selectedEmployee } = useAppContext();
@@ -138,9 +145,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
           </Stack>
         </StyledContainer>
         {withNextButton && (
-          <Stack justifyContent="flex-end">
+          <Stack justifyContent="flex-end" gap={spacing.s250}>
             <Button
-              fullwidth={isMobile}
+              appearance="gray"
+              variant="outlined"
+              onClick={handlePreviousStep}
+            >
+              Anterior
+            </Button>
+            <Button
               onClick={handleNextStep}
               disabled={loading ?? !formik.isValid}
             >

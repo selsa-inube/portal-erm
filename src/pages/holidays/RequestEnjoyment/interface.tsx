@@ -108,16 +108,14 @@ function RequestEnjoymentUI({
             )}
 
             {currentStep === 1 && (
-              <AlertCardContainer
-                handlePreviousStep={handlePreviousStep}
-                handleNextStep={handleNextStep}
-              />
+              <AlertCardContainer handleNextStep={handleNextStep} />
             )}
             {currentStep === 2 && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
                 withNextButton={true}
+                handlePreviousStep={handlePreviousStep}
                 onFormValid={setIsCurrentFormValid}
                 handleNextStep={handleNextStep}
               />
