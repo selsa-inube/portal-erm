@@ -3,7 +3,11 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-const StyledRadioClient = styled.label`
+interface IStyledRadioClient {
+  theme: typeof inube;
+}
+
+const StyledRadioClient = styled.label<IStyledRadioClient>`
   & div {
     box-sizing: border-box;
     min-height: 58px;

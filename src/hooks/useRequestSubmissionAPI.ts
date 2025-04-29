@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { IRequestBody } from "@src/services/humanResourcesRequest/postHumanResourceRequest/types";
-import { postHumanResourceRequest } from "@src/services/humanResourcesRequest/postHumanResourceRequest";
+
+import { IRequestBody } from "@services/humanResourcesRequest/postHumanResourceRequest/types";
+import { postHumanResourceRequest } from "@services/humanResourcesRequest/postHumanResourceRequest";
 
 export function useRequestSubmissionAPI() {
   const [showErrorFlag, setShowErrorFlag] = useState(false);

@@ -7,30 +7,40 @@ interface IStyledContainer {
   $borderTable: boolean;
   $isTablet: boolean;
   $actionsMobile: boolean;
+  theme: typeof inube;
 }
+
 interface IStyledThactions {
   $isTablet?: boolean;
   $isFirst?: boolean;
+  theme: typeof inube;
 }
 
 interface IStyledTdactions {
   $right?: number;
   $isTablet?: boolean;
   $isFirst?: boolean;
+  theme: typeof inube;
 }
 
 interface IStyledTable {
   $zebraEffect: boolean;
   $background: boolean;
   $isTablet: boolean;
+  theme: typeof inube;
 }
 
 interface IStyledTdbodyContainer {
   $borderTable?: boolean;
+  theme: typeof inube;
 }
 
 interface IStyledTd {
   $widthTd?: string;
+}
+
+interface IStyledWithTheme {
+  theme: typeof inube;
 }
 
 export const StyledContainer = styled.div<IStyledContainer>`
@@ -89,26 +99,25 @@ export const StyledTable = styled.table<IStyledTable>`
     $isTablet &&
     `tbody tr {
       &:nth-child(even) ${StyledTdactions} {
-        background-color: ${theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};};
+        background-color: ${theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
       }
       &:nth-child(odd) ${StyledTdactions} {
         background-color: ${theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
       }
-      
     }`}
 `;
 
-export const StyledTbody = styled.tbody`
+export const StyledTbody = styled.tbody<IStyledWithTheme>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
-export const StyledThead = styled.thead`
+export const StyledThead = styled.thead<IStyledWithTheme>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
-export const StyledTh = styled.th`
+export const StyledTh = styled.th<IStyledWithTheme>`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
   padding: ${spacing.s050};

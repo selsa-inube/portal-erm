@@ -1,14 +1,19 @@
 import styled from "styled-components";
+import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
-import { inube } from "@inubekit/inubekit";
 
 interface StyledClientsListProps {
   $isMobile: boolean;
   $scroll?: boolean;
+  theme?: typeof inube;
 }
 
-const StyledClients = styled.div`
+interface IStyledClients {
+  theme?: typeof inube;
+}
+
+const StyledClients = styled.div<IStyledClients>`
   & form {
     & > div {
       gap: ${spacing.s500};

@@ -8,6 +8,14 @@ interface StyledContractsContainerProps {
   theme?: typeof inube;
 }
 
+interface IStyledSeparatorLine {
+  theme: typeof inube;
+}
+
+interface IStyledAddVinculation {
+  theme: typeof inube;
+}
+
 const StyledContractsContainer = styled.div<StyledContractsContainerProps>`
   display: flex;
   flex-direction: column;
@@ -22,7 +30,7 @@ const StyledContractsContainer = styled.div<StyledContractsContainerProps>`
     $isMobile ? `${spacing.s300} ${spacing.s150}` : spacing.s300};
 `;
 
-const StyledSeparatorLine = styled.hr`
+const StyledSeparatorLine = styled.hr<IStyledSeparatorLine>`
   width: 2px;
   margin: 0px;
   border: 0px;
@@ -30,7 +38,7 @@ const StyledSeparatorLine = styled.hr`
     theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
 `;
 
-const StyledAddVinculation = styled.div`
+const StyledAddVinculation = styled.div<IStyledAddVinculation>`
   display: flex;
   flex-direction: column;
   justify-content: center;

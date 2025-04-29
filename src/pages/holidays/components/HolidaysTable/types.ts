@@ -29,7 +29,7 @@ interface HolidayTableAction
 }
 
 export interface HolidayTableDataDetails {
-  daysEnjoyed: string;
+  daysOff: string;
   startDate: string;
   contract: string;
   description: string;
