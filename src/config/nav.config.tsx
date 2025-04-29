@@ -8,15 +8,8 @@ import {
   MdOutlineBadge,
   MdPendingActions,
 } from "react-icons/md";
+import { ILinkNav } from "@inubekit/inubekit";
 import { useLocation } from "react-router-dom";
-
-interface NavLink {
-  id: string;
-  label: string;
-  icon: JSX.Element;
-  path: string;
-  isActive: boolean;
-}
 
 const baseNavLinks = [
   {
@@ -93,7 +86,7 @@ const useNavConfig = () => {
             };
             return acc;
           },
-          {} as Record<string, NavLink>,
+          {} as Record<string, ILinkNav>,
         ),
       },
     },
