@@ -39,6 +39,13 @@ export interface IVacationGeneralInformationEntry {
   observations: string;
 }
 
+export interface IVacationPaymentGeneralInformationEntry {
+  id: string;
+  daysToPay: string;
+  contract: string;
+  observations: string;
+}
+
 export interface ICertificationGeneralInformationEntry {
   id: string;
   certification: string;
@@ -50,7 +57,8 @@ export interface ICertificationGeneralInformationEntry {
 
 export type HumanResourceRequestData =
   | IVacationGeneralInformationEntry
-  | ICertificationGeneralInformationEntry;
+  | ICertificationGeneralInformationEntry
+  | IVacationPaymentGeneralInformationEntry;
 
 export enum EStatus {
   in_progress = "En progreso",

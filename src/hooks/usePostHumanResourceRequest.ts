@@ -31,7 +31,13 @@ export function useRequestSubmission(
     try {
       let humanResourceRequestData: string;
 
-      if ("daysOff" in formValues) {
+      if ("daysToPay" in formValues) {
+        humanResourceRequestData = JSON.stringify({
+          daysToPay: formValues.daysToPay,
+          contract: formValues.contract,
+          observations: formValues.observations,
+        });
+      } else if ("daysOff" in formValues) {
         humanResourceRequestData = JSON.stringify({
           daysOff: formValues.daysOff,
           startDate: formatDate(formValues.startDate),
