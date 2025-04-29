@@ -11,7 +11,7 @@ import { createPortal } from "react-dom";
 import { AssistedProcess } from "@components/feedback/AssistedProcess";
 
 import { StyledModal, StyledContainer } from "./styles";
-import { processingRequestMock } from "./config/config";
+import { IStep } from "@components/feedback/AssistedProcess/types";
 
 export interface ProcessingRequestModalProps {
   buttonText?: string;
@@ -20,6 +20,7 @@ export interface ProcessingRequestModalProps {
   title?: string;
   portalId?: string;
   currentStepId?: number;
+  steps: IStep[];
   onCloseModal?: () => void;
 }
 
@@ -30,6 +31,7 @@ export function ProcessingRequestModal(props: ProcessingRequestModalProps) {
     title = "Procesando solicitud",
     portalId = "portal",
     currentStepId = 1,
+    steps,
     onCloseModal,
   } = props;
 
@@ -42,7 +44,6 @@ export function ProcessingRequestModal(props: ProcessingRequestModalProps) {
     );
   }
 
-  const steps = processingRequestMock;
   const lastStepId = steps[steps.length - 1]?.id;
 
   return createPortal(

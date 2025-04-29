@@ -4,6 +4,7 @@ import { Button } from "@inubekit/inubekit";
 
 import { ProcessingRequestModal, ProcessingRequestModalProps } from "..";
 import { props } from "./props";
+import { processingRequestMock } from "../config/config";
 
 const story: Meta<typeof ProcessingRequestModal> = {
   component: ProcessingRequestModal,
@@ -62,6 +63,7 @@ Default.args = {
   title: "Procesando solicitud",
   description:
     "Hemos recibido tu solicitud y se encuentra en proceso. Por favor, espera mientras la gestionamos.",
+  steps: processingRequestMock,
 };
 
 export default story;

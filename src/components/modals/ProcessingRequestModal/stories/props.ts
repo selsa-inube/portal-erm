@@ -23,6 +23,15 @@ const props: Partial<ArgTypes<ProcessingRequestModalProps>> = {
     description: "ID of the portal node for rendering the modal",
     defaultValue: "portal",
   },
+  currentStepId: {
+    control: { type: "number", min: 1, max: 3 },
+    description: "ID of the current active step in the process",
+    defaultValue: 1,
+  },
+  steps: {
+    control: "object",
+    description: "Array of process steps to display in the modal",
+  },
   onCloseModal: {
     action: "closed",
     description: "Function triggered when the modal is closed",
