@@ -10,7 +10,12 @@ import {
 } from "@inubekit/inubekit";
 import { MdOutlineChevronRight, MdOutlineBeachAccess } from "react-icons/md";
 
-import { useNavConfig, userMenu, actions } from "@config/nav.config";
+import {
+  useNavConfig,
+  userMenu,
+  actions,
+  useConfigHeader,
+} from "@config/nav.config";
 import { useAppContext } from "@context/AppContext/useAppContext";
 import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
@@ -58,6 +63,7 @@ function AppPage(props: AppPageProps) {
   const navigate = useNavigate();
 
   const navConfig = useNavConfig();
+  const configHeader = useConfigHeader();
 
   const [collapse, setCollapse] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,8 +108,7 @@ function AppPage(props: AppPageProps) {
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <Header
-          portalId="portal"
-          navigation={{ items: navConfig, breakpoint: "800px" }}
+          navigation={{ nav: configHeader, breakpoint: "800px" }}
           logoURL={renderLogo(
             selectedClient?.logo ?? logoUrl,
             selectedClient?.name ?? "Sin unidad seleccionada",

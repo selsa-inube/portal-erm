@@ -5,7 +5,7 @@ import { SendRequestModal } from "@components/modals/SendRequestModal";
 import { RequestInfoModal } from "@components/modals/RequestInfoModal";
 import { useErrorFlag } from "@hooks/useErrorFlag";
 import { ICertificationGeneralInformationEntry } from "@ptypes/humanResourcesRequest.types";
-import { useRequestSubmission } from "@src/hooks/usePostHumanResourceRequest";
+import { useRequestSubmission } from "@hooks/usePostHumanResourceRequest";
 
 import { NewCertificationUI } from "./interface";
 import { newCCertificationApplication } from "./config/assisted.config";

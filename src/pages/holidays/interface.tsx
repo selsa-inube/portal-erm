@@ -1,4 +1,4 @@
-import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import { Button, Stack } from "@inubekit/inubekit";
 
 import { AppMenu } from "@components/layout/AppMenu";
@@ -51,20 +51,10 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           >
             <Button
               spacing="wide"
-              variant="outlined"
-              fullwidth={isMobile}
-              onClick={() => {
-                /* no-op */
-              }}
-            >
-              Días por disfrutar
-            </Button>
-            <Button
-              spacing="wide"
               variant="filled"
               type="link"
               path="/holidays/request-enjoyment"
-              iconBefore={<MdOutlineAirplanemodeActive />}
+              iconBefore={<MdAdd />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
             >
@@ -75,7 +65,7 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
               variant="filled"
               type="link"
               path="/holidays/request-payment"
-              iconBefore={<MdOutlinePayments />}
+              iconBefore={<MdAdd />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
             >
@@ -85,6 +75,8 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           <HolidaysTable
             data={tableData}
             loading={isLoading}
+            hasViewDetailsPrivilege
+            hasDeletePrivilege
             handleDeleteRequest={handleDeleteRequest}
           />
         </StyledHolidaysContainer>

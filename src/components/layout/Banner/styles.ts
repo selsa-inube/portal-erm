@@ -2,7 +2,31 @@ import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
 
-const StyledRadioClient = styled.div`
+interface IStyledRadioClient {
+  theme: typeof inube;
+}
+
+interface IStyledBannerImage {
+  theme: typeof inube;
+}
+
+interface IStyledBannerImage {
+  theme: typeof inube;
+}
+
+interface IStyledBannerImage {
+  theme: typeof inube;
+}
+
+interface IVerticalDivider {
+  theme: typeof inube;
+}
+
+interface IMobileDropdown {
+  theme: typeof inube;
+}
+
+const StyledRadioClient = styled.div<IStyledRadioClient>`
   position: relative;
   display: flex;
   align-items: center;
@@ -21,7 +45,7 @@ const StyledRadioClient = styled.div`
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
 `;
 
-const StyledBannerImage = styled.img`
+const StyledBannerImage = styled.img<IStyledBannerImage>`
   width: 44px;
   height: 44px;
   object-fit: contain;
@@ -32,7 +56,7 @@ const StyledBannerImage = styled.img`
   min-height: 34px;
 `;
 
-const VerticalDivider = styled.div`
+const VerticalDivider = styled.div<IVerticalDivider>`
   width: 2px;
   height: 50px;
   background-color: ${({ theme }) =>
@@ -48,7 +72,7 @@ const MobileToggle = styled.div`
   justify-content: center;
 `;
 
-const MobileDropdown = styled.div`
+const MobileDropdown = styled.div<IMobileDropdown>`
   position: absolute;
   top: calc(100% + ${spacing.s100});
   right: 0;

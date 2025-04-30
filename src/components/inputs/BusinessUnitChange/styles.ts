@@ -3,7 +3,11 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
-const StyledContainer = styled.div`
+interface IStyledContainer {
+  theme: typeof inube;
+}
+
+const StyledContainer = styled.div<IStyledContainer>`
   box-shadow: 2px 2px 3px 2px
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   border-radius: ${spacing.s100};

@@ -32,6 +32,7 @@ interface GeneralInformationFormProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit?: (values: IGeneralInformationEntry) => void;
 }
@@ -46,6 +47,7 @@ const GeneralInformationForm = forwardRef<
       onFormValid,
       onSubmit,
       handleNextStep,
+      handlePreviousStep,
       loading,
       withNextButton = false,
     },
@@ -77,6 +79,7 @@ const GeneralInformationForm = forwardRef<
         formik={formik}
         withNextButton={withNextButton}
         validationSchema={validationSchema}
+        handlePreviousStep={handlePreviousStep}
         handleNextStep={handleNextStep}
       />
     );
