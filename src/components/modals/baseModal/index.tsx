@@ -7,9 +7,11 @@ import {
   Stack,
   Icon,
   Text,
+  useMediaQuery,
 } from "@inubekit/inubekit";
 
 import { validationMessages } from "@validations/validationMessages";
+import { spacing } from "@design/tokens/spacing";
 
 import { StyledContainer, StyledContainerClose } from "./styles";
 import { dataBaseModal } from "./config";
@@ -41,7 +43,7 @@ export function BaseModal(props: IBaseModalProps) {
     children,
     handleBack,
     handleClose,
-    width = "",
+    width = "450px",
     height = "",
     disabledNext = false,
     disabledBack = false,
@@ -58,28 +60,30 @@ export function BaseModal(props: IBaseModalProps) {
     throw new Error(validationMessages.errorNodo);
   }
 
+  const isMobile = useMediaQuery("(max-width: 750px)");
+
   return createPortal(
     <Blanket>
-      <StyledContainer>
+      <StyledContainer $smallScreen={isMobile}>
         <Stack
           direction="column"
-          padding="24px"
-          gap="24px"
-          width={width}
-          height={height}
+          padding={isMobile ? spacing.s200 : spacing.s300} // Ajuste de espaciado
+          gap={isMobile ? spacing.s200 : spacing.s300}
+          width={isMobile ? "90%" : width} // Ancho ajustable solo en móviles
+          height={isMobile ? "auto" : height} // Ajustar altura en móviles
         >
           <Stack justifyContent="space-between" alignItems="center">
-            <Text size="small" type="headline">
+            <Text size={isMobile ? "medium" : "small"} type="headline">
               {title}
             </Text>
             <StyledContainerClose onClick={handleClose ?? handleBack}>
-              <Stack alignItems="center" gap="8px">
-                <Text type="body" size="large">
+              <Stack alignItems="center" gap={spacing.s100}>
+                <Text type="body" size={isMobile ? "medium" : "large"}>
                   {dataBaseModal.close}
                 </Text>
                 <Icon
                   icon={<MdClear />}
-                  size="24px"
+                  size={spacing.s300}
                   cursorHover
                   appearance="dark"
                 />
@@ -89,7 +93,7 @@ export function BaseModal(props: IBaseModalProps) {
           {initialDivider && <Divider />}
           <Stack direction="column">{children}</Stack>
           {finalDivider && <Divider />}
-          <Stack justifyContent="end" gap="20px">
+          <Stack justifyContent="end" gap={spacing.s250}>
             {backButton && (
               <Button
                 onClick={handleBack ?? handleClose}

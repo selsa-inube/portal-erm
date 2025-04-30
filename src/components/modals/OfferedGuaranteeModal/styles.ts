@@ -6,12 +6,12 @@ interface IScrollableContainer {
 }
 
 export const ScrollableContainer = styled.div<IScrollableContainer>`
-  height: ${({ $isMobile }) => ($isMobile ? "auto" : "636px")};
+  height: ${({ $isMobile }) => ($isMobile ? "auto" : "390px")};
   width: 100%;
   overflow: auto;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
     border-radius: 8px;
   }
   &::-webkit-scrollbar-thumb {

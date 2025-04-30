@@ -16,6 +16,7 @@ import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
+import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
 
 import {
   StyledAppPage,
@@ -59,6 +60,7 @@ function AppPage(props: AppPageProps) {
   const navConfig = useNavConfig();
 
   const [collapse, setCollapse] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
 
@@ -90,6 +92,10 @@ function AppPage(props: AppPageProps) {
 
     setCollapse(false);
     navigate("/employees/select-employee");
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen); // Toggle la visibilidad de la modal
   };
 
   return (
@@ -174,9 +180,17 @@ function AppPage(props: AppPageProps) {
                       redirectUrl="/employees/select-employee"
                       infoItems={[
                         {
-                          icon: <MdOutlineBeachAccess />,
+                          icon: (
+                            <Icon
+                              icon={<MdOutlineBeachAccess />}
+                              appearance="primary"
+                              size="24px"
+                              cursorHover
+                            />
+                          ),
                           value: 10,
                           label: "Días pendientes",
+                          onClick: toggleModal,
                         },
                       ]}
                     />
@@ -190,6 +204,10 @@ function AppPage(props: AppPageProps) {
           </Grid>
         </StyledContainer>
       </Grid>
+
+      {isModalOpen && (
+        <OfferedGuaranteeModal handleClose={toggleModal} isMobile={isTablet} />
+      )}
     </StyledAppPage>
   );
 }

@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { Stack, Tabs } from "@inubekit/inubekit";
 
+import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
+import {
+  mockDataDaysPayment,
+  mockDataOpronPayment,
+} from "@mocks/mockDataDays/mockDataPayment";
 import { BaseModal } from "@components/modals/baseModal";
 
+import { DaysPending } from "./DaysPending";
+import { DaysUsed } from "./DaysUsed";
 import { dataGuarantee, dataTabs } from "./config";
+import { ScrollableContainer } from "./styles";
 
 export interface IOfferedGuaranteeModalProps {
   handleClose: () => void;
@@ -14,6 +22,7 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
   const { handleClose, isMobile } = props;
 
   const [currentTab, setCurrentTab] = useState(dataTabs[0].id);
+
   const onChange = (tabId: string) => {
     setCurrentTab(tabId);
   };
@@ -25,7 +34,7 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
       handleNext={handleClose}
       handleClose={handleClose}
       width={isMobile ? "300px" : "404px"}
-      finalDivider={true}
+      finalDivider={false}
     >
       <Stack>
         <Tabs
@@ -35,7 +44,21 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
           onChange={onChange}
         />
       </Stack>
-      <Stack width="100%">{currentTab === "pending" && ""}</Stack>
+
+      <Stack>
+        {currentTab === "pending" && (
+          <DaysPending isMobile={isMobile} data={mockDataDaysPending} />
+        )}
+        <ScrollableContainer>
+          {currentTab === "used" && (
+            <DaysUsed
+              isMobile={isMobile}
+              paymentData={mockDataDaysPayment}
+              opronData={mockDataOpronPayment}
+            />
+          )}
+        </ScrollableContainer>
+      </Stack>
     </BaseModal>
   );
 }
