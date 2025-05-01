@@ -1,6 +1,7 @@
 import { FormikProps, useFormik } from "formik";
 import { object, string } from "yup";
 import { forwardRef, useEffect, useImperativeHandle } from "react";
+import * as Yup from "yup";
 
 import { validationMessages } from "@validations/validationMessages";
 import { validationRules } from "@validations/validationRules";
@@ -15,8 +16,8 @@ const createValidationSchema = () =>
       ? validationRules.daysOff.required(validationMessages.required)
       : validationRules.daysOff,
     startDate: generalInformationRequiredFields.startDate
-      ? validationRules.startDate.required(validationMessages.required)
-      : validationRules.startDate,
+      ? Yup.string().required(validationMessages.required)
+      : Yup.string(),
     contract: generalInformationRequiredFields.contract
       ? string().required(validationMessages.required)
       : string(),
