@@ -87,7 +87,6 @@ function AppProvider(props: AppProviderProps) {
     parseInt(localStorage.getItem("pendingDays") ?? "0", 10),
   );
 
-  // Aseguramos que se guarde el valor de pendingDays en el localStorage cada vez que cambie
   useEffect(() => {
     if (pendingDays !== undefined) {
       localStorage.setItem("pendingDays", pendingDays.toString());

@@ -2,7 +2,7 @@ import { IPendingUsedDaysTableHeader } from "./types";
 
 export const contractTableHeaders: IPendingUsedDaysTableHeader[] = [
   { label: "Contrato", key: "contract", style: { width: "auto" } },
-  { label: "Días pendientes", key: "pendingDays", style: { width: "10px" } },
+  { label: "Días pendientes", key: "pendingDays", style: { width: "auto" } },
 ];
 
 export const paymentTableHeaders: IPendingUsedDaysTableHeader[] = [
@@ -16,8 +16,8 @@ export const paymentTableHeaders: IPendingUsedDaysTableHeader[] = [
 ];
 
 export const contractTableColumns = [
-  { span: 1, style: { width: "60%" } },
-  { span: 1, style: { width: "auto" } },
+  { span: 1, style: { width: "65%" } },
+  { span: 1, style: { width: "30%" } },
 ];
 
 export const paymentTableColumns = [

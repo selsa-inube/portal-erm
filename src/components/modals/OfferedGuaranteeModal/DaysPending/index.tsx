@@ -15,10 +15,8 @@ interface IDaysPending {
   data: { contrato: string; diasPendientes: number }[];
 }
 
-export function DaysPending(props: IDaysPending) {
-  const { isMobile, data } = props;
+export function DaysPending({ isMobile, data }: IDaysPending) {
   const { setPendingDays } = useAppContext();
-
   const { totalPendingDays, contractData } = usePendingData(data);
 
   useEffect(() => {
