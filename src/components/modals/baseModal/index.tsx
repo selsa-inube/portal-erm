@@ -67,10 +67,10 @@ export function BaseModal(props: IBaseModalProps) {
       <StyledContainer $smallScreen={isMobile}>
         <Stack
           direction="column"
-          padding={isMobile ? spacing.s200 : spacing.s300} // Ajuste de espaciado
+          padding={isMobile ? spacing.s200 : spacing.s300}
           gap={isMobile ? spacing.s200 : spacing.s300}
-          width={isMobile ? "90%" : width} // Ancho ajustable solo en móviles
-          height={isMobile ? "auto" : height} // Ajustar altura en móviles
+          width={isMobile ? "90%" : width}
+          height={isMobile ? "auto" : height}
         >
           <Stack justifyContent="space-between" alignItems="center">
             <Text size={isMobile ? "medium" : "small"} type="headline">

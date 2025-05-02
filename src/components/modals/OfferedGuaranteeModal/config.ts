@@ -6,5 +6,4 @@ export const dataTabs = [
 export const dataGuarantee = {
   title: "Días por disfrutar",
   close: "Cerrar",
-  borrower: "Codeudor",
 };

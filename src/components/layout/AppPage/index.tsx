@@ -58,6 +58,7 @@ function AppPage(props: AppPageProps) {
     businessUnits,
     setSelectedClient,
     selectedEmployee,
+    pendingDays,
   } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ function AppPage(props: AppPageProps) {
   };
 
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen); // Toggle la visibilidad de la modal
+    setIsModalOpen(!isModalOpen);
   };
 
   return (
@@ -193,7 +194,7 @@ function AppPage(props: AppPageProps) {
                               cursorHover
                             />
                           ),
-                          value: 10,
+                          value: pendingDays,
                           label: "Días pendientes",
                           onClick: toggleModal,
                         },

@@ -14,6 +14,6 @@ export const StyledContainer = styled.div<IStyledContainer>`
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   border-radius: 8px;
   width: ${({ $smallScreen }) => ($smallScreen ? "335px" : "450px")};
-  height: ${({ $smallScreen }) => ($smallScreen ? "auto" : "auto")};
+  height: ${({ $smallScreen }) => ($smallScreen ? "auto" : "636px")};
   max-width: ${({ $smallScreen }) => ($smallScreen ? "90%" : "450px")};
 `;

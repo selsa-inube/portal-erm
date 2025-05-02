@@ -33,16 +33,11 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
       nextButton={dataGuarantee.close}
       handleNext={handleClose}
       handleClose={handleClose}
-      width={isMobile ? "300px" : "404px"}
+      width={isMobile ? "auto" : "auto"}
       finalDivider={false}
     >
       <Stack>
-        <Tabs
-          scroll={isMobile}
-          selectedTab={currentTab}
-          tabs={dataTabs}
-          onChange={onChange}
-        />
+        <Tabs selectedTab={currentTab} tabs={dataTabs} onChange={onChange} />
       </Stack>
 
       <Stack>

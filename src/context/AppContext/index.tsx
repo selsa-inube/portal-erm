@@ -6,14 +6,12 @@ import {
   ReactNode,
 } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import selsaLogo from "@assets/images/selsa.png";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types";
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { Employee } from "@ptypes/employeePortalConsultation.types";
-
 import { IAppContextType, IPreferences, IClient } from "./types";
 
 const AppContext = createContext<IAppContextType | undefined>(undefined);
@@ -48,6 +46,7 @@ function AppProvider(props: AppProviderProps) {
 
   const initialLogo = localStorage.getItem("logoUrl") ?? selsaLogo;
   const [logoUrl, setLogoUrl] = useState<string>(initialLogo);
+
   const [preferences, setPreferences] = useState<IPreferences>({
     boardOrientation:
       (localStorage.getItem("boardOrientation") as "vertical" | "horizontal") ??
@@ -83,6 +82,17 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessUnit[]>(businessUnitsData);
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
+
+  const [pendingDays, setPendingDays] = useState<number>(
+    parseInt(localStorage.getItem("pendingDays") ?? "0", 10),
+  );
+
+  // Aseguramos que se guarde el valor de pendingDays en el localStorage cada vez que cambie
+  useEffect(() => {
+    if (pendingDays !== undefined) {
+      localStorage.setItem("pendingDays", pendingDays.toString());
+    }
+  }, [pendingDays]);
 
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
@@ -165,6 +175,8 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         selectedEmployee,
         setSelectedEmployee,
+        pendingDays,
+        setPendingDays,
       }}
     >
       {children}

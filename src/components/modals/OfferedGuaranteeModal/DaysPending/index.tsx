@@ -1,13 +1,13 @@
+import { useEffect } from "react";
 import { Stack, Text } from "@inubekit/inubekit";
-
 import { spacing } from "@design/tokens/spacing";
+import { useAppContext } from "@context/AppContext";
 
 import { dataDaysPending } from "./config";
 import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
-import {
-  IPendingUsedDaysTable,
-  IPendingUsedDaysTableHeader,
-} from "../PendingUsedDaysTable/types";
+import { usePendingData } from "./interface";
+
+import { IPendingUsedDaysTableHeader } from "../PendingUsedDaysTable/types";
 import { contractTableHeaders } from "../PendingUsedDaysTable/tableConfig";
 
 interface IDaysPending {
@@ -17,23 +17,20 @@ interface IDaysPending {
 
 export function DaysPending(props: IDaysPending) {
   const { isMobile, data } = props;
+  const { setPendingDays } = useAppContext();
 
-  const totalPendingDays = data.reduce(
-    (total, item) => total + item.diasPendientes,
-    0,
-  );
+  const { totalPendingDays, contractData } = usePendingData(data);
 
-  const contractData: IPendingUsedDaysTable[] = data.map((item) => ({
-    contract: { value: item.contrato },
-    pendingDays: { value: item.diasPendientes },
-  }));
+  useEffect(() => {
+    setPendingDays(totalPendingDays);
+  }, [totalPendingDays, setPendingDays]);
 
   const headers: IPendingUsedDaysTableHeader[] = contractTableHeaders;
 
   return (
     <Stack
       direction="column"
-      height={isMobile ? "29px" : "366px"}
+      height={isMobile ? "auto" : "auto"}
       padding={`${spacing.s300} ${spacing.s0} ${spacing.s150} ${spacing.s0}`}
       gap="16px"
     >
