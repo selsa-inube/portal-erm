@@ -27,7 +27,7 @@ const holidaysData: IHolidaysTable[] = [
     },
     dataDetails: {
       value: {
-        daysEnjoyed: "2",
+        daysOff: "2",
         startDate: "18/Ene/2024",
         contract: "Contrato 123",
         description: "Disfrute de vacaciones",
@@ -55,7 +55,7 @@ const holidaysData: IHolidaysTable[] = [
     },
     dataDetails: {
       value: {
-        daysEnjoyed: "2",
+        daysOff: "2",
         startDate: "18/Ene/2024",
         contract: "Contrato 123",
         description: "Disfrute de vacaciones",

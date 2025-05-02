@@ -3,12 +3,24 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
+interface IStyledTaskBoardContainer {
+  theme?: typeof inube;
+}
+
+interface IStyledTaskHeader {
+  theme?: typeof inube;
+}
+
 interface StyledTaskContentProps {
   $isRightSection: boolean;
   theme?: typeof inube;
 }
 
-const StyledTaskBoardContainer = styled.div`
+interface IStyledMobileBoard {
+  theme?: typeof inube;
+}
+
+const StyledTaskBoardContainer = styled.div<IStyledTaskBoardContainer>`
   display: flex;
   min-height: 100px;
   border-radius: ${spacing.s100};
@@ -22,7 +34,7 @@ const StyledTaskSection = styled.div`
   flex: 1;
 `;
 
-const StyledTaskHeader = styled.h3`
+const StyledTaskHeader = styled.h3<IStyledTaskHeader>`
   margin: 0;
   padding: ${spacing.s150};
   border-bottom: 2px solid
@@ -55,7 +67,7 @@ const StyledTaskContent = styled.div<StyledTaskContentProps>`
   height: 100%;
 `;
 
-const StyledMobileBoard = styled.div`
+const StyledMobileBoard = styled.div<IStyledMobileBoard>`
   min-height: 100px;
   border-radius: ${spacing.s100};
   border: 2px solid

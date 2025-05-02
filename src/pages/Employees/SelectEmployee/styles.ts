@@ -3,6 +3,10 @@ import { inube } from "@inubekit/inubekit";
 
 import { spacing } from "@design/tokens/spacing";
 
+interface IStyledQuickAccessContainer {
+  theme: typeof inube;
+}
+
 const StyledAppPage = styled.div`
   display: flex;
   justify-content: center;
@@ -13,7 +17,7 @@ const StyledAppPage = styled.div`
   }
 `;
 
-const StyledQuickAccessContainer = styled.div`
+const StyledQuickAccessContainer = styled.div<IStyledQuickAccessContainer>`
   position: relative;
   align-items: center;
   justify-content: center;

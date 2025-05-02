@@ -24,7 +24,7 @@ function CertificationsOptions() {
 
       try {
         const requests = await getHumanResourceRequests("certification", "");
-        const formattedData = formatHumanResourceData(requests || []);
+        const formattedData = formatHumanResourceData(requests ?? []);
         setTableData(formattedData);
       } catch (error) {
         console.error(

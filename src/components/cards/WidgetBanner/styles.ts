@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
 
 interface StyledInfoItemProps {
+  theme: typeof inube;
   clickable?: boolean;
 }
 
@@ -16,7 +17,7 @@ const IStyledWidgetBanner = styled.div.withConfig({
   &:hover {
     background-color: ${({ clickable, theme }) =>
       clickable
-        ? theme?.palette?.neutral?.N30 || inube.palette.neutral.N30
+        ? (theme?.palette?.neutral?.N30 ?? inube.palette.neutral.N30)
         : "none"};
     border-radius: 4px;
     box-shadow: ${({ clickable }) =>
