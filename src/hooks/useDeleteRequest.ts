@@ -14,8 +14,8 @@ export function useDeleteRequest<T extends { requestId?: string }>(
 
   useErrorFlag(
     showFlag,
-    "La solicitud se descarto correctamente",
-    "Solicitud descartada",
+    "La solicitud se canceló correctamente",
+    "Solicitud Descartada",
     true,
   );
 

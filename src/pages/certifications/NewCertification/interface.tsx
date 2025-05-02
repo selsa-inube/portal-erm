@@ -112,10 +112,7 @@ function NewCertificationUI(
             )}
             <Stack direction="column" gap={spacing.s500}>
               {currentStep === 1 && (
-                <AlertCardStep
-                  handlePreviousStep={handlePreviousStep}
-                  handleNextStep={handleNextStep}
-                />
+                <AlertCardStep handleNextStep={handleNextStep} />
               )}
               {currentStep === 2 && (
                 <GeneralInformationForm
@@ -124,6 +121,7 @@ function NewCertificationUI(
                   withNextButton={true}
                   onFormValid={setIsCurrentFormValid}
                   handleNextStep={handleNextStep}
+                  handlePreviousStep={handlePreviousStep}
                 />
               )}
             </Stack>

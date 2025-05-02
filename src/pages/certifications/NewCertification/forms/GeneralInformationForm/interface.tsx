@@ -1,5 +1,5 @@
 import { FormikProps } from "formik";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { ObjectSchema, AnyObject } from "yup";
 import {
   Stack,
@@ -13,10 +13,8 @@ import {
 import { isRequired } from "@utils/forms/forms";
 import { getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
-import {
-  certificationOptions,
-  contractOptions,
-} from "@pages/certifications/NewCertification/config/assisted.config";
+import { useAppContext } from "@context/AppContext";
+import { certificationOptions } from "@pages/certifications/NewCertification/config/assisted.config";
 
 import { StyledContainer } from "./styles";
 import { IGeneralInformationEntry } from "./types";
@@ -26,12 +24,35 @@ interface GeneralInformationFormUIProps {
   loading?: boolean;
   withNextButton?: boolean;
   handleNextStep: () => void;
+  handlePreviousStep: () => void;
   validationSchema?: ObjectSchema<AnyObject>;
 }
 
+function getDisabledState(loading: boolean | undefined, isValid: boolean) {
+  return loading ? true : !isValid;
+}
+
 const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
-  const { formik, loading, withNextButton, validationSchema, handleNextStep } =
-    props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    validationSchema,
+    handleNextStep,
+    handlePreviousStep,
+  } = props;
+
+  const { selectedEmployee } = useAppContext();
+
+  const contractOptions = useMemo(
+    () =>
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+        id: c.contractId,
+        value: `${c.businessName} - ${c.contractType}`,
+        label: `${c.businessName} - ${c.contractType}`,
+      })),
+    [selectedEmployee.employmentContracts],
+  );
 
   const handleContractChange = (name: string, value: string) => {
     formik.setFieldValue(name, value);
@@ -79,19 +100,30 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
             />
-          </Stack>
+          </Stack>{" "}
           {contractOptions.length > 1 && (
             <Stack>
               <Select
-                size="compact"
-                fullwidth={true}
-                name="contract"
-                required
                 label="Contrato"
+                name="contract"
+                id="contract"
                 options={contractOptions}
-                value={formik.values.contract}
                 placeholder="Selecciona de la lista"
+                value={formik.values.contract}
+                message={formik.errors.contract}
+                disabled={getDisabledState(
+                  loading,
+                  contractOptions.length !== 1 || !formik.values.contract,
+                )}
+                size="compact"
+                fullwidth
+                onBlur={formik.handleBlur}
                 onChange={handleContractChange}
+                required={
+                  validationSchema
+                    ? isRequired(validationSchema, "contract")
+                    : false
+                }
               />
             </Stack>
           )}
@@ -118,7 +150,14 @@ const GeneralInformationFormUI = (props: GeneralInformationFormUIProps) => {
           </Stack>
         </StyledContainer>
         {withNextButton && (
-          <Stack justifyContent="flex-end">
+          <Stack justifyContent="flex-end" gap={spacing.s200}>
+            <Button
+              appearance="gray"
+              variant="outlined"
+              onClick={handlePreviousStep}
+            >
+              Anterior
+            </Button>
             <Button
               fullwidth={isMobile}
               onClick={handleNextStep}
