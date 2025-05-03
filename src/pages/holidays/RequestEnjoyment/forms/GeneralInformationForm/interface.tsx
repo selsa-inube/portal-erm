@@ -8,15 +8,14 @@ import {
   Text,
 } from "@inubekit/inubekit";
 import { useEffect, useMemo, useState } from "react";
-import Holidays from "date-holidays";
 import { FormikProps } from "formik";
 import * as Yup from "yup";
 
-import { isRequired } from "@utils/forms/forms";
+import { isRequired, getFieldState } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
-import { getFieldState } from "@utils/forms/forms";
 import { useAppContext } from "@context/AppContext";
 import { IOption } from "@pages/requests/types";
+import { useDayOptions } from "@hooks/useDayOptions";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer, StyledDateContainer } from "./styles";
@@ -51,10 +50,8 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
 
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedDay, setSelectedDay] = useState("");
   const [yearOptions, setYearOptions] = useState<IOption[]>([]);
   const [monthOptions, setMonthOptions] = useState<IOption[]>([]);
-  const [dayOptions, setDayOptions] = useState<IOption[]>([]);
 
   const contractOptions = useMemo(
     () =>
@@ -67,8 +64,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
   );
 
   useEffect(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
+    const currentYear = new Date().getFullYear();
     setYearOptions(
       [currentYear, currentYear + 1].map((year) => ({
         id: String(year),
@@ -78,10 +74,9 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
     );
 
     if (formik.values.startDate) {
-      const [day, monthName, year] = formik.values.startDate.split("/");
-      setSelectedDay(day);
-      setSelectedMonth(String(monthAbbr.indexOf(monthName)));
+      const [monthName, year] = formik.values.startDate.split("/");
       setSelectedYear(year);
+      setSelectedMonth(String(monthAbbr.indexOf(monthName)));
     }
   }, []);
 
@@ -90,65 +85,35 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
       setMonthOptions([]);
       return;
     }
-
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth();
-
+    const current = new Date();
     const available =
-      parseInt(selectedYear) > currentYear
+      parseInt(selectedYear, 10) > current.getFullYear()
         ? MONTH_OPTIONS
-        : MONTH_OPTIONS.filter((_, idx) => idx >= currentMonth);
-
+        : MONTH_OPTIONS.filter((_, idx) => idx >= current.getMonth());
     setMonthOptions(available);
+    setSelectedMonth("");
   }, [selectedYear]);
 
-  useEffect(() => {
-    if (selectedYear && selectedMonth) {
-      const hd = new Holidays("CO");
-      const year = parseInt(selectedYear);
-      const month = parseInt(selectedMonth);
-      const currentDate = new Date();
-
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const days = Array.from({ length: daysInMonth }, (_, i) => {
-        const day = i + 1;
-        const date = new Date(year, month, day);
-        const isPast =
-          year === currentDate.getFullYear() &&
-          month === currentDate.getMonth() &&
-          day < currentDate.getDate();
-
-        return !isPast && date.getDay() % 6 !== 0 && !hd.isHoliday(date)
-          ? {
-              id: String(day),
-              value: String(day).padStart(2, "0"),
-              label: String(day).padStart(2, "0"),
-            }
-          : null;
-      }).filter(Boolean) as IOption[];
-
-      setDayOptions(days);
-      if (!days.some((d) => d.value === selectedDay)) setSelectedDay("");
-    } else {
-      setDayOptions([]);
-    }
-  }, [selectedYear, selectedMonth, selectedDay]);
+  const { dayOptions, selectedDay, setSelectedDay } = useDayOptions(
+    selectedYear,
+    selectedMonth,
+    formik.values.startDate.split("/")[0] || "",
+  );
 
   useEffect(() => {
     const formattedDate =
       selectedYear && selectedMonth && selectedDay
-        ? `${selectedDay}/${monthAbbr[parseInt(selectedMonth)]}/${selectedYear}`
+        ? `${selectedDay}/${monthAbbr[parseInt(selectedMonth, 10)]}/${selectedYear}`
         : "";
     formik.setFieldValue("startDate", formattedDate);
-  }, [selectedYear, selectedMonth, selectedDay]);
+  }, [selectedDay, selectedMonth, selectedYear]);
 
   useEffect(() => {
     if (contractOptions.length === 1 && !formik.values.contract) {
       formik.setFieldValue("contract", contractOptions[0].value);
       formik.setFieldValue("contractDesc", contractOptions[0].label);
     }
-  }, [contractOptions, formik.values.contract]);
+  }, [contractOptions]);
 
   return (
     <form>
@@ -194,7 +159,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     placeholder={isMobile ? "Mes" : "Selecciona mes"}
                     options={monthOptions}
                     value={selectedMonth}
-                    disabled={loading ?? !selectedYear}
+                    disabled={!selectedYear || loading}
                     size="compact"
                     onChange={(_, value) => setSelectedMonth(value)}
                     required={isRequired(props.validationSchema, "startDate")}
@@ -205,7 +170,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                     placeholder={isMobile ? "Día" : "Selecciona día"}
                     options={dayOptions}
                     value={selectedDay}
-                    disabled={!!loading || !selectedMonth || !selectedYear}
+                    disabled={!selectedMonth || !selectedYear || loading}
                     message={formik.errors.startDate}
                     size="compact"
                     onChange={(_, value) => setSelectedDay(value)}
@@ -222,7 +187,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 placeholder="Selecciona de la lista"
                 value={formik.values.contract}
                 message={formik.errors.contract}
-                disabled={loading ?? contractOptions.length === 1}
+                disabled={loading}
                 size="compact"
                 fullwidth
                 onChange={(_, value) => {
