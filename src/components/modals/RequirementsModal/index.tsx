@@ -10,7 +10,7 @@ import {
 import {
   MdClear,
   MdAdd,
-  MdAddCircleOutline,
+  MdOutlineVisibility,
   MdOutlineCheckCircle,
   MdCheck,
   MdClose,
@@ -63,14 +63,14 @@ function RequirementsModal(props: RequirementsModalProps) {
 
   const renderAddIcon = (entry: IEntries) => {
     return (
-      <Stack justifyContent="center">
+      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
         <Icon
-          icon={<MdAddCircleOutline />}
-          appearance="primary"
+          icon={<MdOutlineVisibility />}
+          appearance="dark"
           onClick={() => console.log("Add clicked", entry)}
           spacing="compact"
           variant="empty"
-          size="26px"
+          size="20px"
           cursorHover
         />
       </Stack>
@@ -82,13 +82,13 @@ function RequirementsModal(props: RequirementsModalProps) {
       React.isValidElement(entry.tag) && entry.tag.props.label === "No Cumple";
 
     return (
-      <Stack justifyContent="center">
+      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
         <Icon
           icon={<MdOutlineCheckCircle />}
           appearance="primary"
           spacing="compact"
           cursorHover
-          size="26px"
+          size="20px"
           onClick={() => console.log("Check clicked", entry)}
           disabled={isDisabled}
         />
@@ -144,7 +144,7 @@ function RequirementsModal(props: RequirementsModalProps) {
   };
 
   const infoItems = [
-    { icon: <MdAddCircleOutline />, text: "Adjuntar", appearance: "help" },
+    { icon: <MdOutlineVisibility />, text: "Adjuntar", appearance: "help" },
     {
       icon: <MdOutlineCheckCircle />,
       text: "Forzar Aprobación",
