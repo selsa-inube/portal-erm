@@ -13,15 +13,27 @@ interface IStaffPortalByBusinessManager
   staffPortalId: string;
   optionsByStaffPortalBusinessManager: IOptionsByStaffPortalBusinessManager[];
 }
+interface IStaffByBusinessUnitAndRole {
+  BusinessUnitName: string;
+  businessUnitCode: string;
+  roleName: string;
+  staffId: string;
+}
 
 interface IStaffUserAccount {
-  accountName: string;
   biologicalSex: string;
   birthDay: Date;
+  businessManagerCode: string;
+  businessManagerName: string;
+  identificationDocumentNumber: string;
+  identificationTypeNaturalPerson: string;
+  missionName: string;
   principalEmail: string;
   principalPhone: string;
+  staffByBusinessUnitAndRole?: IStaffByBusinessUnitAndRole[];
+  staffId: string;
+  staffName: string;
   userAccount: string;
-  userAccountId: string;
 }
 
 export type { IStaffPortalByBusinessManager, IStaffUserAccount };
