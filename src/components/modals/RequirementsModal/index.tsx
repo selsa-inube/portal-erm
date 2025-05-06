@@ -14,7 +14,7 @@ import {
   MdOutlineCheckCircle,
   MdCheck,
   MdClose,
-  MdRemove,
+  MdHelpOutline,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 import React from "react";
@@ -102,12 +102,16 @@ function RequirementsModal(props: RequirementsModalProps) {
   ];
 
   const getIconByTagStatus = (tagElement: React.ReactElement) => {
-    if (tagElement.props.label === "Cumple") {
+    const label = tagElement.props.children;
+
+    if (label === "Cumple") {
       return <MdCheck />;
-    } else if (tagElement.props.label === "Sin Evaluar") {
-      return <MdRemove />;
-    } else {
+    } else if (label === "Sin Evaluar") {
+      return <MdHelpOutline />;
+    } else if (label === "No Cumple") {
       return <MdClose />;
+    } else {
+      return null;
     }
   };
 
@@ -124,8 +128,6 @@ function RequirementsModal(props: RequirementsModalProps) {
                 icon={getIconByTagStatus(tagElement)}
                 appearance={tagElement.props.appearance}
                 cursorHover
-                variant="filled"
-                shape="circle"
                 size="20px"
               />
             </Stack>

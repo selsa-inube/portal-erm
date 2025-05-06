@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MdOutlineInfo } from "react-icons/md";
 
 import { InfoModal } from "@components/modals/InfoModal";
-import { Text, SkeletonLine, Icon } from "@inubekit/inubekit";
+import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
 
 import {
   StyledContainer,
@@ -12,7 +12,6 @@ import {
   StyledTr,
   StyledTh,
   StyledTd,
-  StyledThactions,
   StyledTdactions,
 } from "./styles";
 import { ITitle, IRenderActionsTitles, IActionsComponent } from "./types";
@@ -32,7 +31,7 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
     <>
       {!isTablet
         ? actions.map((actionTitle) => (
-            <StyledThactions key={actionTitle.id}>
+            <Stack key={actionTitle.id}>
               <Text
                 appearance={appearance}
                 type="title"
@@ -42,10 +41,10 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
               >
                 {actionTitle.actionName}
               </Text>
-            </StyledThactions>
+            </Stack>
           ))
         : isFirstTable && (
-            <StyledThactions $isTablet={isTablet} colSpan={3} $isFirst>
+            <Stack>
               {isStyleMobile && (
                 <Icon
                   icon={<MdOutlineInfo />}
@@ -54,7 +53,7 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
                   onClick={onInfoClick}
                 />
               )}
-            </StyledThactions>
+            </Stack>
           )}
     </>
   );
