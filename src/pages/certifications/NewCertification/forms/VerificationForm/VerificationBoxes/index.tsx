@@ -64,12 +64,12 @@ function VerificationBoxes({
 }: VerificationBoxesProps) {
   return (
     <>
-      {stepKey === 1 &&
+      {stepKey === 1 && renderAlerts(isTablet)}
+      {stepKey === 2 &&
         renderPersonalInfoVerification(
           updatedData.personalInformation.values,
           isTablet,
         )}
-      {stepKey === 2 && renderAlerts(isTablet)}
     </>
   );
 }
