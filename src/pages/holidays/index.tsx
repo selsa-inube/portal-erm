@@ -60,7 +60,7 @@ function HolidaysOptions() {
       appName={holidaysNavConfig[0].label}
       appRoute={holidaysNavConfig[0].crumbs}
       navigatePage={holidaysNavConfig[0].url}
-      tableData={tableData}
+      tableData={[]}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
