@@ -39,7 +39,7 @@ function AppProvider(props: AppProviderProps) {
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: "account1",
+          id: "angiepinillanova@gma",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
         }

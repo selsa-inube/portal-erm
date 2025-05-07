@@ -1,5 +1,5 @@
-import { Button, Stack } from "@inubekit/inubekit";
-import { MdOutlineAdd } from "react-icons/md";
+import { Button, Stack, Text } from "@inubekit/inubekit";
+import { MdAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
@@ -44,24 +44,30 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
         <StyledCertificationsContainer $isMobile={isMobile}>
           <Stack
             gap={spacing.s150}
-            justifyContent="end"
+            justifyContent="space-between"
             width="100%"
             direction={isMobile ? "column" : "row"}
+            alignItems="center"
           >
+            <Text type="title" size="medium">
+              Consulta de certificaciones en trámite
+            </Text>
             <Button
               spacing="wide"
               variant="filled"
-              iconBefore={<MdOutlineAdd />}
+              iconBefore={<MdAdd />}
               type="link"
               path="/certifications/new-certification"
               fullwidth={isMobile}
             >
-              Nueva certificación
+              Nueva solicitud
             </Button>
           </Stack>
           <CertificationsTable
             data={tableData}
             loading={isLoading}
+            hasViewDetailsPrivilege
+            hasDeletePrivilege
             handleDeleteRequest={handleDeleteRequest}
           />
         </StyledCertificationsContainer>
