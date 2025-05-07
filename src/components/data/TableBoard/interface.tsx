@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { MdOutlineInfo } from "react-icons/md";
+import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
 
 import { InfoModal } from "@components/modals/InfoModal";
-import { Text, SkeletonLine, Icon, Stack } from "@inubekit/inubekit";
+import { spacing } from "@design/tokens/spacing";
 
 import {
   StyledContainer,
@@ -12,6 +13,7 @@ import {
   StyledTr,
   StyledTh,
   StyledTd,
+  StyledThactions,
   StyledTdactions,
 } from "./styles";
 import { ITitle, IRenderActionsTitles, IActionsComponent } from "./types";
@@ -31,7 +33,7 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
     <>
       {!isTablet
         ? actions.map((actionTitle) => (
-            <Stack key={actionTitle.id}>
+            <StyledThactions key={actionTitle.id}>
               <Text
                 appearance={appearance}
                 type="title"
@@ -41,19 +43,19 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
               >
                 {actionTitle.actionName}
               </Text>
-            </Stack>
+            </StyledThactions>
           ))
         : isFirstTable && (
-            <Stack>
+            <StyledThactions $isTablet={isTablet} colSpan={3} $isFirst>
               {isStyleMobile && (
                 <Icon
                   icon={<MdOutlineInfo />}
                   appearance="primary"
-                  size="28px"
+                  size="20px"
                   onClick={onInfoClick}
                 />
               )}
-            </Stack>
+            </StyledThactions>
           )}
     </>
   );
@@ -86,6 +88,25 @@ const dataLoading = (titleColumns: ITitle[], numberActions: number) => {
     );
   }
   return rowsLoading;
+};
+
+const ActionsIcon = (props: IActionsComponent) => {
+  const { actionMobile, entry, isTablet } = props;
+
+  return (
+    <>
+      {isTablet &&
+        actionMobile?.map((action, index) => (
+          <StyledTdactions
+            key={action.id}
+            $isTablet={isTablet}
+            $isFirst={index === 0}
+          >
+            {action.content(entry)}
+          </StyledTdactions>
+        ))}
+    </>
+  );
 };
 
 const Actions = (props: IActionsComponent) => {
@@ -130,6 +151,7 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
     appearanceTable,
     isTablet,
     actionMobile,
+    actionMobileIcon,
     isFirstTable,
     showTagsInMobile = false,
   } = props;
@@ -197,16 +219,26 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
                       key={title.id}
                       $widthTd={appearanceTable?.widthTd}
                     >
-                      {typeof entry[title.id] !== "string" ? (
-                        entry[title.id]
-                      ) : (
-                        <Text
-                          size="medium"
-                          padding={isTablet ? "0px" : "0px 4px"}
-                        >
-                          {entry[title.id]}
-                        </Text>
-                      )}
+                      <Stack alignItems="center" gap={spacing.s075}>
+                        {actionMobileIcon && (
+                          <ActionsIcon
+                            actionMobile={actionMobileIcon}
+                            entry={entry}
+                            isTablet={isTablet}
+                            actions={[]}
+                          />
+                        )}
+                        {typeof entry[title.id] !== "string" ? (
+                          entry[title.id]
+                        ) : (
+                          <Text
+                            size="medium"
+                            padding={isTablet ? "0px" : "0px 4px"}
+                          >
+                            {entry[title.id]}
+                          </Text>
+                        )}
+                      </Stack>
                     </StyledTd>
                   ))}
                   {actions && (

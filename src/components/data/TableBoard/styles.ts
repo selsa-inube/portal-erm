@@ -10,6 +10,12 @@ interface IStyledContainer {
   theme: typeof inube;
 }
 
+interface IStyledThactions {
+  $isTablet?: boolean;
+  $isFirst?: boolean;
+  theme: typeof inube;
+}
+
 interface IStyledTdactions {
   $right?: number;
   $isTablet?: boolean;
@@ -48,8 +54,13 @@ export const StyledContainer = styled.div<IStyledContainer>`
   overflow: visible;
 `;
 
+export const StyledThactions = styled.th<IStyledThactions>`
+  text-align: end;
+  padding: 0px 10px;
+`;
+
 export const StyledTdactions = styled.td<IStyledTdactions>`
-  text-align: center;
+  align-items: center;
 `;
 
 export const StyledTable = styled.table<IStyledTable>`
@@ -116,6 +127,12 @@ export const StyledTr = styled.tr<IStyledTdbodyContainer>`
 `;
 
 export const StyledTd = styled.td<IStyledTd>`
+  width: ${({ $widthTd }) => $widthTd};
+  height: 24px;
+  padding: ${spacing.s050};
+`;
+
+export const StyledTdIcon = styled.div<IStyledTd>`
   width: ${({ $widthTd }) => $widthTd};
   height: 24px;
   padding: ${spacing.s050};

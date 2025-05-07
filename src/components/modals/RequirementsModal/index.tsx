@@ -12,13 +12,13 @@ import {
   MdAdd,
   MdOutlineVisibility,
   MdOutlineCheckCircle,
-  MdCheck,
-  MdClose,
-  MdHelpOutline,
 } from "react-icons/md";
 import { createPortal } from "react-dom";
 import React from "react";
 
+import CheckIcon from "@assets/images/CheckIcon.svg";
+import CloseIcon from "@assets/images/CloseIcon.svg";
+import HelpIcon from "@assets/images/HelpIcon.svg";
 import { spacing } from "@design/tokens/spacing";
 import { TableBoard } from "@components/data/TableBoard";
 import {
@@ -105,35 +105,40 @@ function RequirementsModal(props: RequirementsModalProps) {
     const label = tagElement.props.children;
 
     if (label === "Cumple") {
-      return <MdCheck />;
+      return <img src={CheckIcon} alt="Cumple" width={14} height={14} />;
     } else if (label === "Sin Evaluar") {
-      return <MdHelpOutline />;
+      return <img src={HelpIcon} alt="Sin Evaluar" width={14} height={14} />;
     } else if (label === "No Cumple") {
-      return <MdClose />;
+      return <img src={CloseIcon} alt="No Cumple" width={14} height={14} />;
     } else {
       return null;
     }
   };
 
-  const getActionsMobile = () => {
+  const getActionsMobileIcon = () => {
     return [
       {
-        id: "tags",
+        id: "estado",
         actionName: "",
         content: (entry: IEntries) => {
           const tagElement = entry.tag as React.ReactElement;
           return (
-            <Stack alignItems="center" padding="4px">
+            <>
               <Icon
                 icon={getIconByTagStatus(tagElement)}
                 appearance={tagElement.props.appearance}
                 cursorHover
                 size="20px"
               />
-            </Stack>
+            </>
           );
         },
       },
+    ];
+  };
+
+  const getActionsMobile = () => {
+    return [
       {
         id: "agregar",
         content: (entry: IEntries) => renderAddIcon(entry),
@@ -192,6 +197,7 @@ function RequirementsModal(props: RequirementsModalProps) {
                   entries={requirement.entries}
                   actions={actionsRequirements}
                   actionMobile={getActionsMobile()}
+                  actionMobileIcon={getActionsMobileIcon()}
                   appearanceTable={{
                     widthTd: "75%",
                     efectzebra: true,
