@@ -40,7 +40,7 @@ const getBusinessUnitsForOfficer = async (
         signal: controller.signal,
       };
 
-      const url = `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/business-units-portal-staff/${userAccount}/${portalPublicCode}`;
+      const url = `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/business-units-portal-staff/${userAccount.substring(0, 20)}/${portalPublicCode}`;
       const res = await fetch(url, options);
 
       if (res.status === 204) {

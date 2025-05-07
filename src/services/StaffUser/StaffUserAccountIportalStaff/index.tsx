@@ -21,13 +21,15 @@ const staffUserAccountById = async (
         method: "GET",
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          "X-Action": "SearchByIdStaffUserAccount",
+          "X-Action": "SearchAllStaff",
         },
         signal: controller.signal,
       };
-
+      const params = new URLSearchParams({
+        identificationDocumentNumber: userAccountId,
+      });
       const res = await fetch(
-        `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staff-user-accounts/${userAccountId}`,
+        `${environment.IVITE_ISTAFF_QUERY_PROCESS_SERVICE}/staffs?${params.toString()}`,
         options,
       );
 
@@ -46,8 +48,8 @@ const staffUserAccountById = async (
           data,
         };
       }
-
-      return mapStaffUserAccountApiToEntity(data);
+      console.log("Data from API:", mapStaffUserAccountApiToEntity(data[0]));
+      return mapStaffUserAccountApiToEntity(data[0]);
     } catch (error) {
       console.error(`Attempt ${attempt} failed:`, error);
       if (attempt === maxRetries) {
