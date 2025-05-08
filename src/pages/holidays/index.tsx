@@ -14,33 +14,59 @@ import { IHolidaysTable } from "./components/HolidaysTable/types";
 function HolidaysOptions() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
-  const hasActiveContract = true;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const requests = await getHumanResourceRequests("vacations", "");
-        setTableData(formatHolidaysData(requests ?? []));
-      } catch (error) {
-        console.error(
-          "Error al obtener las solicitudes de recursos humanos:",
-          error,
-        );
-        setTableData([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const [isLoading, setIsLoading] = useState(true);
+  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+
+  const hasActiveContract = true;
+  const hasEnjoymentPrivilege = true;
+  const hasPaymentPrivilege = true;
+
+  const mainNavItem = holidaysNavConfig[0];
+
+  const fetchHolidaysData = async () => {
+    setIsLoading(true);
+    try {
+      const requests = await getHumanResourceRequests("vacations", "");
+      setTableData(formatHolidaysData(requests ?? []));
+    } catch (error) {
+      setTableData([]);
+      showError(
+        error instanceof Error
+          ? error.message
+          : "An error occurred while fetching data.",
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showError = (message: string) => {
+    navigate(location.pathname, {
+      state: {
+        showFlag: true,
+        flagMessage: message,
+        flagTitle: "Error",
+        isSuccess: false,
+      },
+      replace: true,
+    });
+  };
+
+  const handleDeleteRequest = (requestId: string, justification: string) => {
+    const request = tableData.find((item) => item.requestId === requestId);
+    const requestNumber = request?.requestNumber ?? "";
+    void handleDelete(requestId, justification, requestNumber);
+  };
 
   const { handleDelete } = useDeleteRequest((filterFn) => {
     setTableData((prev) => prev.filter(filterFn));
   });
+
+  useEffect(() => {
+    void fetchHolidaysData();
+  }, []);
 
   useErrorFlag(
     location.state?.showFlag,
@@ -57,20 +83,16 @@ function HolidaysOptions() {
 
   return (
     <HolidaysOptionsUI
-      appName={holidaysNavConfig[0].label}
-      appRoute={holidaysNavConfig[0].crumbs}
-      navigatePage={holidaysNavConfig[0].url}
+      appName={mainNavItem.label}
+      appRoute={mainNavItem.crumbs}
+      navigatePage={mainNavItem.url}
       tableData={tableData}
       isLoading={isLoading}
       hasActiveContract={hasActiveContract}
       isMobile={isMobile}
-      handleDeleteRequest={(requestId, justification) => {
-        const request = tableData.find((item) => item.requestId === requestId);
-        const requestNumber = request?.requestNumber ?? "";
-        void handleDelete(requestId, justification, requestNumber);
-      }}
-      hasEnjoymentPrivilege
-      hasPaymentPrivilege
+      hasEnjoymentPrivilege={hasEnjoymentPrivilege}
+      hasPaymentPrivilege={hasPaymentPrivilege}
+      handleDeleteRequest={handleDeleteRequest}
     />
   );
 }
