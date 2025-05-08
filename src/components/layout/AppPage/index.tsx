@@ -105,10 +105,6 @@ function AppPage(props: AppPageProps) {
     setIsModalOpen(!isModalOpen);
   };
 
-  useEffect(() => {
-    console.log("pendingDays actualizado:", pendingDays);
-  }, [pendingDays]);
-
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
