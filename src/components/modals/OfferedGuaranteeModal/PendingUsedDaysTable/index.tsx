@@ -16,7 +16,6 @@ import {
   contractTableColumns,
   paymentTableColumns,
 } from "./tableConfig";
-
 import { IPendingUsedDaysTable, IPendingUsedDaysTableHeader } from "./types";
 import { StyledTd, StyledTh } from "./styles";
 
@@ -27,11 +26,9 @@ export interface PendingUsedDaysTableProps {
   headers: IPendingUsedDaysTableHeader[];
 }
 
-function PendingUsedDaysTable({
-  data,
-  loading = false,
-  variant,
-}: PendingUsedDaysTableProps) {
+function PendingUsedDaysTable(props: PendingUsedDaysTableProps) {
+  const { data, loading = false, variant } = props;
+
   const headers =
     variant === "contract" ? contractTableHeaders : paymentTableHeaders;
 

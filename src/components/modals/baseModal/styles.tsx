@@ -3,6 +3,7 @@ import { inube } from "@inubekit/inubekit";
 
 interface IStyledContainer {
   $smallScreen: boolean;
+  theme?: typeof inube;
 }
 
 export const StyledContainerClose = styled.div`

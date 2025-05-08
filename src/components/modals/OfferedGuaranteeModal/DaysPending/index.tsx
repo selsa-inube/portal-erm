@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { Stack, Text } from "@inubekit/inubekit";
+
 import { spacing } from "@design/tokens/spacing";
 import { useAppContext } from "@context/AppContext";
 
 import { dataDaysPending } from "./config";
-import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
 import { usePendingData } from "./interface";
-
+import { PendingUsedDaysTable } from "../PendingUsedDaysTable/index";
 import { IPendingUsedDaysTableHeader } from "../PendingUsedDaysTable/types";
 import { contractTableHeaders } from "../PendingUsedDaysTable/tableConfig";
 
@@ -30,7 +30,7 @@ export function DaysPending({ isMobile, data }: IDaysPending) {
       direction="column"
       height={isMobile ? "auto" : "auto"}
       padding={`${spacing.s300} ${spacing.s0} ${spacing.s150} ${spacing.s0}`}
-      gap="16px"
+      gap={spacing.s200}
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>
         <Text type="body" size="medium" appearance="gray">

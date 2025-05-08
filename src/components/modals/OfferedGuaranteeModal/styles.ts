@@ -3,6 +3,7 @@ import { inube } from "@inubekit/inubekit";
 
 interface IScrollableContainer {
   $isMobile?: boolean;
+  theme?: typeof inube;
 }
 
 export const ScrollableContainer = styled.div<IScrollableContainer>`
