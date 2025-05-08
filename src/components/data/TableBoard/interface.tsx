@@ -220,7 +220,7 @@ export const TableBoardUI = (props: ITableBoardUIProps) => {
                       key={title.id}
                       $widthTd={appearanceTable?.widthTd}
                     >
-                      <Stack alignItems="center" gap={spacing.s075}>
+                      <Stack gap={spacing.s075}>
                         {actionMobileIcon && (
                           <ActionsIcon
                             actionMobile={actionMobileIcon}

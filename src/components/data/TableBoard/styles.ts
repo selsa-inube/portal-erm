@@ -65,6 +65,7 @@ export const StyledTdactions = styled.td<IStyledTdactions>`
 
 export const StyledDivactions = styled.div<IStyledTdactions>`
   align-items: center;
+  align-content: center;
 `;
 
 export const StyledTable = styled.table<IStyledTable>`
