@@ -11,6 +11,7 @@ interface IStyledModal {
 const StyledModal = styled.div<IStyledModal>`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 || inube.palette.neutral.N0};
   height: ${({ $smallScreen }) => ($smallScreen ? "318px" : "326px")};

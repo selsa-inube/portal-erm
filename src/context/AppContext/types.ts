@@ -5,6 +5,7 @@ import {
   IStaffUserAccount,
 } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 interface BusinessManager {
   id: string;
@@ -29,13 +30,15 @@ export interface IClient {
   logo: string;
 }
 
+export interface IUser {
+  username: string;
+  id: string;
+  company: string;
+  urlImgPerfil: string;
+}
+
 export interface IAppContextType {
-  user: {
-    username: string;
-    id: string;
-    company: string;
-    urlImgPerfil: string;
-  } | null;
+  user: IUser | null;
   setUser: React.Dispatch<React.SetStateAction<IAppContextType["user"]>>;
   preferences: IPreferences;
   updatePreferences: (newPreferences: Partial<IPreferences>) => void;
@@ -57,4 +60,8 @@ export interface IAppContextType {
   setBusinessUnitsIsFetching: React.Dispatch<React.SetStateAction<boolean>>;
   selectedClient: IClient | null;
   setSelectedClient: React.Dispatch<React.SetStateAction<IClient | null>>;
+  employees: Employee[];
+  setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
+  selectedEmployee: Employee;
+  setSelectedEmployee: (employee: Employee) => void;
 }

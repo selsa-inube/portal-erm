@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import { FormikProps } from "formik";
 import { ObjectSchema, AnyObject } from "yup";
 import {
@@ -12,10 +13,7 @@ import {
 import { isRequired } from "@utils/forms/forms";
 import { spacing } from "@design/tokens/spacing";
 import { getFieldState } from "@utils/forms/forms";
-import {
-  certificationOptions,
-  contractOptions,
-} from "@pages/holidays/RequestPayment/config/assisted.config";
+import { useAppContext } from "@context/AppContext";
 
 import { IGeneralInformationEntry } from "./types";
 import { StyledContainer } from "./styles";
@@ -29,14 +27,45 @@ interface GeneralInformationFormUIProps {
   validationSchema: ObjectSchema<AnyObject>;
   loading?: boolean;
   withNextButton?: boolean;
+  handlePreviousStep: () => void;
   handleNextStep: () => void;
 }
 
 function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
-  const { formik, loading, withNextButton, validationSchema, handleNextStep } =
-    props;
+  const {
+    formik,
+    loading,
+    withNextButton,
+    validationSchema,
+    handlePreviousStep,
+    handleNextStep,
+  } = props;
 
   const isMobile = useMediaQuery("(max-width: 700px)");
+  const { selectedEmployee } = useAppContext();
+
+  const contractOptions = useMemo(
+    () =>
+      (selectedEmployee.employmentContracts ?? []).map((c) => ({
+        id: c.contractId,
+        value: `${c.businessName} - ${c.contractType}`,
+        label: `${c.businessName} - ${c.contractType}`,
+      })),
+    [selectedEmployee.employmentContracts],
+  );
+
+  const handleContractChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
+    const found = contractOptions.find((option) => option.value === value);
+    formik.setFieldValue("contractDesc", found?.label ?? "");
+  };
+
+  useEffect(() => {
+    if (contractOptions.length === 1 && !formik.values.contract) {
+      const onlyOption = contractOptions[0];
+      handleContractChange("contract", onlyOption.value);
+    }
+  }, [contractOptions, formik.values.contract]);
 
   return (
     <form>
@@ -60,27 +89,28 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
                 onChange={formik.handleChange}
                 required={isRequired(validationSchema, "daysToPay")}
               />
-
-              <Select
-                label="Contrato"
-                name="contract"
-                id="contract"
-                options={certificationOptions}
-                placeholder="Selecciona un contrato"
-                value={formik.values.contract}
-                message={formik.errors.contract}
-                disabled={getDisabledState(
-                  loading,
-                  contractOptions.length !== 1 || !formik.values.contract,
-                )}
-                size="compact"
-                fullwidth
-                onBlur={formik.handleBlur}
-                onChange={(name, value) => {
-                  formik.setFieldValue(name, value);
-                }}
-                required={isRequired(validationSchema, "contract")}
-              />
+              {contractOptions.length > 1 && (
+                <Select
+                  label="Contrato"
+                  name="contract"
+                  id="contract"
+                  options={contractOptions}
+                  placeholder="Selecciona de la lista"
+                  value={formik.values.contract}
+                  message={formik.errors.contract}
+                  disabled={getDisabledState(
+                    loading,
+                    contractOptions.length !== 1 || !formik.values.contract,
+                  )}
+                  size="compact"
+                  fullwidth
+                  onBlur={formik.handleBlur}
+                  onChange={(name, value) => {
+                    formik.setFieldValue(name, value);
+                  }}
+                  required={isRequired(validationSchema, "contract")}
+                />
+              )}
             </Stack>
 
             <Textarea
@@ -89,7 +119,7 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
               name="observations"
               id="observations"
               value={formik.values.observations}
-              maxLength={120}
+              maxLength={1000}
               disabled={loading}
               status={getFieldState(formik, "observations")}
               message={formik.errors.observations}
@@ -102,9 +132,15 @@ function GeneralInformationFormUI(props: GeneralInformationFormUIProps) {
         </StyledContainer>
 
         {withNextButton && (
-          <Stack justifyContent="flex-end">
+          <Stack justifyContent="flex-end" gap={spacing.s250}>
             <Button
-              fullwidth={isMobile}
+              appearance="gray"
+              variant="outlined"
+              onClick={handlePreviousStep}
+            >
+              Anterior
+            </Button>
+            <Button
               onClick={handleNextStep}
               disabled={getDisabledState(loading, formik.isValid)}
             >

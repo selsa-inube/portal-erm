@@ -18,7 +18,7 @@ export interface TaskToManageHumanResourceRequest {
 
 export interface HumanResourceRequest {
   employeeId: string;
-  humanResourceRequestData: humanResourceRequestData;
+  humanResourceRequestData: HumanResourceRequestData;
   humanResourceRequestDate: string;
   humanResourceRequestDescription: string;
   humanResourceRequestId: string;
@@ -31,21 +31,41 @@ export interface HumanResourceRequest {
   userNameInCharge: string;
 }
 
-export interface humanResourceRequestData {
-  typeOfRequest: string;
-  contract: string;
-  addressee: string;
+export interface IVacationGeneralInformationEntry {
+  id: string;
+  daysOff: string;
   startDate: string;
-  daysEnjoyed: string;
-  paidDays: string;
+  contract: string;
+  observations: string;
 }
+
+export interface IVacationPaymentGeneralInformationEntry {
+  id: string;
+  daysToPay: string;
+  contract: string;
+  observations: string;
+}
+
+export interface ICertificationGeneralInformationEntry {
+  id: string;
+  certification: string;
+  addressee: string;
+  contract: string;
+  contractDesc: string;
+  observations: string;
+}
+
+export type HumanResourceRequestData =
+  | IVacationGeneralInformationEntry
+  | ICertificationGeneralInformationEntry
+  | IVacationPaymentGeneralInformationEntry;
 
 export enum EStatus {
   in_progress = "En progreso",
   finished = "Terminada",
   closed = "Cerrada",
   rejected = "Rechazada",
-  cancele = "Cancelada",
+  canceled = "Cancelada",
 }
 
 export enum EType {

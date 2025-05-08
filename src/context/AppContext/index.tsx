@@ -12,6 +12,7 @@ import { IStaffPortalByBusinessManager } from "@ptypes/staffPortalBusiness.types
 import { IStaffUserAccount } from "@ptypes/staffPortalBusiness.types";
 import { IBusinessManager } from "@ptypes/employeePortalBusiness.types";
 import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { Employee } from "@ptypes/employeePortalConsultation.types";
 
 import { IAppContextType, IPreferences, IClient } from "./types";
 
@@ -28,6 +29,7 @@ function AppProvider(props: AppProviderProps) {
   const { children, dataPortal, businessManagersData, businessUnitsData } =
     props;
   const { user: auth0User } = useAuth0();
+
   const [user, setUser] = useState<{
     username: string;
     id: string;
@@ -37,7 +39,7 @@ function AppProvider(props: AppProviderProps) {
     auth0User
       ? {
           username: auth0User.name ?? "",
-          id: "account1",
+          id: "angiepinillanova@gma",
           company: "Company Name",
           urlImgPerfil: auth0User.picture ?? "",
         }
@@ -79,7 +81,6 @@ function AppProvider(props: AppProviderProps) {
     useState<IBusinessManager>(businessManagersData);
   const [businessUnits, setBusinessUnits] =
     useState<IBusinessUnit[]>(businessUnitsData);
-
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
 
@@ -121,6 +122,23 @@ function AppProvider(props: AppProviderProps) {
     }
   }, [logoUrl, preferences, user]);
 
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee>(() => {
+    const storedEmployee = localStorage.getItem("selectedEmployee");
+    return storedEmployee ? JSON.parse(storedEmployee) : null;
+  });
+
+  useEffect(() => {
+    if (selectedEmployee) {
+      localStorage.setItem(
+        "selectedEmployee",
+        JSON.stringify(selectedEmployee),
+      );
+    } else {
+      localStorage.removeItem("selectedEmployee");
+    }
+  }, [selectedEmployee]);
+
   return (
     <AppContext.Provider
       value={{
@@ -143,6 +161,10 @@ function AppProvider(props: AppProviderProps) {
         setBusinessUnitsIsFetching,
         selectedClient,
         setSelectedClient,
+        employees,
+        setEmployees,
+        selectedEmployee,
+        setSelectedEmployee,
       }}
     >
       {children}

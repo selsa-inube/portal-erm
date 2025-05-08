@@ -1,11 +1,8 @@
-import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
-import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { MdOutlineAdd } from "react-icons/md";
+import { Button, Stack, Text } from "@inubekit/inubekit";
+import { MdAdd } from "react-icons/md";
 
 import { AppMenu } from "@components/layout/AppMenu";
 import { IRoute } from "@components/layout/AppMenu/types";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { spacing } from "@design/tokens/spacing";
 
 import { StyledCertificationsContainer } from "./styles";
@@ -19,7 +16,9 @@ interface CertificationsOptionsUIProps {
   navigatePage: string;
   tableData: ICertificationsTable[];
   isLoading: boolean;
+  isMobile: boolean;
   appDescription?: string;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
@@ -29,25 +28,10 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
     navigatePage,
     appDescription,
     tableData,
+    isMobile,
     isLoading,
+    handleDeleteRequest,
   } = props;
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
-  useErrorFlag(
-    location.state?.showFlag,
-    location.state?.flagMessage,
-    location.state?.flagTitle,
-    location.state?.isSuccess,
-  );
-
-  useEffect(() => {
-    if (location.state?.showFlag) {
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location, navigate]);
 
   return (
     <>
@@ -60,22 +44,32 @@ function CertificationsOptionsUI(props: CertificationsOptionsUIProps) {
         <StyledCertificationsContainer $isMobile={isMobile}>
           <Stack
             gap={spacing.s150}
-            justifyContent="end"
+            justifyContent="space-between"
             width="100%"
             direction={isMobile ? "column" : "row"}
+            alignItems="center"
           >
+            <Text type="title" size="medium">
+              Consulta de certificaciones en trámite
+            </Text>
             <Button
               spacing="wide"
               variant="filled"
-              iconBefore={<MdOutlineAdd />}
+              iconBefore={<MdAdd />}
               type="link"
               path="/certifications/new-certification"
               fullwidth={isMobile}
             >
-              Nueva certificación
+              Nueva solicitud
             </Button>
           </Stack>
-          <CertificationsTable data={tableData} loading={isLoading} />
+          <CertificationsTable
+            data={tableData}
+            loading={isLoading}
+            hasViewDetailsPrivilege
+            hasDeletePrivilege
+            handleDeleteRequest={handleDeleteRequest}
+          />
         </StyledCertificationsContainer>
       </AppMenu>
     </>

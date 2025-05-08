@@ -7,10 +7,11 @@ import { useAppContext } from "./context/AppContext/useAppContext";
 
 interface ProtectedAppPageProps {
   withNav?: boolean;
+  withBanner?: boolean;
 }
 
 function ProtectedAppPage(props: ProtectedAppPageProps) {
-  const { withNav = true } = props;
+  const { withNav = true, withBanner = true } = props;
   const { selectedClient } = useAppContext();
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ function ProtectedAppPage(props: ProtectedAppPageProps) {
     }
   }, [selectedClient, navigate]);
 
-  return <AppPage withNav={withNav} />;
+  return <AppPage withNav={withNav} withBanner={withBanner} />;
 }
 
 export { ProtectedAppPage };

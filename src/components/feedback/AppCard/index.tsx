@@ -11,10 +11,11 @@ interface AppCardProps {
   description: string;
   icon: React.ReactNode;
   url: string;
+  showComplement?: boolean;
 }
 
 function AppCard(props: AppCardProps) {
-  const { title, complement, description, icon, url } = props;
+  const { title, complement, description, icon, url, showComplement } = props;
 
   return (
     <StyledAppCard to={url}>
@@ -29,7 +30,7 @@ function AppCard(props: AppCardProps) {
       </Stack>
       <Stack direction="column" gap={spacing.s200}>
         <Text size="small">{description}</Text>
-        {complement && complement.length > 0 && (
+        {showComplement && complement && complement.length > 0 && (
           <StyledComplementContainer>
             {complement.map((text, index) => (
               <Stack key={index} alignItems="center" gap={spacing.s075}>
@@ -39,7 +40,7 @@ function AppCard(props: AppCardProps) {
                   size="12px"
                 />
                 <Text type="label" size="small">
-                  • {text}
+                  {text}
                 </Text>
               </Stack>
             ))}

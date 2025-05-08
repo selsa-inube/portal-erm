@@ -1,80 +1,81 @@
 import { Outlet } from "react-router-dom";
-import {
-  MdOutlineArrowForward,
-  MdOutlineKeyboardArrowRight,
-  MdOutlineAdd,
-} from "react-icons/md";
-import {
-  Text,
-  Stack,
-  Grid,
-  Header,
-  useMediaQuery,
-  Button,
-} from "@inubekit/inubekit";
+import { MdOutlineBeachAccess } from "react-icons/md";
+import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
 
-import logoInube from "@assets/images/logoInube.png";
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
-import { userMenu, nav } from "@config/nav.config";
+import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
-import { VinculacionBanner } from "@components/layout/Banner";
-
-import { ILink } from "./types";
+import { VinculationBanner } from "@components/layout/Banner";
 
 import {
   StyledAppPage,
   StyledContainer,
   StyledContentImg,
   StyledLogo,
-  StyledLogoFooter,
   StyledMain,
-  StyledFooter,
   StyledQuickAccessContainer,
-  StylesAccess,
 } from "./styles";
 
-const renderLogo = (imgUrl: string) => {
+const renderLogo = (imgUrl: string, altText: string) => {
   return (
     <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} />
+      <StyledLogo src={imgUrl} alt={altText} />
     </StyledContentImg>
   );
 };
 
-const handleVinculate = () => {
-  console.log("Vinculación agregada");
-};
-
 function Home() {
-  const { user, logoUrl, selectedClient } = useAppContext();
-  const businessUnitName = selectedClient?.name || "Sin unidad seleccionada";
+  const { user, logoUrl, selectedClient, selectedEmployee } = useAppContext();
+  const configHeader = useConfigHeader();
   const isTablet = useMediaQuery("(max-width: 944px)");
 
   return (
     <StyledAppPage>
-      <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
+      <Grid templateRows="auto auto" height="100vh" justifyContent="unset">
         <Header
-          portalId="portal"
-          logoURL={renderLogo(logoUrl)}
+          navigation={{ nav: configHeader, breakpoint: "800px" }}
+          logoURL={renderLogo(
+            selectedClient?.logo ?? logoUrl,
+            selectedClient?.name ?? "Sin unidad seleccionada",
+          )}
           user={{
             username: user?.username ?? "Nombre de usuario",
-            client: businessUnitName,
+            client: selectedClient?.name ?? "Sin unidad seleccionada",
+            breakpoint: "800px",
           }}
           menu={userMenu}
         />
         <StyledContainer>
-          <Stack padding={spacing.s075}>
-            <VinculacionBanner
-              name="José Manuel Hernández Díaz"
-              status="vinculado"
+          <Stack padding={spacing.s075} justifyContent="center">
+            <VinculationBanner
+              key={
+                selectedEmployee ? selectedEmployee.employeeId : "no-employee"
+              }
+              name={
+                selectedEmployee
+                  ? `${selectedEmployee.names} ${selectedEmployee.surnames}`
+                  : "Empleado no seleccionado"
+              }
+              status={
+                selectedEmployee
+                  ? selectedEmployee.employeeStatus
+                  : "estado-desconocido"
+              }
               imageUrl={logoUrl}
-              onVinculate={handleVinculate}
+              redirectUrl="/employees/select-employee"
+              infoItems={[
+                {
+                  icon: <MdOutlineBeachAccess />,
+                  value: 10,
+                  label: "Días pendientes",
+                },
+              ]}
             />
           </Stack>
           <StyledMain $isTablet={isTablet}>
             <Grid
-              templateColumns={isTablet ? "1fr" : "4fr 1fr"}
+              templateColumns={isTablet ? "1fr" : "auto 1fr"}
               gap={spacing.s600}
               alignItems="start"
             >
@@ -90,74 +91,17 @@ function Home() {
                   Aquí tienes las funcionalidades disponibles.
                 </Text>
                 <StyledQuickAccessContainer $isTablet={isTablet}>
-                  {Object.values(nav.sections?.administrate?.links)?.map(
-                    (link: ILink, index: number) => (
-                      <AppCard
-                        key={index}
-                        title={link.label}
-                        description={link.description ?? "Descripción"}
-                        icon={link.icon}
-                        url={link.path}
-                      />
-                    ),
-                  )}
+                  {baseNavLinks.map((link, index) => (
+                    <AppCard
+                      key={index}
+                      title={link.label}
+                      description={"Descripción"}
+                      icon={link.icon}
+                      url={link.path}
+                    />
+                  ))}
                 </StyledQuickAccessContainer>
               </Stack>
-              {!isTablet && (
-                <Stack direction="column">
-                  <Text
-                    type="title"
-                    size="medium"
-                    appearance="gray"
-                    weight="bold"
-                  >
-                    Accesos rápidos
-                  </Text>
-                  <StylesAccess $isTablet={isTablet}>
-                    <Stack gap={spacing.s200} direction="column">
-                      <Button
-                        variant="none"
-                        appearance="dark"
-                        type="link"
-                        path="/holidays/request-enjoyment"
-                        iconBefore={<MdOutlineArrowForward />}
-                      >
-                        Solicitar disfrute de Vacaciones
-                      </Button>
-                      <Button
-                        variant="none"
-                        appearance="dark"
-                        type="link"
-                        path="/holidays/request-payment"
-                        iconBefore={<MdOutlineKeyboardArrowRight />}
-                      >
-                        Solicitar pago de Vacaciones
-                      </Button>
-                      <Button
-                        variant="none"
-                        appearance="dark"
-                        type="link"
-                        path="/certifications/new-certification"
-                        iconBefore={<MdOutlineAdd />}
-                      >
-                        Solicitar certificación
-                      </Button>
-                    </Stack>
-                    <StyledFooter>
-                      <StyledContentImg to="/">
-                        <StyledLogoFooter src={logoInube} alt="Logo Inube" />
-                        <Text
-                          appearance="gray"
-                          textAlign="center"
-                          size="medium"
-                        >
-                          inube - 2025
-                        </Text>
-                      </StyledContentImg>
-                    </StyledFooter>
-                  </StylesAccess>
-                </Stack>
-              )}
             </Grid>
             <Outlet />
           </StyledMain>

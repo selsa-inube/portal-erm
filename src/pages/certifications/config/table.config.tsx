@@ -13,6 +13,7 @@ export const formatHumanResourceData = (
   requests: HumanResourceRequest[],
 ): ICertificationsTable[] =>
   requests.map((request) => ({
+    requestId: request.humanResourceRequestId,
     requestNumber: { value: request.humanResourceRequestNumber },
     type: {
       value:
@@ -44,7 +45,6 @@ export const formatHumanResourceData = (
     dataDetails: {
       value: {
         ...request.humanResourceRequestData,
-        startDate: formatDate(request.humanResourceRequestData?.startDate),
         description: request.humanResourceRequestDescription,
       },
     },

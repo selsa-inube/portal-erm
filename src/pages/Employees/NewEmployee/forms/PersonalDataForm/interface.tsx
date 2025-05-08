@@ -77,7 +77,6 @@ function PersonalDataFormUI(props: PersonalDataFormUIProps) {
                 placeholder="Número de identificación"
                 name="identificationNumber"
                 id="identificationNumber"
-                type="number"
                 value={formik.values.identificationNumber}
                 status={getFieldState(formik, "identificationNumber")}
                 message={formik.errors.identificationNumber}

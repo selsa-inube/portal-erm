@@ -51,7 +51,7 @@ function ContractualPositionDataFormUI(
             >
               <Select
                 label="Marco normativo"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="normativeFramework"
                 id="normativeFramework"
                 value={formik.values.normativeFramework}
@@ -69,7 +69,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Tipo de contrato"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="contractType"
                 id="contractType"
                 value={formik.values.contractType}
@@ -117,7 +117,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Empresa"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="company"
                 id="company"
                 value={formik.values.company}
@@ -135,7 +135,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Jornada laboral"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="workingShift"
                 id="workingShift"
                 value={formik.values.workingShift}
@@ -153,7 +153,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Equipo de trabajo"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="team"
                 id="team"
                 value={formik.values.team}
@@ -169,7 +169,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Cargo"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="position"
                 id="position"
                 value={formik.values.position}
@@ -187,7 +187,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Perfil salarial"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="salaryProfile"
                 id="salaryProfile"
                 value={formik.values.salaryProfile}
@@ -205,7 +205,7 @@ function ContractualPositionDataFormUI(
 
               <Select
                 label="Modalidad"
-                placeholder="Selecciona una opción"
+                placeholder="Selecciona de la lista"
                 name="jobMode"
                 id="jobMode"
                 value={formik.values.jobMode}

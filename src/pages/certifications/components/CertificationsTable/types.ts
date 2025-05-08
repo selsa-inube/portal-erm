@@ -1,15 +1,16 @@
 export interface ICertificationsTable {
+  requestId?: string;
   requestNumber: CertificationsTableField<string>;
   date: CertificationsTableField<string>;
   status: CertificationsTableField<string>;
   dataDetails: CertificationsTableField<object>;
   details: CertificationsTableDetails;
   delete: CertificationsTableAction;
-  type?: CertificationsTableField<string>;
+  type: CertificationsTableField<string>;
   mobileActions?: CertificationsTableField<JSX.Element>;
 }
 
-interface CertificationsTableField<T> {
+export interface CertificationsTableField<T> {
   value: T;
 }
 

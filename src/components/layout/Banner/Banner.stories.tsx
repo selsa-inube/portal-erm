@@ -1,9 +1,18 @@
 import { Meta } from "@storybook/react";
-import { VinculacionBanner, VinculacionBannerProps } from "./index";
+import { MemoryRouter } from "react-router-dom";
 
-const meta: Meta<typeof VinculacionBanner> = {
-  title: "components/VinculacionBanner",
-  component: VinculacionBanner,
+import { VinculationBanner, VinculationBannerProps } from "./index";
+
+const meta: Meta<typeof VinculationBanner> = {
+  title: "components/VinculationBanner",
+  component: VinculationBanner,
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
   argTypes: {
     status: {
       control: "select",
@@ -18,14 +27,15 @@ const meta: Meta<typeof VinculacionBanner> = {
   },
 };
 
-export const Default = (args: VinculacionBannerProps) => (
-  <VinculacionBanner {...args} />
+export const Default = (args: VinculationBannerProps) => (
+  <VinculationBanner {...args} />
 );
 
 Default.args = {
   name: "José Manuel Hernández Díaz",
   status: "Activo",
-  onVinculate: () => alert("Vinculación agregada"),
+  imageUrl: "url/dummy",
+  redirectUrl: "/somewhere",
 };
 
 export default meta;

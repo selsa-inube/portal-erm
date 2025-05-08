@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { MdOutlineAirplanemodeActive, MdOutlinePayments } from "react-icons/md";
-import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { MdAdd } from "react-icons/md";
+import { Button, Stack } from "@inubekit/inubekit";
 
 import { AppMenu } from "@components/layout/AppMenu";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { IRoute } from "@components/layout/AppMenu/types";
 import { spacing } from "@design/tokens/spacing";
 
@@ -18,8 +15,10 @@ interface HolidaysOptionsUIProps {
   navigatePage: string;
   tableData: IHolidaysTable[];
   isLoading: boolean;
+  isMobile: boolean;
   appDescription?: string;
   hasActiveContract?: boolean;
+  handleDeleteRequest: (requestId: string, justification: string) => void;
 }
 
 function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
@@ -29,26 +28,11 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
     navigatePage,
     tableData,
     isLoading,
+    isMobile,
     appDescription,
     hasActiveContract = true,
+    handleDeleteRequest,
   } = props;
-
-  const location = useLocation();
-  const navigate = useNavigate();
-  const isMobile = useMediaQuery("(max-width: 768px)");
-
-  useErrorFlag(
-    location.state?.showFlag,
-    location.state?.flagMessage,
-    location.state?.flagTitle,
-    location.state?.isSuccess,
-  );
-
-  useEffect(() => {
-    if (location.state?.showFlag) {
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location, navigate]);
 
   return (
     <>
@@ -67,40 +51,34 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
           >
             <Button
               spacing="wide"
-              variant="outlined"
-              fullwidth={isMobile}
-              onClick={() => {
-                /* no-op */
-              }}
-            >
-              Días por disfrutar
-            </Button>
-
-            <Button
-              spacing="wide"
               variant="filled"
               type="link"
               path="/holidays/request-enjoyment"
-              iconBefore={<MdOutlineAirplanemodeActive />}
+              iconBefore={<MdAdd />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
             >
               Solicitar disfrute
             </Button>
-
             <Button
               spacing="wide"
               variant="filled"
               type="link"
               path="/holidays/request-payment"
-              iconBefore={<MdOutlinePayments />}
+              iconBefore={<MdAdd />}
               fullwidth={isMobile}
               disabled={!hasActiveContract}
             >
               Solicitar pago
             </Button>
           </Stack>
-          <HolidaysTable data={tableData} loading={isLoading} />
+          <HolidaysTable
+            data={tableData}
+            loading={isLoading}
+            hasViewDetailsPrivilege
+            hasDeletePrivilege
+            handleDeleteRequest={handleDeleteRequest}
+          />
         </StyledHolidaysContainer>
       </AppMenu>
     </>

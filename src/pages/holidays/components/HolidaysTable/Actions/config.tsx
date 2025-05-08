@@ -1,4 +1,4 @@
-import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
+import { MdOutlineHighlightOff, MdOutlineRemoveRedEye } from "react-icons/md";
 import { IAction } from "./type";
 
 export const Actions = (
@@ -13,7 +13,7 @@ export const Actions = (
       onClick: onClickDetails,
     },
     {
-      icon: <MdDeleteOutline />,
+      icon: <MdOutlineHighlightOff />,
       appearance: "danger",
       label: "Eliminar",
       onClick: onClickEliminate,

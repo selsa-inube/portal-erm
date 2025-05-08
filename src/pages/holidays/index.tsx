@@ -1,44 +1,59 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useMediaQuery } from "@inubekit/inubekit";
 
-import { useAppContext } from "@context/AppContext/useAppContext";
-import { useErrorFlag } from "@hooks/useErrorFlag";
 import { getHumanResourceRequests } from "@services/humanResourcesRequest/getHumanResourcesRequest";
+import { useDeleteRequest } from "@hooks/useDeleteRequest";
+import { useErrorFlag } from "@hooks/useErrorFlag";
 
-import { holidaysNavConfig } from "./config/nav.config";
-import { HolidaysOptionsUI } from "./interface";
-import { IHolidaysTable } from "./components/HolidaysTable/types";
 import { formatHolidaysData } from "./config/table.config";
+import { HolidaysOptionsUI } from "./interface";
+import { holidaysNavConfig } from "./config/nav.config";
+import { IHolidaysTable } from "./components/HolidaysTable/types";
 
 function HolidaysOptions() {
-  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const [flagShown, setFlagShown] = useState(false);
-  const { user } = useAppContext();
-
-  useErrorFlag(flagShown, "Error en la consulta las solicitudes en tramite");
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const [tableData, setTableData] = useState<IHolidaysTable[]>([]);
+  const hasActiveContract = true;
 
   useEffect(() => {
-    const fetchHolidays = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
       try {
-        if (!user?.id) return;
-
-        const holidays = await getHumanResourceRequests("vacations", user.id);
-        const formattedData = formatHolidaysData(holidays || []);
-
-        setTableData(formattedData);
+        const requests = await getHumanResourceRequests("vacations", "");
+        setTableData(formatHolidaysData(requests ?? []));
       } catch (error) {
-        console.error("Error al obtener las vacaciones:", error);
-        setFlagShown(true);
+        console.error(
+          "Error al obtener las solicitudes de recursos humanos:",
+          error,
+        );
+        setTableData([]);
       } finally {
         setIsLoading(false);
       }
     };
+    fetchData();
+  }, []);
 
-    if (user?.id) {
-      fetchHolidays();
+  const { handleDelete } = useDeleteRequest((filterFn) => {
+    setTableData((prev) => prev.filter(filterFn));
+  });
+
+  useErrorFlag(
+    location.state?.showFlag,
+    location.state?.flagMessage,
+    location.state?.flagTitle,
+    location.state?.isSuccess,
+  );
+
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [user?.id]);
+  }, [location, navigate]);
 
   return (
     <HolidaysOptionsUI
@@ -47,6 +62,13 @@ function HolidaysOptions() {
       navigatePage={holidaysNavConfig[0].url}
       tableData={tableData}
       isLoading={isLoading}
+      hasActiveContract={hasActiveContract}
+      isMobile={isMobile}
+      handleDeleteRequest={(requestId, justification) => {
+        const request = tableData.find((item) => item.requestId === requestId);
+        const requestNumber = request?.requestNumber ?? "";
+        void handleDelete(requestId, justification, requestNumber);
+      }}
     />
   );
 }

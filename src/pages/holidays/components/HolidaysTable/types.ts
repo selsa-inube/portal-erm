@@ -1,4 +1,6 @@
 export interface IHolidaysTable {
+  requestId?: string;
+  requestNumber?: string;
   description: HolidayTableField<string>;
   date: HolidayTableField<string>;
   days: HolidayTableField<number>;
@@ -27,7 +29,7 @@ interface HolidayTableAction
 }
 
 export interface HolidayTableDataDetails {
-  daysEnjoyed: string;
+  daysOff: string;
   startDate: string;
   contract: string;
   description: string;

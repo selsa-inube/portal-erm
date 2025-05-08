@@ -26,6 +26,8 @@ import { BusinessUnitsLoader } from "./BusinessUnitsLoader";
 import { useAppContext } from "./context/AppContext/useAppContext";
 import { AppProvider } from "./context/AppContext";
 import { ProtectedAppPage } from "./ProtectedAppPage";
+import { Contracts } from "./pages/contracts";
+import { RequestsRoutes } from "./routes/requests";
 
 function LogOut() {
   localStorage.clear();
@@ -88,8 +90,13 @@ const router = createBrowserRouter(
       <Route path="/*" element={<ProtectedAppPage />}>
         <Route path="holidays/*" element={<HolidaysRoutes />} />
         <Route path="certifications/*" element={<CertificationsRoutes />} />
+        <Route path="contracts/*" element={<Contracts />} />
+        <Route path="requests/*" element={<RequestsRoutes />} />
       </Route>
-      <Route path="/employees/*" element={<ProtectedAppPage withNav={false} />}>
+      <Route
+        path="/employees/*"
+        element={<ProtectedAppPage withNav={false} withBanner={false} />}
+      >
         <Route path="*" element={<EmployeesRoutes />} />
       </Route>
       <Route path="logout" element={<LogOut />} />

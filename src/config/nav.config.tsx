@@ -8,60 +8,111 @@ import {
   MdOutlineBadge,
   MdPendingActions,
 } from "react-icons/md";
+import { ILinkNav } from "@inubekit/inubekit";
+import { useLocation } from "react-router-dom";
 
-import { INav } from "@components/layout/AppPage/types";
+const baseNavLinks = [
+  {
+    id: "holidays",
+    label: "Vacaciones",
+    icon: <MdBeachAccess />,
+    path: "/holidays",
+  },
+  {
+    id: "disability",
+    label: "Incapacidades",
+    icon: <MdOutlinePersonalInjury />,
+    path: "/disability",
+  },
+  {
+    id: "absences",
+    label: "Ausencias",
+    icon: <MdOutlinePersonOff />,
+    path: "/absences",
+  },
+  {
+    id: "certifications",
+    label: "Certificaciones",
+    icon: <MdOutlineFilePresent />,
+    path: "/certifications",
+  },
+  {
+    id: "contracts",
+    label: "Contratos",
+    icon: <MdOutlineHistoryEdu />,
+    path: "/contracts",
+  },
+  {
+    id: "charges",
+    label: "Cargos",
+    icon: <MdOutlineBadge />,
+    path: "/charges",
+  },
+  {
+    id: "requests",
+    label: "Solicitudes en tramite",
+    icon: <MdPendingActions />,
+    path: "/requests",
+  },
+];
 
-const nav: INav = {
-  title: "MENU",
-  sections: {
-    administrate: {
-      name: "",
-      links: {
-        holidays: {
-          id: "holidays",
-          label: "Vacaciones",
-          icon: <MdBeachAccess />,
-          path: "/holidays",
-        },
-        disability: {
-          id: "disability",
-          label: "Incapacidades",
-          icon: <MdOutlinePersonalInjury />,
-          path: "/disability",
-        },
-        absences: {
-          id: "absences",
-          label: "Ausencias",
-          icon: <MdOutlinePersonOff />,
-          path: "/absences",
-        },
-        certifications: {
-          id: "certifications",
-          label: "Certificaciones",
-          icon: <MdOutlineFilePresent />,
-          path: "/certifications",
-        },
-        contracts: {
-          id: "contracts",
-          label: "Contratos",
-          icon: <MdOutlineHistoryEdu />,
-          path: "/contracts",
-        },
-        charges: {
-          id: "charges",
-          label: "Cargos",
-          icon: <MdOutlineBadge />,
-          path: "/charges",
-        },
-        Requests: {
-          id: "Requests",
-          label: "Solicitudes en tramite",
-          icon: <MdPendingActions />,
-          path: "/Requests",
-        },
-      },
+const noop = () => undefined;
+
+const actions = [
+  {
+    id: "logout",
+    label: "Cerrar sesión",
+    icon: <MdLogout />,
+    action: () => {
+      window.location.href = "/logout";
     },
   },
+];
+
+const useNavConfig = () => {
+  const location = useLocation();
+
+  const nav = {
+    reactPortalId: "portals",
+    title: "MENU",
+    sections: {
+      administrate: {
+        name: "",
+        links: baseNavLinks.reduce(
+          (acc, link) => {
+            acc[link.id] = {
+              ...link,
+              isActive: location.pathname.startsWith(link.path),
+            };
+            return acc;
+          },
+          {} as Record<string, ILinkNav>,
+        ),
+      },
+    },
+    actions,
+  };
+
+  return nav;
+};
+
+const useConfigHeader = () => {
+  const nav = {
+    reactPortalId: "portal",
+    title: "MENU",
+    sections: [
+      {
+        isOpen: true,
+        onClose: noop,
+        onToggle: noop,
+        subtitle: "Administrate",
+        links: baseNavLinks,
+      },
+    ],
+    actions,
+  };
+
+  return nav;
 };
 
 const userMenu = [
@@ -80,15 +131,4 @@ const userMenu = [
   },
 ];
 
-const actions = [
-  {
-    id: "logout",
-    label: "Cerrar sesión",
-    icon: <MdLogout />,
-    action: () => {
-      window.location.href = "/logout";
-    },
-  },
-];
-
-export { nav, userMenu, actions };
+export { useNavConfig, useConfigHeader, baseNavLinks, userMenu, actions };

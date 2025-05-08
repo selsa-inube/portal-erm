@@ -6,6 +6,7 @@ export const useErrorFlag = (
   message?: string,
   title?: string,
   isSuccess = false,
+  duration?: number,
 ) => {
   const { addFlag } = useFlag();
 
@@ -19,7 +20,7 @@ export const useErrorFlag = (
             ? "Solicitud enviada correctamente."
             : "Error en la consulta de los datos."),
         appearance: isSuccess ? "success" : "danger",
-        duration: 10000,
+        duration: duration ?? 10000,
       });
     }
   }, [flagShown, message, title, isSuccess]);
