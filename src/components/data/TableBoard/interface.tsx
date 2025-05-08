@@ -15,6 +15,7 @@ import {
   StyledTd,
   StyledThactions,
   StyledTdactions,
+  StyledDivactions,
 } from "./styles";
 import { ITitle, IRenderActionsTitles, IActionsComponent } from "./types";
 import { ITableBoardProps } from ".";
@@ -97,13 +98,13 @@ const ActionsIcon = (props: IActionsComponent) => {
     <>
       {isTablet &&
         actionMobile?.map((action, index) => (
-          <StyledTdactions
+          <StyledDivactions
             key={action.id}
             $isTablet={isTablet}
             $isFirst={index === 0}
           >
             {action.content(entry)}
-          </StyledTdactions>
+          </StyledDivactions>
         ))}
     </>
   );

@@ -63,6 +63,10 @@ export const StyledTdactions = styled.td<IStyledTdactions>`
   align-items: center;
 `;
 
+export const StyledDivactions = styled.div<IStyledTdactions>`
+  align-items: center;
+`;
+
 export const StyledTable = styled.table<IStyledTable>`
   border-collapse: collapse;
   width: 100%;
