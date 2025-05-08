@@ -1,6 +1,8 @@
 import { Stack, Text } from "@inubekit/inubekit";
 import { spacing } from "@design/tokens/spacing";
+
 import { useAppContext } from "@context/AppContext";
+
 import { dataDaysUsed } from "./config";
 import { IDaysUsed } from "./types";
 import { useDaysUsedLogic } from "./interface";
