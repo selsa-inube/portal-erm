@@ -10,6 +10,7 @@ import {
   Tr,
   Text,
   SkeletonLine,
+  Stack,
 } from "@inubekit/inubekit";
 
 import { IDaysUsedTable } from "./types";
@@ -118,9 +119,11 @@ function DaysUsedTable(props: DaysUsedTableProps) {
   const renderEmptyState = () => (
     <Tr border="bottom">
       <Td colSpan={headers.length} align="center" type="custom">
-        <Text type="label" size="large" appearance="gray">
-          Aún no has utilizado ningún día de vacaciones.
-        </Text>
+        <Stack justifyContent="center">
+          <Text type="label" size="large" appearance="gray">
+            Aún no has utilizado ningún día de vacaciones.
+          </Text>
+        </Stack>
       </Td>
     </Tr>
   );

@@ -202,9 +202,12 @@ function HolidaysOptionsUI(props: HolidaysOptionsUIProps) {
             />
             {selectedTab === "solicitudes" ? (
               <StyledHolidaysContainer $isMobile={isMobile}>
-                <Text type="title" size="medium">
-                  Solicitudes en trámite
-                </Text>
+                <Stack alignItems="center" justifyContent="space-between">
+                  <Text type="title" size="medium">
+                    Solicitudes en trámite
+                  </Text>
+                  {isMobile && renderActions()}
+                </Stack>
                 <HolidaysTable
                   data={tableData}
                   loading={isLoading}

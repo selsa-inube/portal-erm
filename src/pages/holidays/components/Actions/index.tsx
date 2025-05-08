@@ -9,6 +9,7 @@ import {
   StyledCloseIcon,
 } from "./styles";
 import { Actions } from "./config";
+import { IAction } from "./type";
 
 interface ActionModalProps {
   disableEnjoyment?: boolean;
@@ -59,6 +60,16 @@ export function ActionModal(props: ActionModalProps) {
     }
   });
 
+  const handleItemClick = (item: IAction) => {
+    if (item.isDisabled && onInfoIconClick) {
+      onInfoIconClick(
+        actionDescriptions?.[item.id] ?? "No puedes realizar esta acción",
+      );
+    } else if (!item.isDisabled && item.onClick) {
+      item.onClick();
+    }
+  };
+
   return (
     <StyledContainer>
       <StyledActions>
@@ -67,14 +78,7 @@ export function ActionModal(props: ActionModalProps) {
             {actionsList.map((item, index) => (
               <StyledLi
                 key={index}
-                onClick={(event) => {
-                  if (item.isDisabled) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    return;
-                  }
-                  item.onClick?.();
-                }}
+                onClick={() => handleItemClick(item)}
                 $isDisabled={item.isDisabled}
               >
                 <Icon
@@ -95,13 +99,6 @@ export function ActionModal(props: ActionModalProps) {
                     appearance="primary"
                     size="16px"
                     cursorHover
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onInfoIconClick(
-                        actionDescriptions?.[item.id] ??
-                          "No puedes realizar esta acción",
-                      );
-                    }}
                   />
                 )}
               </StyledLi>
