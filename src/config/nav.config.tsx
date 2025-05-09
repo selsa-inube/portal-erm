@@ -131,4 +131,4 @@ const userMenu = [
   },
 ];
 
-export { useNavConfig, useConfigHeader, userMenu, actions };
+export { useNavConfig, useConfigHeader, baseNavLinks, userMenu, actions };
