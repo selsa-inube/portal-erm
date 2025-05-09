@@ -209,7 +209,7 @@ function ContractualPositionDataFormUI(
               />
 
               <Select
-                label="Modalidad"
+                label="Sitio de trabajo"
                 placeholder="Selecciona de la lista"
                 name="jobMode"
                 id="jobMode"

@@ -153,7 +153,7 @@ function AssignmentFormUI(props: AssignmentFormUIProps) {
         <Stack
           direction="column"
           gap={isMobile ? spacing.s300 : spacing.s400}
-          height={isMobile ? "65vh" : "60vh"}
+          height={isMobile ? "70vh" : "60vh"}
           justifyContent="space-between"
         >
           <StyledContainer $isMobile={isMobile}>
