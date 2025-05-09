@@ -12,6 +12,7 @@ import {
   SkeletonLine,
   Stack,
 } from "@inubekit/inubekit";
+import { useEffect, useState } from "react";
 
 import { IDaysUsedTable } from "./types";
 import { StyledTd, StyledTh } from "./styles";
@@ -25,6 +26,16 @@ interface DaysUsedTableProps {
 
 function DaysUsedTable(props: DaysUsedTableProps) {
   const { data, loading = false } = props;
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const {
     totalRecords,
@@ -37,10 +48,14 @@ function DaysUsedTable(props: DaysUsedTableProps) {
     currentData,
   } = usePagination(data);
 
+  const displayData = isMobile ? data : currentData;
+
   const getHeaderAlignment = (key: string) => {
     switch (key) {
       case "days":
         return "right";
+      default:
+        return undefined;
     }
   };
 
@@ -51,6 +66,8 @@ function DaysUsedTable(props: DaysUsedTableProps) {
         return "left";
       case "days":
         return "right";
+      default:
+        return undefined;
     }
   };
 
@@ -129,7 +146,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
   );
 
   const renderDataRows = () =>
-    currentData.map((row: IDaysUsedTable, rowIndex: number) => (
+    displayData.map((row: IDaysUsedTable, rowIndex: number) => (
       <Tr key={rowIndex} border="bottom">
         {headers.map((header) => {
           const cellData = row[header.key];
@@ -158,7 +175,7 @@ function DaysUsedTable(props: DaysUsedTableProps) {
               ? renderEmptyState()
               : renderDataRows()}
         </Tbody>
-        {data.length > 0 && (
+        {!isMobile && data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">
               <Td colSpan={headers.length} type="custom" align="center">

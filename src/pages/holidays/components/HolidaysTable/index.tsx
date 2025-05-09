@@ -69,7 +69,8 @@ function HolidaysTable(props: HolidaysTableProps) {
     "(max-width: 542px)",
   ]);
 
-  const iconSize = mediaQueries["(max-width: 542px)"] ? "20px" : "16px";
+  const isMobile = mediaQueries["(max-width: 542px)"];
+  const iconSize = isMobile ? "20px" : "16px";
 
   const {
     totalRecords,
@@ -82,8 +83,10 @@ function HolidaysTable(props: HolidaysTableProps) {
     currentData,
   } = usePagination(data);
 
+  const displayData = isMobile ? data : currentData;
+
   const determineVisibleHeaders = () => {
-    if (mediaQueries["(max-width: 542px)"]) {
+    if (isMobile) {
       return [
         ...headers.filter((header) =>
           ["description", "date"].includes(header.key),
@@ -110,7 +113,7 @@ function HolidaysTable(props: HolidaysTableProps) {
   };
 
   const visibleHeaders = determineVisibleHeaders();
-  const visibleColumns = mediaQueries["(max-width: 542px)"]
+  const visibleColumns = isMobile
     ? columns.slice(1, 3)
     : mediaQueries["(max-width: 1024px)"]
       ? columns.slice(0, 3)
@@ -180,7 +183,8 @@ function HolidaysTable(props: HolidaysTableProps) {
       return;
     }
 
-    const dataDe = data[rowIndex].dataDetails
+    const dataSource = isMobile ? data : currentData;
+    const dataDe = dataSource[rowIndex].dataDetails
       ?.value as unknown as HolidayTableDataDetails;
     const dataDeta = [
       { label: "Días de disfrute", value: dataDe.daysOff },
@@ -263,7 +267,8 @@ function HolidaysTable(props: HolidaysTableProps) {
     }
 
     if (cellData?.type === "icon" && headerKey === "delete") {
-      const requestId = currentData[rowIndex!]?.requestId;
+      const dataSource = isMobile ? data : currentData;
+      const requestId = dataSource[rowIndex!]?.requestId;
       return requestId ? renderDeleteIcon(requestId) : null;
     }
 
@@ -280,7 +285,7 @@ function HolidaysTable(props: HolidaysTableProps) {
     },
     rowIndex: number,
   ) => {
-    if (headerKey === "actions" && mediaQueries["(max-width: 542px)"]) {
+    if (headerKey === "actions" && isMobile) {
       return (
         <Td
           key={headerKey}
@@ -293,7 +298,7 @@ function HolidaysTable(props: HolidaysTableProps) {
           ) : (
             <Stack justifyContent="center" gap={spacing.s400}>
               {renderDetailsIcon(rowIndex)}
-              {renderDeleteIcon(currentData[rowIndex].requestId!)}
+              {renderDeleteIcon(displayData[rowIndex].requestId!)}
             </Stack>
           )}
         </Td>
@@ -320,7 +325,7 @@ function HolidaysTable(props: HolidaysTableProps) {
   };
 
   const renderHeaderRow = () => {
-    if (!mediaQueries["(max-width: 542px)"]) {
+    if (!isMobile) {
       const headerSlice = mediaQueries["(max-width: 1024px)"]
         ? headers.slice(0, 3)
         : headers.slice(0, 4);
@@ -385,7 +390,7 @@ function HolidaysTable(props: HolidaysTableProps) {
   );
 
   const renderDataRows = () =>
-    currentData.map((row: IHolidaysTable, rowIndex: number) => (
+    displayData.map((row: IHolidaysTable, rowIndex: number) => (
       <Tr key={rowIndex} border="bottom">
         {visibleHeaders.map((header) => {
           const cellData = row[header.key as keyof IHolidaysTable] as {
@@ -417,7 +422,7 @@ function HolidaysTable(props: HolidaysTableProps) {
               ? renderEmptyState()
               : renderDataRows()}
         </Tbody>
-        {data.length > 0 && (
+        {!isMobile && data.length > 0 && (
           <Tfoot>
             <Tr border="bottom">
               <Td colSpan={visibleHeaders.length} type="custom" align="center">
