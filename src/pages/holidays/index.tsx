@@ -30,6 +30,10 @@ function HolidaysOptions() {
     try {
       const requests = await getHumanResourceRequests("vacations", "");
       setTableData(formatHolidaysData(requests ?? []));
+
+      if (location.state?.showFlag) {
+        navigate(location.pathname, { replace: true });
+      }
     } catch (error) {
       setTableData([]);
       showError(
@@ -68,18 +72,21 @@ function HolidaysOptions() {
     void fetchHolidaysData();
   }, []);
 
+  useEffect(() => {
+    if (location.state?.showFlag) {
+      const timer = setTimeout(() => {
+        navigate(location.pathname, { replace: true });
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state?.showFlag, navigate, location.pathname]);
+
   useErrorFlag(
     location.state?.showFlag,
     location.state?.flagMessage,
     location.state?.flagTitle,
     location.state?.isSuccess,
   );
-
-  useEffect(() => {
-    if (location.state?.showFlag) {
-      navigate(location.pathname, { replace: true, state: {} });
-    }
-  }, [location, navigate]);
 
   return (
     <HolidaysOptionsUI
