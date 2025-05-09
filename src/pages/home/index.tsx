@@ -1,9 +1,19 @@
-import { Outlet } from "react-router-dom";
-import { MdOutlineBeachAccess } from "react-icons/md";
-import { Text, Stack, Grid, Header, useMediaQuery } from "@inubekit/inubekit";
+import { useState, useRef, useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { MdOutlineBeachAccess, MdOutlineChevronRight } from "react-icons/md";
+import {
+  Text,
+  Icon,
+  Stack,
+  Grid,
+  Header,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 
 import { AppCard } from "@components/feedback/AppCard";
 import { spacing } from "@design/tokens/spacing";
+import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
+import { BusinessUnitChange } from "@components/inputs/BusinessUnitChange";
 import { userMenu, useConfigHeader, baseNavLinks } from "@config/nav.config";
 import { useAppContext } from "@context/AppContext";
 import { VinculationBanner } from "@components/layout/Banner";
@@ -15,6 +25,8 @@ import {
   StyledLogo,
   StyledMain,
   StyledQuickAccessContainer,
+  StyledCollapseIcon,
+  StyledCollapse,
 } from "./styles";
 
 const renderLogo = (imgUrl: string, altText: string) => {
@@ -26,9 +38,51 @@ const renderLogo = (imgUrl: string, altText: string) => {
 };
 
 function Home() {
-  const { user, logoUrl, selectedClient, selectedEmployee } = useAppContext();
+  const {
+    user,
+    logoUrl,
+    selectedClient,
+    businessUnits,
+    setSelectedClient,
+    selectedEmployee,
+  } = useAppContext();
   const configHeader = useConfigHeader();
   const isTablet = useMediaQuery("(max-width: 944px)");
+  const navigate = useNavigate();
+
+  const [collapse, setCollapse] = useState(false);
+  const collapseMenuRef = useRef<HTMLDivElement>(null);
+  const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      collapseMenuRef.current &&
+      !collapseMenuRef.current.contains(event.target as Node) &&
+      businessUnitChangeRef.current &&
+      !businessUnitChangeRef.current.contains(event.target as Node)
+    ) {
+      setCollapse(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogoClick = (businessUnit: IBusinessUnit) => {
+    setSelectedClient({
+      id: businessUnit.businessUnitPublicCode,
+      name: businessUnit.descriptionUse,
+      sigla: businessUnit.abbreviatedName,
+      logo: businessUnit.urlLogo,
+    });
+
+    setCollapse(false);
+    navigate("/employees/select-employee");
+  };
 
   return (
     <StyledAppPage>
@@ -46,8 +100,33 @@ function Home() {
           }}
           menu={userMenu}
         />
+        <StyledCollapseIcon
+          $collapse={collapse}
+          ref={collapseMenuRef}
+          $isTablet={isTablet}
+          onClick={() => setCollapse(!collapse)}
+        >
+          <Icon
+            icon={<MdOutlineChevronRight />}
+            appearance="primary"
+            size="24px"
+            cursorHover
+          />
+        </StyledCollapseIcon>
+        {collapse && (
+          <StyledCollapse ref={businessUnitChangeRef}>
+            <BusinessUnitChange
+              businessUnits={businessUnits}
+              selectedClient={selectedClient?.name ?? ""}
+              onLogoClick={handleLogoClick}
+            />
+          </StyledCollapse>
+        )}
         <StyledContainer>
-          <Stack padding={spacing.s075} justifyContent="center">
+          <Stack
+            padding={`${spacing.s400} ${spacing.s800}`}
+            justifyContent="center"
+          >
             <VinculationBanner
               key={
                 selectedEmployee ? selectedEmployee.employeeId : "no-employee"
@@ -76,7 +155,6 @@ function Home() {
           <StyledMain $isTablet={isTablet}>
             <Grid
               templateColumns={isTablet ? "1fr" : "auto 1fr"}
-              gap={spacing.s600}
               alignItems="start"
             >
               <Stack gap={spacing.s300} direction="column">
