@@ -83,31 +83,6 @@ function AppProvider(props: AppProviderProps) {
   const [businessUnitsIsFetching, setBusinessUnitsIsFetching] =
     useState<boolean>(false);
 
-  const [pendingDays, setPendingDays] = useState<number>(() => {
-    const stored = localStorage.getItem("pendingDays");
-    if (stored && !isNaN(Number(stored))) {
-      return parseInt(stored, 10);
-    }
-    return 0;
-  });
-
-  useEffect(() => {
-    if (pendingDays !== null && !isNaN(pendingDays)) {
-      localStorage.setItem("pendingDays", pendingDays.toString());
-    }
-  }, [pendingDays]);
-
-  useEffect(() => {
-    if (user) {
-      const storedPendingDays = localStorage.getItem("pendingDays");
-      if (storedPendingDays && !isNaN(Number(storedPendingDays))) {
-        setPendingDays(parseInt(storedPendingDays, 10));
-      } else {
-        setPendingDays(0);
-      }
-    }
-  }, [user]);
-
   const [selectedClient, setSelectedClient] = useState<IClient | null>(() => {
     const storedClient = localStorage.getItem("selectedClient");
     if (storedClient) {
@@ -189,8 +164,6 @@ function AppProvider(props: AppProviderProps) {
         setEmployees,
         selectedEmployee,
         setSelectedEmployee,
-        pendingDays,
-        setPendingDays,
       }}
     >
       {children}

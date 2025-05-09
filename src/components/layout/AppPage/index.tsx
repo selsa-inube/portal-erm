@@ -22,6 +22,7 @@ import { IBusinessUnit } from "@ptypes/employeePortalBusiness.types";
 import { VinculationBanner } from "@components/layout/Banner";
 import { spacing } from "@design/tokens/spacing";
 import { OfferedGuaranteeModal } from "@components/modals/OfferedGuaranteeModal";
+import { usePendingData } from "@components/modals/OfferedGuaranteeModal/DaysPending/interface";
 
 import {
   StyledAppPage,
@@ -58,7 +59,6 @@ function AppPage(props: AppPageProps) {
     businessUnits,
     setSelectedClient,
     selectedEmployee,
-    pendingDays,
   } = useAppContext();
   const isTablet = useMediaQuery("(max-width: 944px)");
   const navigate = useNavigate();
@@ -70,6 +70,8 @@ function AppPage(props: AppPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
+
+  const { totalPendingDays } = usePendingData();
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
@@ -194,7 +196,7 @@ function AppPage(props: AppPageProps) {
                               cursorHover
                             />
                           ),
-                          value: pendingDays,
+                          value: totalPendingDays,
                           label: "Días pendientes",
                           onClick: toggleModal,
                         },

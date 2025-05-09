@@ -64,6 +64,4 @@ export interface IAppContextType {
   setEmployees: React.Dispatch<React.SetStateAction<Employee[]>>;
   selectedEmployee: Employee;
   setSelectedEmployee: (employee: Employee) => void;
-  pendingDays: number;
-  setPendingDays: React.Dispatch<React.SetStateAction<number>>;
 }

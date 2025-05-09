@@ -32,7 +32,7 @@ export function DaysUsed(props: IDaysUsed) {
     <Stack
       direction="column"
       height={isMobile ? "auto" : "auto"}
-      padding={`${spacing.s300} ${spacing.s100} ${spacing.s0} ${spacing.s0}`}
+      padding={`${spacing.s0} ${spacing.s100} ${spacing.s0} ${spacing.s0}`}
       gap="16px"
     >
       <Stack justifyContent="center" alignItems="center" gap={spacing.s100}>

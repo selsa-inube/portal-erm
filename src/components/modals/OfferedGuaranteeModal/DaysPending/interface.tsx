@@ -1,17 +1,24 @@
+import { useState, useEffect } from "react";
 import { IPendingUsedDaysTable } from "../PendingUsedDaysTable/types";
+import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
 
-export const usePendingData = (
-  data: { contrato: string; diasPendientes: number }[],
-) => {
-  const totalPendingDays = data.reduce(
-    (total, item) => total + item.diasPendientes,
-    0,
-  );
+export const usePendingData = () => {
+  const [contractData, setContractData] = useState<IPendingUsedDaysTable[]>([]);
+  const [totalPendingDays, setTotalPendingDays] = useState(0);
 
-  const contractData: IPendingUsedDaysTable[] = data.map((item) => ({
-    contract: { value: item.contrato },
-    pendingDays: { value: item.diasPendientes },
-  }));
+  useEffect(() => {
+    const data = mockDataDaysPending;
 
-  return { totalPendingDays, contractData };
+    const transformed = data.map((item) => ({
+      contract: { value: item.contrato },
+      pendingDays: { value: item.diasPendientes },
+    }));
+
+    const total = data.reduce((acc, item) => acc + item.diasPendientes, 0);
+
+    setContractData(transformed);
+    setTotalPendingDays(total);
+  }, []);
+
+  return { contractData, totalPendingDays };
 };

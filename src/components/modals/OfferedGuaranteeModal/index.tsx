@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Stack, Tabs } from "@inubekit/inubekit";
 
 import { mockDataDaysPending } from "@mocks/mockDataDays/mockData";
+import { spacing } from "@design/tokens/spacing";
 import {
   mockDataDaysPayment,
   mockDataOpronPayment,
@@ -40,7 +41,7 @@ export function OfferedGuaranteeModal(props: IOfferedGuaranteeModalProps) {
         <Tabs selectedTab={currentTab} tabs={dataTabs} onChange={onChange} />
       </Stack>
 
-      <Stack>
+      <Stack padding={`${spacing.s300} ${spacing.s0}  ${spacing.s0}`}>
         {currentTab === "pending" && (
           <DaysPending isMobile={isMobile} data={mockDataDaysPending} />
         )}
