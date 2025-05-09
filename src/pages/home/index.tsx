@@ -124,7 +124,7 @@ function Home() {
         )}
         <StyledContainer>
           <Stack
-            padding={`${spacing.s400} ${spacing.s800}`}
+            padding={`${isTablet ? spacing.s100 : spacing.s400} ${isTablet ? spacing.s200 : spacing.s800} ${isTablet ? spacing.s400 : spacing.s200}`}
             justifyContent="center"
           >
             <VinculationBanner
@@ -150,6 +150,7 @@ function Home() {
                   label: "Días pendientes",
                 },
               ]}
+              expandedWidth
             />
           </Stack>
           <StyledMain $isTablet={isTablet}>
