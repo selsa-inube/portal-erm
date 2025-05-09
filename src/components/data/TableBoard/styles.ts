@@ -56,7 +56,7 @@ export const StyledContainer = styled.div<IStyledContainer>`
 
 export const StyledThactions = styled.th<IStyledThactions>`
   text-align: end;
-  padding: 0px 10px;
+  padding: ${spacing.s0} ${spacing.s100};
 `;
 
 export const StyledTdactions = styled.td<IStyledTdactions>`
@@ -119,6 +119,7 @@ export const StyledTh = styled.th<IStyledWithTheme>`
 `;
 
 export const StyledTr = styled.tr<IStyledTdbodyContainer>`
+  height: 36px;
   vertical-align: middle;
   white-space: normal;
   box-sizing: border-box;

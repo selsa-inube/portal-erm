@@ -63,7 +63,7 @@ function RequirementsModal(props: RequirementsModalProps) {
 
   const renderAddIcon = (entry: IEntries) => {
     return (
-      <Stack justifyContent="center" padding={`${spacing.s0} ${spacing.s100}`}>
+      <Stack justifyContent="center">
         <Icon
           icon={<MdOutlineVisibility />}
           appearance="dark"
@@ -123,14 +123,14 @@ function RequirementsModal(props: RequirementsModalProps) {
         content: (entry: IEntries) => {
           const tagElement = entry.tag as React.ReactElement;
           return (
-            <>
+            <Stack>
               <Icon
                 icon={getIconByTagStatus(tagElement)}
                 appearance={tagElement.props.appearance}
                 cursorHover
                 size="20px"
               />
-            </>
+            </Stack>
           );
         },
       },
@@ -199,7 +199,7 @@ function RequirementsModal(props: RequirementsModalProps) {
                   actionMobile={getActionsMobile()}
                   actionMobileIcon={getActionsMobileIcon()}
                   appearanceTable={{
-                    widthTd: "75%",
+                    widthTd: "82%",
                     efectzebra: true,
                     title: "primary",
                     isStyleMobile: true,

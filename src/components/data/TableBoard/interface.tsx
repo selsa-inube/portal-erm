@@ -37,10 +37,10 @@ const RenderActionsTitles = (props: IRenderActionsTitles) => {
             <StyledThactions key={actionTitle.id}>
               <Text
                 appearance={appearance}
-                type="title"
-                size="medium"
+                size="large"
                 padding="0px 4px"
                 textAlign="center"
+                weight="bold"
               >
                 {actionTitle.actionName}
               </Text>

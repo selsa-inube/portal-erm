@@ -9,16 +9,16 @@ export interface BorderedTagProps
   children: React.ReactNode;
 }
 
-export const BorderedTag = ({
-  appearance,
-  children,
-  ...props
-}: BorderedTagProps) => {
+function BorderedTag(props: BorderedTagProps): JSX.Element {
+  const { appearance, children, ...rest } = props;
+
   return (
-    <StyledBorderedTag $color={appearance} {...props}>
+    <StyledBorderedTag $color={appearance} {...rest}>
       <Text type="label" weight="bold" size="medium" appearance={appearance}>
         {children}
       </Text>
     </StyledBorderedTag>
   );
-};
+}
+
+export { BorderedTag };

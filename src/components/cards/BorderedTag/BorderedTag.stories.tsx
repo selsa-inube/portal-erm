@@ -1,7 +1,8 @@
-import { BorderedTag } from "./index";
 import type { Meta, StoryObj } from "@storybook/react";
 import { ThemeProvider } from "styled-components";
 import { inube } from "@inubekit/inubekit";
+
+import { BorderedTag } from "./index";
 
 const meta: Meta<typeof BorderedTag> = {
   title: "components/cards/BorderedTag",
