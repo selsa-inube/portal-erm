@@ -45,6 +45,7 @@ const StyledLogo = styled.img`
 
 const StyledQuickAccessContainer = styled.div<StyledMainProps>`
   padding: ${spacing.s200};
+
   border: 1px solid
     ${({ theme }) => theme?.palette?.neutral?.N30 || inube.palette.neutral.N30};
   display: flex;

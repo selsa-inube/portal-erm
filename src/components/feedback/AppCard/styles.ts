@@ -13,12 +13,11 @@ interface IStyledAppCard {
 }
 
 const StyledAppCard = styled(Link)<IStyledAppCard>`
-  overflow: hidden;
   box-sizing: border-box;
   padding: ${spacing.s150} ${spacing.s300};
-  height: 132px;
+  height: 130px;
   max-height: 176px;
-  width: 315px;
+  width: 305px;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
